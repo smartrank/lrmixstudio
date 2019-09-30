@@ -1,0 +1,63 @@
+LRmix Studio Release Notes
+==========================
+
+Version: ${project.version}
+Release date: ${buildTimestamp}
+------------------------
+LRDYN-223:  When reading a GeneMapper or LRMix file containing a replicate ID number, this replicate ID 
+            is now incorporated into the sample name. 
+            This fixes a problem in the scenario where replicates are spread over multiple files, in 
+            which case the exported PDF report would only contain the alleles of the last loaded replicate.
+LRDYN-224:  The application can now be started with a command line argument specifying the name of a logfile 
+            or saved session file from which to restore settings. If loading succeeds, the user is taken 
+            directly to the Analysis tab.
+LRDYN-225:  Fixed an error message that occurred at the end of an analysis when running on Java 7.
+LRDYN-226:  Disabling a sample on the summary screen now also disables it on the Sample Files screen.
+LRDYN-228:  The default number of steps in the sensitivity analysis is set to 10.
+LRDYN-230:  Fixed a layout problem in the settings box on the Sensitivity Analysis tab.
+LRDYN-231:  The results of Dropout Estimation (DE) and Sensitivity Analyses (SA) is stored. If Hp or Hd is changed in ways  
+            that do not affect the outcome of DE or SE, the stored DE and SA results are included in the report for analyses run with 
+            the changed hypotheses. This means that a dropout estimation and sensitivity analysis can be performed after which 
+            the dropout values for contributors can be set without having to re-do DE or SA.
+LRDYN-232:  Reference profile loci with one allele are now treated as homozygote.
+LRDYN-233:  Fixed the behaviour of the Restart button to properly reset the Analysis tab to accurately reflect the default hypotheses.
+LRDYN-234:  Fixed scaling issues in the Sensitivity Analysis graph.
+LRDYN-235:  Changed Y-axis title of sensitivity analysis graph to 'Log 10'.
+LRDYN-236:  Empty lines in CSV files are now ignored.
+LRDYN-237:  Added support for the CSV format as used by eDNA. This format uses the following columns:
+            UD1,UD2,UD3,Panel,Marker,Dye,Allele 1,Height 1,Allele 2 and Height 2
+            The user defined fields carry the following information:
+                UD1 contains the Sample Id
+                UD2 contains the Case Number
+                UD3 contains the SIN
+LRDYN-239:  Long sample names are now properly shown in the report.
+LRDYN-240:  Added a button to show the log of the current analysis.
+LRDYN-241:  It is now possible to set PrD of selected profiles directly from the Sensitivity Analysis tab.
+LRDYN-242:  When the Restart button is clicked, the state of the Sensitivity Analysis screen is now properly reset.
+LRDYN-243:  In the non-contributor tab, profiles that are selected as donor for both Hp and Hd are no longer available as POI for the non-contributor test. 
+LRDYN-244:  If reference profile loci with a single allele are treated as homozygote (see LRDYN-232), this is now reported in the GUI, the log and the report.  
+LRDYN-245:  Fixed the representation of dropout values in the report. E.g. the value 0.07 would sometimes be represented as 0.06999999999999. 
+LRDYN-246:  In the sensitivity analysis the start and end of the graph would seem to be truncated if the number of steps was low and the Log10(LR) at the upper 
+            or lower bound was not representable (e.g. Infinity). For the lower end of the graph, this was fixed by re-calculating the LR at the next-up 
+            value for dropout (i.e. increased by 0.01). For the upper end, the next-down value is used (i.e. reduced by 0.01)  
+LRDYN-247:  If the calculation results in 'Not a Number' (NaN) or Infinity, a dialog is shown with possible causes. 
+
+Version: 2.1.0
+Release date: 2016-02-18
+------------------------
+LRDYN-222:  Introduced support for a new input file format (called LRM-2 for lack of a better name). Based on the LRmix csv format, with the following changes:
+            * 'SampleName' in row 0, column 0 changed to 'Sample Name'
+            * 'AlleleN' in header changed to 'Allele N'
+            * 'Height N' columns added
+
+Version: 2.0.1
+Release date: 2016-01-14
+------------------------
+LRDYN-220:  Replaced approximation of Genotype Probability for Sibling relation if Theta==0 with exact value.
+            Details:
+            This version corrects for the relatives formula when questioned profile and profiled relative are 
+            siblings in the configuration ab/ab (following the so-called Buckleton's formulas, see manual for 
+            complete references and more details). It only affects situations where Fst=0.
+            In 2.0, for siblings, we had, (1+pa+pb+pa*pb)/4, and in this version 2.0.1, we have the 
+            changed formula:  (1+pa+pb+2*pa*pb)/4 (note the 2 before the pa*pb)
+LRDYN-221:  Profile summary is not updated if profiles are enabled or disabled.

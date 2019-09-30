@@ -1,0 +1,1644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-06-13T09:28:28 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Field_3x" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="afebe046-6016-478c-b1da-69cbf12205bc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="825"/>
+	<property name="ireport.callouts" value="##Fri Sep 27 10:46:41 CEST 2013"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hTextAlign="Center" hImageAlign="Center"/>
+	<style name="table 16">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="Crosstab_CH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab_CG" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab_CT" mode="Opaque" backcolor="#005FB3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab_CD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Contributors Dataset" uuid="8e24c81e-6a32-42d3-9ae3-39c8d287f56c">
+		<parameter name="UnknownsCount" class="java.lang.String"/>
+		<parameter name="UnknownsDropout" class="java.lang.String"/>
+		<field name="sample" class="java.lang.String"/>
+		<field name="dropoutProbability" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Results Dataset" uuid="3a1bebf3-5c1f-4b16-80d2-f25e5eb9cad4">
+		<parameter name="OverallRatio" class="java.math.BigDecimal"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="locusName" class="java.lang.String"/>
+		<field name="prosecutionProbability" class="java.math.BigDecimal"/>
+		<field name="defenseProbability" class="java.math.BigDecimal"/>
+		<field name="ratio" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Replicates Dataset" uuid="d1e55f8f-4b1f-4872-a3c4-5d6d60262379">
+		<field name="id" class="java.lang.String"/>
+		<field name="loci" class="java.util.Collection"/>
+		<field name="sourceFile" class="java.lang.String"/>
+		<group name="GroupByReplicate">
+			<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		</group>
+		<group name="GroupBySourceFile">
+			<groupExpression><![CDATA[$F{sourceFile}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="Profiles Dataset" uuid="5d2e1af7-4892-46ac-a24e-945d044f80a1">
+		<field name="id" class="java.lang.String"/>
+		<field name="loci" class="java.util.Collection"/>
+		<field name="sourceFile" class="java.lang.String"/>
+		<group name="GroupBySourceFile">
+			<groupExpression><![CDATA[$F{sourceFile}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="Locus Dataset" uuid="61b7a3d4-f7ae-4261-a979-24a5db26260a">
+		<field name="id" class="java.lang.String"/>
+		<field name="sourceFile" class="java.lang.String"/>
+		<field name="alleles" class="java.lang.String"/>
+		<field name="sampleId" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Sensitivity Analysis Dataset" uuid="b3cbf8f5-4a34-40e8-8d28-95f971a17017">
+		<field name="x" class="java.math.BigDecimal"/>
+		<field name="y" class="java.math.BigDecimal"/>
+		<field name="rangeId" class="java.lang.String"/>
+		<field name="rangeIndex" class="java.lang.Integer"/>
+		<sortField name="x"/>
+	</subDataset>
+	<subDataset name="DropoutEstimation Dataset" uuid="dc1cad5e-9c9c-46b1-ba22-70421859e2f8">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="defenseMaximum" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[defenseMaximum]]></fieldDescription>
+		</field>
+		<field name="defenseMinimum" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[defenseMinimum]]></fieldDescription>
+		</field>
+		<field name="maximum" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[maximum]]></fieldDescription>
+		</field>
+		<field name="minimum" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[minimum]]></fieldDescription>
+		</field>
+		<field name="prosecutionMaximum" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[prosecutionMaximum]]></fieldDescription>
+		</field>
+		<field name="prosecutionMinimum" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[prosecutionMinimum]]></fieldDescription>
+		</field>
+		<field name="valid" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[valid]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="Rare Allele Dataset" uuid="ebd4a290-e530-4ccc-a2e4-9c47e4915001">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="allele" class="java.lang.String">
+			<fieldDescription><![CDATA[allele]]></fieldDescription>
+		</field>
+		<field name="locus" class="java.lang.Object"/>
+	</subDataset>
+	<subDataset name="Replicate Locus Dataset" uuid="753f0ee9-7385-47e9-91f6-7ca2b6bfe130">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="sampleId" class="java.lang.String">
+			<fieldDescription><![CDATA[sampleId]]></fieldDescription>
+		</field>
+		<field name="alleles" class="java.util.Collection">
+			<fieldDescription><![CDATA[alleles]]></fieldDescription>
+		</field>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[name]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="Reference Profile Locus Dataset" uuid="47017eb9-8065-4a64-b742-f0c2463af141">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[name]]></fieldDescription>
+		</field>
+		<field name="alleles" class="java.util.Collection">
+			<fieldDescription><![CDATA[alleles]]></fieldDescription>
+		</field>
+		<field name="sampleId" class="java.lang.String">
+			<fieldDescription><![CDATA[sampleId]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="HomozygotizedLociDataset" uuid="d6fe114a-66f0-40ab-ae52-e1fa700aa854">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="_THIS" class="java.lang.String"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="CaseNumber" class="java.lang.String"/>
+	<field name="DefenseContributors" class="java.lang.Object"/>
+	<field name="Ratios" class="java.util.Collection"/>
+	<field name="ProgramVersion" class="java.lang.String"/>
+	<field name="ProsecutionContributors" class="java.lang.Object"/>
+	<field name="Logo" class="java.io.InputStream"/>
+	<field name="OverallRatio" class="java.math.BigDecimal"/>
+	<field name="ThetaCorrection" class="java.lang.String"/>
+	<field name="DropInProbability" class="java.lang.String"/>
+	<field name="ProsecutionUnknowns" class="java.math.BigDecimal"/>
+	<field name="DefenseUnknowns" class="java.math.BigDecimal"/>
+	<field name="PopulationStatisticsFileName" class="java.lang.String"/>
+	<field name="ProsecutionUnknownsDropoutProbability" class="java.lang.String"/>
+	<field name="SensitivityAnalysisResults" class="java.util.Collection"/>
+	<field name="Replicates" class="java.util.Collection"/>
+	<field name="ReferenceProfiles" class="java.util.Collection"/>
+	<field name="DefenseUnknownsDropoutProbability" class="java.lang.String"/>
+	<field name="ReplicateLoci" class="java.util.Collection"/>
+	<field name="SensitivityAnalysisGraph" class="java.lang.Object"/>
+	<field name="NonContributorTestGraph" class="java.lang.Object"/>
+	<field name="NonContributorTestResults" class="java.lang.Object"/>
+	<field name="DropoutEstimation" class="java.lang.Object"/>
+	<field name="RareAlleles" class="java.util.Collection"/>
+	<field name="RareAlleleFrequency" class="java.lang.String"/>
+	<field name="ReferenceProfileLoci" class="java.util.Collection"/>
+	<field name="DisabledReplicates" class="java.util.Collection">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DisabledReferenceProfiles" class="java.util.Collection"/>
+	<field name="DisabledLoci" class="java.util.Collection">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="UserName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DateTime" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Remarks" class="java.lang.String"/>
+	<field name="TraceIDs" class="java.lang.String">
+		<fieldDescription><![CDATA[A String containing the names of the analysed traces]]></fieldDescription>
+	</field>
+	<field name="Relatedness" class="nl.minvenj.nfi.lrmixstudio.domain.Relatedness">
+		<fieldDescription><![CDATA[Describes the family relation between a known profile and one unknown contributor.]]></fieldDescription>
+	</field>
+	<field name="ReferenceProfilesNotes" class="java.util.Collection"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<staticText>
+				<reportElement x="365" y="0" width="190" height="43" uuid="fba67fe3-2cd9-4c20-a618-9d04df26577f"/>
+				<textElement textAlignment="Right">
+					<font size="30" isBold="false"/>
+				</textElement>
+				<text><![CDATA[LRmix Studio]]></text>
+			</staticText>
+			<image evaluationTime="Report">
+				<reportElement x="0" y="0" width="272" height="79" uuid="f8c5aa50-434b-4462-af63-6c1a0c2cd77a"/>
+				<imageExpression><![CDATA[$F{Logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="280" y="43" width="275" height="20" uuid="1665ac2a-7666-4f4f-ab71-9c5a3cbaf677"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["version " + $F{ProgramVersion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="2" y="0" width="272" height="16" uuid="324e4390-7075-454c-a72d-86036ef4550b">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Case Number: " + $F{CaseNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="20" width="417" height="16" uuid="f32e89de-b0be-4359-9608-755d22d6a8fe">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Analysis performed by: " + $F{UserName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="36" width="417" height="16" uuid="fa9e9d00-f3e8-45f8-8da2-2f5abb95b68f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Date and time of analysis: " + $F{DateTime}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="2" y="52" width="537" height="16" uuid="447704f4-05be-48bc-96ab-f5dfb8ae148c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Trace"+($F{TraceIDs}.contains(",")?"s":"")+" Analysed: " + $F{TraceIDs}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="73" width="554" height="1" forecolor="#DEDEDE" uuid="0ce76f65-e8b6-4e98-bc62-4aa7c2ad1bec">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="190" splitType="Stretch">
+			<break>
+				<reportElement x="0" y="0" width="100" height="1" uuid="4e0ece52-377f-464c-acbe-692b1de6e804">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[!$V{PAGE_NUMBER}.toString().equals("1")]]></printWhenExpression>
+				</reportElement>
+			</break>
+			<staticText>
+				<reportElement x="292" y="20" width="227" height="20" uuid="44be2e6a-2812-4e03-942e-c750565d9da5"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Defense Hypothesis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="20" width="235" height="20" uuid="3a9821aa-7181-4ac8-b4c0-02cb62bb78cc"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prosecution Hypothesis]]></text>
+			</staticText>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="284" y="20" width="1" height="138" uuid="f3e2f457-a460-417f-8635-e1707c1fe4e3"/>
+			</line>
+			<componentElement>
+				<reportElement key="table" style="table" x="39" y="40" width="223" height="118" isRemoveLineWhenBlank="true" uuid="4ad1d2eb-4e82-4cde-ba8f-ffd0fdcc0241"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Contributors Dataset" uuid="3a37585e-24f7-4a19-9ce1-39badc30f470">
+						<datasetParameter name="UnknownsCount">
+							<datasetParameterExpression><![CDATA[$F{ProsecutionUnknowns}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="UnknownsDropout">
+							<datasetParameterExpression><![CDATA[$F{ProsecutionUnknownsDropoutProbability}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ProsecutionContributors})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="125" uuid="054a07de-ba7b-4e6f-9403-401b54885822">
+						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="14" uuid="7c0c154d-2661-44b8-956b-f5d7147ff40c"/>
+								<box leftPadding="3"/>
+								<textElement>
+									<font size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Profile]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="21" rowSpan="1">
+							<box leftPadding="0"/>
+							<textField>
+								<reportElement x="0" y="0" width="125" height="21" isPrintWhenDetailOverflows="true" uuid="3acec3cd-d37f-4f52-8d9f-c77ead2367f7"/>
+								<box leftPadding="3"/>
+								<textElement>
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$P{UnknownsCount} + " Unknown Contributor" + ($P{UnknownsCount}.equals("1")?"":"s")]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="125" height="19" uuid="bd4db989-0aeb-4b14-ae2b-b300bd581be8"/>
+								<box leftPadding="3"/>
+								<textElement>
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{sample}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="105" uuid="835e41b4-2d49-4009-8d77-416e5a728650">
+						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="105" height="16" uuid="ef6f416c-f1ba-4bf9-b14d-0dec581e743f"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Dropout Probability]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="21" rowSpan="1">
+							<box rightPadding="0"/>
+							<textField isBlankWhenNull="false">
+								<reportElement x="0" y="0" width="105" height="21" uuid="5b7633e2-1e34-4014-8f9f-4298b0207fc2">
+									<printWhenExpression><![CDATA[!$P{UnknownsCount}.equals( "0" )]]></printWhenExpression>
+								</reportElement>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new String(new BigDecimal($P{UnknownsDropout}).round(new MathContext(2)).toString()+"00").substring(0,4)]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="105" height="19" uuid="537b111e-31fb-4dba-843f-3e9e57d45459"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new String(new BigDecimal($F{dropoutProbability}).round(new MathContext(2)).toString()+"00").substring(0,4)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table" style="table" x="312" y="40" width="227" height="118" isRemoveLineWhenBlank="true" uuid="db26853e-1190-4ab2-a16c-9306509b797a"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Contributors Dataset" uuid="d472b534-9f7a-4474-8bc8-1a545fbc98b1">
+						<datasetParameter name="UnknownsCount">
+							<datasetParameterExpression><![CDATA[$F{DefenseUnknowns}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="UnknownsDropout">
+							<datasetParameterExpression><![CDATA[$F{DefenseUnknownsDropoutProbability}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{DefenseContributors})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="125" uuid="fab68285-1548-4cca-98b2-364645c5e4b0">
+						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="14" uuid="f1d0b27f-ecd5-4ddc-9241-48fa4139ccbb"/>
+								<box leftPadding="3"/>
+								<textElement>
+									<font size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Profile]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="21" rowSpan="1">
+							<box leftPadding="0"/>
+							<textField>
+								<reportElement x="0" y="0" width="125" height="21" isPrintWhenDetailOverflows="true" uuid="0318486b-d181-4df0-8711-31de8f67aa08"/>
+								<box leftPadding="3"/>
+								<textElement>
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$P{UnknownsCount} + " Unknown Contributor" + ($P{UnknownsCount}.equals("1")?"":"s")]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="125" height="19" uuid="4ba85803-dc12-470d-b345-ac2e640e1cfa">
+									<property name="local_mesure_unitheight" value="pixel"/>
+								</reportElement>
+								<box leftPadding="3"/>
+								<textElement>
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{sample}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="105" uuid="5f373569-ce21-41e4-ab19-b15cdb7e6d91">
+						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="105" height="16" uuid="4251583c-4d18-4dc8-ac07-4f4035d37de7"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Dropout Probability]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="21" rowSpan="1">
+							<box rightPadding="0"/>
+							<textField isBlankWhenNull="false">
+								<reportElement x="0" y="0" width="105" height="21" uuid="13a28957-c1ba-4104-8f18-8ad48a8c40d5">
+									<printWhenExpression><![CDATA[!$P{UnknownsCount}.equals( "0" )]]></printWhenExpression>
+								</reportElement>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new String(new BigDecimal($P{UnknownsDropout}).round(new MathContext(2)).toString()+"00").substring(0,4)]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="105" height="19" uuid="69a247db-717b-46b9-a286-d1e959fb41ce"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new String(new BigDecimal($F{dropoutProbability}).round(new MathContext(2)).toString()+"00").substring(0,4)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="39" y="164" width="500" height="20" isRemoveLineWhenBlank="true" uuid="bdcd30af-2a2e-4ab0-b382-c3136461f623"/>
+				<textFieldExpression><![CDATA[($F{Relatedness}.getRelation().toString().equalsIgnoreCase("No Relation") ? "":"The defense hypothesis specifies that one unknown contributor is the " + $F{Relatedness})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="1" width="60" height="20" uuid="4f14b932-0f32-4efd-9fad-d19cffe86242">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Analysis"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="132" y="1" width="155" height="20" uuid="e06a73be-65bd-4e79-8b34-e31d91329554">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="1" width="40" height="20" uuid="293fdecf-102f-4c36-ad84-1c42a85d8e7a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="1" width="22" height="20" uuid="c14478f4-dae2-4034-a694-c1a8b08b9614">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["of"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="70">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="80d627b2-ee0b-4394-bf69-3f48890a517a"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Match Parameters]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="27" y="53" width="105" height="16" uuid="9c9462cd-9d8d-42d6-ba58-0d693b85236c">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Allele Frequencies "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="36" width="105" height="16" uuid="2b549e02-e698-4d9a-999a-40f76bbbaf20">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Theta correction: "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="20" width="105" height="16" uuid="b917d678-b249-4c49-bb4e-879ff12471f2">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Probability of dropin: "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="132" y="20" width="137" height="16" uuid="5a644fce-7490-4c0f-a204-734a04c0a195">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropInProbability}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="132" y="36" width="137" height="16" uuid="eb54c02d-ab34-4aa3-af80-b9a4a5de2887">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ThetaCorrection}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="132" y="53" width="423" height="16" isPrintWhenDetailOverflows="true" uuid="f1358318-e473-40f1-9614-e849885f7e19">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PopulationStatisticsFileName}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="124" splitType="Prevent">
+			<printWhenExpression><![CDATA[!$F{Ratios}.isEmpty()]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" isPrintInFirstWholeBand="true" uuid="86625767-b33c-4e23-8a70-4d5aa4b9a291"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Results]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table" style="table" x="27" y="20" width="500" height="99" uuid="b09bfdc7-4ba4-49cf-a5b3-f99972514986"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Results Dataset" uuid="9976c3be-4930-4a91-9345-cafc5e01488d">
+						<datasetParameter name="OverallRatio">
+							<datasetParameterExpression><![CDATA[$F{OverallRatio}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Ratios})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="153" uuid="08cec69e-8d80-4281-9668-d42d78d12ece">
+						<jr:tableFooter height="30" rowSpan="1">
+							<box leftPadding="3">
+								<pen lineStyle="Double"/>
+								<topPen lineWidth="1.0" lineStyle="Double"/>
+								<leftPen lineStyle="Double"/>
+								<bottomPen lineStyle="Double"/>
+								<rightPen lineStyle="Double"/>
+							</box>
+							<textField pattern="0.00000E000">
+								<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="147" height="21" uuid="d8a57f16-1b58-47de-82f3-21a3a00c8719"/>
+								<textElement>
+									<font size="11" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Overall Likelihood Ratio"]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<box leftPadding="3"/>
+							<staticText>
+								<reportElement x="0" y="0" width="136" height="14" uuid="da1b2be8-fd8d-4f81-a09f-9d205b94b413"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Locus]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="17" rowSpan="1">
+							<box leftPadding="3"/>
+							<textField>
+								<reportElement x="0" y="0" width="136" height="15" uuid="35ea307b-7801-4e31-a740-f07aa4035c76"/>
+								<textElement>
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{locusName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="a9ac4e74-9e76-495b-9eae-4560a3db8e59">
+						<jr:tableFooter height="30" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<box leftPadding="3"/>
+							<staticText>
+								<reportElement x="0" y="0" width="79" height="30" uuid="0022d57c-bd12-4a8d-8a30-12c1ad81ee52"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Pr(E|Hp)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="17" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textField pattern="0.00000E000">
+								<reportElement style="table_TD" x="0" y="0" width="90" height="17" uuid="cb2663f0-2883-42df-a27c-b22e997f0c7b"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{prosecutionProbability}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="9ca703b9-323e-4979-9d84-83f30735ab8b">
+						<jr:tableFooter height="30" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<box leftPadding="3"/>
+							<staticText>
+								<reportElement x="0" y="0" width="78" height="30" uuid="b8241c3c-0a6b-4e68-8243-139a0c3454ea"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Pr(E|Hd)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="17" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textField pattern="0.00000E000">
+								<reportElement x="0" y="0" width="90" height="17" uuid="8b04514f-b1aa-46d3-a0f0-089e3bcc36c9"/>
+								<box rightPadding="3"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{defenseProbability}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="132" uuid="26d520c6-2d92-4a52-82c1-cbf248278682">
+						<jr:tableFooter height="30" rowSpan="1">
+							<box rightPadding="0"/>
+							<textField pattern="0.00000E000" isBlankWhenNull="false">
+								<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="132" height="21" uuid="0249af83-758a-407e-82ed-28aa9e5a2283"/>
+								<box>
+									<pen lineWidth="0.0" lineStyle="Double"/>
+									<topPen lineWidth="1.0" lineStyle="Double"/>
+									<leftPen lineWidth="0.0" lineStyle="Double"/>
+									<bottomPen lineWidth="0.0" lineStyle="Double"/>
+									<rightPen lineWidth="0.0" lineStyle="Double"/>
+								</box>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+									<paragraph rightIndent="3"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$P{OverallRatio}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<box leftPadding="3" rightPadding="0"/>
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="14" uuid="e3b64c93-7fc0-41e9-9fe0-b5c4ccc2b411"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[LR]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="17" rowSpan="1">
+							<box rightPadding="0"/>
+							<textField pattern="0.00000E000">
+								<reportElement x="0" y="0" width="132" height="15" uuid="eedd1e08-cb01-4e11-8e3a-515fe07a95a0"/>
+								<textElement textAlignment="Right">
+									<font fontName="Monospaced"/>
+									<paragraph rightIndent="3"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="508" splitType="Prevent">
+			<printWhenExpression><![CDATA[!$F{SensitivityAnalysisResults}.isEmpty()]]></printWhenExpression>
+			<staticText>
+				<reportElement x="3" y="0" width="552" height="20" uuid="27b11a8f-d99b-4341-853d-08752ecd3881">
+					<printWhenExpression><![CDATA[!$F{SensitivityAnalysisResults}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sensitivity Analysis]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="27" y="20" width="500" height="393" uuid="20afb877-640f-435f-ba97-993b7d784e22">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$F{SensitivityAnalysisGraph}]]></imageExpression>
+			</image>
+			<crosstab>
+				<reportElement x="31" y="440" width="496" height="60" uuid="52ad2bb2-3a3b-4421-a7cb-4b7c42c46535"/>
+				<crosstabDataset isDataPreSorted="true">
+					<dataset>
+						<datasetRun subDataset="Sensitivity Analysis Dataset" uuid="e6d0ef23-3efd-4828-87bd-a7807da4b7a7">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{SensitivityAnalysisResults})]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<crosstabHeaderCell>
+					<cellContents style="table_CH"/>
+				</crosstabHeaderCell>
+				<rowGroup name="x1" width="60">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{x}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents mode="Opaque" style="Crosstab_CH">
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="60" height="15" uuid="dfe0b8dc-8153-47cb-bd44-e07e2b5f379a"/>
+								<textFieldExpression><![CDATA[new BigDecimal($V{x1}).round(new MathContext(2)).toString().contains('.') ? new String(new BigDecimal($V{x1}).round(new MathContext(2)).toString()+"00").substring(0,4) : new String(new BigDecimal($V{x1}).round(new MathContext(2)).toString()+".00").substring(0,4)]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents mode="Opaque" style="Crosstab_CT">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="321efd76-8aef-47c8-a6f1-a2067a4a752d"/>
+								<text><![CDATA[Total x1]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="rangeId1" height="15">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{rangeId}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents mode="Opaque" style="Crosstab_CH">
+							<property name="local_mesure_unitheight" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement key="" style="Crosstab Data Text" stretchType="RelativeToBandHeight" x="0" y="0" width="110" height="15" isPrintWhenDetailOverflows="true" uuid="34cdb8ce-af55-407d-b021-6be625ecf726"/>
+								<textFieldExpression><![CDATA[$V{rangeId1}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents mode="Opaque" style="Crosstab_CT">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="df588ea4-9338-4350-98d2-306ed8e5c0b6"/>
+								<text><![CDATA[Total rangeId1]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="y_MEASURE1" class="java.math.BigDecimal">
+					<measureExpression><![CDATA[$F{y}]]></measureExpression>
+				</measure>
+				<crosstabCell width="110" height="15">
+					<cellContents mode="Opaque" style="Crosstab_CD">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<textField pattern="" isBlankWhenNull="true">
+							<reportElement x="0" y="0" width="110" height="15" uuid="29dd783f-4571-4c9d-bab0-a1449e809db6"/>
+							<textElement textAlignment="Right">
+								<paragraph leftIndent="3" rightIndent="3"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{y_MEASURE1}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="20" columnTotalGroup="rangeId1">
+					<cellContents mode="Opaque" style="Crosstab_CT">
+						<textField>
+							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="f0462adb-bb7e-461f-805a-3a5825c25516"/>
+							<textFieldExpression><![CDATA[$V{y_MEASURE1}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="20" rowTotalGroup="x1">
+					<cellContents mode="Opaque" style="Crosstab_CT">
+						<textField>
+							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="fddd7fd9-4800-4e76-9b61-aac6fc251664"/>
+							<textFieldExpression><![CDATA[$V{y_MEASURE1}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="20" rowTotalGroup="x1" columnTotalGroup="rangeId1">
+					<cellContents mode="Opaque" style="Crosstab_CT">
+						<textField>
+							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="aa8e7f69-ecc9-4eeb-83e0-6d424a361f37"/>
+							<textFieldExpression><![CDATA[$V{y_MEASURE1}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<staticText>
+				<reportElement x="32" y="420" width="520" height="20" uuid="206ed9f7-e18b-4a55-9057-9b541b7b8ec1"/>
+				<text><![CDATA[The following table contains some of the values for the graph above.]]></text>
+			</staticText>
+		</band>
+		<band height="508" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{NonContributorTestGraph}!=null]]></printWhenExpression>
+			<staticText>
+				<reportElement x="3" y="0" width="552" height="20" uuid="27b11a8f-d99b-4341-853d-08752ecd3881"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Non-contributor test]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="27" y="20" width="500" height="393" uuid="20afb877-640f-435f-ba97-993b7d784e22">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$F{NonContributorTestGraph}]]></imageExpression>
+			</image>
+		</band>
+		<band height="181" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{DropoutEstimation}.isValid()]]></printWhenExpression>
+			<textField>
+				<reportElement x="32" y="20" width="523" height="48" uuid="8c810503-5337-44d4-ac95-bc9342da9c15"/>
+				<textFieldExpression><![CDATA["Below are listed the 5% and 95% percentiles of the empirical drop-out distribution, determined using "
++ $F{DropoutEstimation}.getIterations()
++ " Monte-Carlo simulations with the "
++ $F{DropoutEstimation}.getAlleleCount()  +
+" alleles observed in average across the "
++ $F{DropoutEstimation}.getReplicateCount()
++ " replicates."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="0" width="552" height="20" uuid="9135eefb-11e5-4ebb-b0a4-6dc4303382e1"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dropout Estimation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="112" y="108" width="100" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="e7ec1aa3-e2e2-42d1-8f06-35c46d762a4a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Prosecution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="112" y="88" width="100" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="e4959e43-9ed0-4d44-919d-a970a8fc4430"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Hypothesis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="112" y="128" width="100" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="f43959c3-1424-4768-9cad-252e3c323057"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Defense]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="112" y="148" width="100" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="9e877f77-8c2e-45c1-a658-94542ed19fb6"/>
+				<box>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Overall]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="212" y="88" width="100" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="cef6e6e4-d7b1-472f-a687-e67be2193fb8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Minimum (5%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="312" y="88" width="100" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="db70511f-d47b-426b-81aa-120e758b1a71"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Maximum (95%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="212" y="68" width="200" height="20" forecolor="#000000" backcolor="#BFE1FF" uuid="e336c1ad-97aa-48fe-b6cd-9f2b0796374c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Dropout Probability]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="212" y="108" width="100" height="20" uuid="b7dfbf55-8b76-45bd-876e-f834c5ef8aac"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropoutEstimation}.getProsecutionMinimum()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="312" y="108" width="100" height="20" uuid="f9dbf829-560d-4308-9517-381f84d6d3a6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropoutEstimation}.getProsecutionMaximum()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="212" y="128" width="100" height="20" uuid="46ed177c-47c3-47c6-b08a-c048b9e97809"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropoutEstimation}.getDefenseMinimum()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="312" y="128" width="100" height="20" uuid="2234d8ec-8dc6-44cc-ae2a-616f93c3f731"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropoutEstimation}.getDefenseMaximum()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="312" y="148" width="100" height="20" uuid="06e1b1bc-3242-4c89-abe1-f16a4d622a7f"/>
+				<box>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropoutEstimation}.getMaximum()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="212" y="148" width="100" height="20" uuid="f528858e-d1c0-447e-83d9-77b745afd86d"/>
+				<box>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DropoutEstimation}.getMinimum()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="88" splitType="Prevent">
+			<staticText>
+				<reportElement x="0" y="0" width="552" height="20" uuid="0d6b82eb-5a42-4baf-b2d4-a62fce9ce8f6"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rare Alleles]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="32" y="20" width="520" height="36" uuid="88d6e319-a749-48f7-ad90-390c590a64cb">
+					<printWhenExpression><![CDATA[!$F{RareAlleles}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA["The alleles listed below have been detected as rare. They have been assigned the frequency " + $F{RareAlleleFrequency}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="20" width="520" height="36" uuid="7267b016-fa3e-4767-9943-709c80c25f20">
+					<printWhenExpression><![CDATA[$F{RareAlleles}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA["No rare alleles have been detected."]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement key="table 16" style="table 16" x="32" y="56" width="495" height="25" uuid="6f81b020-45d9-44df-8c32-aaa5d8b475c8"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Rare Allele Dataset" uuid="08d8d4a1-2f2b-4001-a1d5-0a293af2f1f7">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{RareAlleles})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="508" uuid="8881d781-de48-4664-b435-71aac1e275ec">
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="508" height="20" uuid="940a8aaa-fa43-4795-ad09-5760d2e557bc"/>
+								<textFieldExpression><![CDATA["Allele " + $F{allele} + " at locus " + $F{locus}.getName() + " of " + $F{locus}.getSampleId()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="61">
+			<printWhenExpression><![CDATA[!$F{DisabledLoci}.isEmpty()]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="552" height="20" uuid="3cde843f-e701-408b-bb2c-688b10e4b4a5"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Disabled Loci]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="30" y="20" width="509" height="32" uuid="c056b1d2-a9cb-455a-b11e-7404e8b7472e"/>
+				<textFieldExpression><![CDATA[$F{DisabledLoci}.size()>0?"The following loci were disabled for this analysis:\n    " + $F{DisabledLoci}.toString().replaceAll("\\[","").replaceAll("\\]", ""):"Locus " + $F{DisabledLoci}.toString().replaceAll("\\[","").replaceAll("\\]", "") + "was disabled."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="189" splitType="Prevent">
+			<staticText>
+				<reportElement x="0" y="5" width="555" height="20" isPrintInFirstWholeBand="true" uuid="83ed21ae-b585-4d61-a1b7-c580e6c73db3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Replicates]]></text>
+			</staticText>
+			<crosstab>
+				<reportElement key="ReplicateLociTable" positionType="Float" mode="Opaque" x="30" y="120" width="497" height="50" uuid="9da10d91-5969-4e4c-91ab-1767eed34e80"/>
+				<crosstabDataset isDataPreSorted="true">
+					<dataset>
+						<datasetRun subDataset="Replicate Locus Dataset" uuid="ed133fd8-c91f-4aa0-a3ac-53f85d44aef1">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ReplicateLoci})]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<crosstabHeaderCell>
+					<cellContents style="table_CH">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="name" width="70">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{name}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque" style="table_CH">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="15" uuid="96c02fac-573f-4146-b02d-a704c72bceba"/>
+								<textFieldExpression><![CDATA[$V{name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="sampleId" height="16">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{sampleId}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque" style="table_CH">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="106" height="16" uuid="375e2140-cedd-4846-b749-3bfa27b56c5b"/>
+								<textFieldExpression><![CDATA[$V{sampleId}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="allelesMeasure" class="java.util.Collection">
+					<measureExpression><![CDATA[$F{alleles}]]></measureExpression>
+				</measure>
+				<crosstabCell width="106" height="15">
+					<cellContents>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isStretchWithOverflow="true">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="106" height="15" uuid="5fcd6002-f5dd-4b4f-a0dc-44fab11878e1"/>
+							<textFieldExpression><![CDATA[$V{allelesMeasure}.toString().replaceAll("\\[","").replaceAll("\\]","").replaceAll("\\,","").replaceAll("\\'","")]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="106" height="25" rowTotalGroup="name">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="sampleId">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="name" columnTotalGroup="sampleId">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<staticText>
+				<reportElement x="32" y="25" width="508" height="20" uuid="a12a56d2-99d0-4347-969b-b6a1e2efaf1e"/>
+				<text><![CDATA[The following replicates were loaded for this analysis:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table" style="table" x="32" y="40" width="494" height="40" uuid="e907cfb7-cfae-4ffd-959e-7ee914a09121"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Profiles Dataset" uuid="12025f34-bbba-46cb-8229-7b8f536a7be4">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Replicates})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="363" uuid="ab8595ff-b455-40e7-93be-65b255032804">
+						<jr:columnHeader style="table_CH" height="17" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="363" height="17" uuid="59ff5322-b220-43d0-b6ef-4d886ab4f269"/>
+								<textElement>
+									<font isBold="true"/>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<text><![CDATA[Filename]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="363" height="20" printWhenGroupChanges="GroupBySourceFile" uuid="f6a208bf-5947-4942-8e38-d932bc0f0a56"/>
+								<textElement>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{sourceFile}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="145" uuid="2b825411-bb5a-4256-b256-20ef4e239cc4">
+						<jr:columnHeader style="table_CH" height="17" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="145" height="17" uuid="4e1cf12d-937e-4971-8582-da5d4aa8a0fe"/>
+								<textElement>
+									<font isBold="true"/>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<text><![CDATA[Replicate]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement style="table_TD" x="0" y="0" width="145" height="20" uuid="d7c68c39-bbfa-4751-a29d-d1da76b8f122"/>
+								<textElement>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement positionType="Float" x="32" y="80" width="495" height="40" uuid="eacd7a3a-8751-4160-af1b-81033b253a1a"/>
+				<textFieldExpression><![CDATA[($F{DisabledReplicates}.size()>0?"Note: the replicate" + ($F{DisabledReplicates}.size()>1?"s ":" ") + $F{DisabledReplicates}.toString().replaceAll("\\[","").replaceAll("\\]", "")  + ($F{DisabledReplicates}.size()>1?" were ":" was ")+ "disabled for this analysis.":"") + "\n\nThe contents of the profiles is listed below:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="229" splitType="Prevent">
+			<staticText>
+				<reportElement x="0" y="0" width="552" height="20" uuid="045cec8e-3e16-4cb0-93aa-5b7c3e23577c"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reference Profiles]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table" style="table" x="32" y="40" width="494" height="39" uuid="7a82a980-318b-440c-af42-97a14ec2ebe6"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Profiles Dataset" uuid="724e4c1d-d129-4d35-b6e4-117bfc08f255">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ReferenceProfiles})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="363" uuid="9daa48bd-89c0-49ea-bcc5-39ff46e789d3">
+						<jr:columnHeader style="table_CH" height="17" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="363" height="17" uuid="cf339f32-5ab2-48da-a7aa-fb7193cf3edf"/>
+								<textElement>
+									<font isBold="true"/>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<text><![CDATA[Filename]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="363" height="20" printWhenGroupChanges="GroupBySourceFile" uuid="7bd6e78f-4a45-408a-8ef4-92ddc9635eb8"/>
+								<textElement>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{sourceFile}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="145" uuid="567f5f5b-3061-445e-9408-2def130f3e32">
+						<jr:columnHeader style="table_CH" height="17" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="145" height="17" uuid="a2e1b937-a15a-4f61-92a3-05864313bac6"/>
+								<textElement>
+									<font isBold="true"/>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<text><![CDATA[Reference Profile]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="20" rowSpan="1">
+							<textField>
+								<reportElement style="table_TD" x="0" y="0" width="145" height="20" uuid="c2fdab74-7141-4867-a055-34e7d5473274"/>
+								<textElement>
+									<paragraph leftIndent="3" rightIndent="3"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<crosstab>
+				<reportElement key="ReferenceSampleLociTable" positionType="Float" x="30" y="130" width="497" height="39" uuid="426cf432-3b04-4326-a809-4b707a3e59fa"/>
+				<crosstabDataset isDataPreSorted="true">
+					<dataset>
+						<datasetRun subDataset="Reference Profile Locus Dataset" uuid="04e81c33-9c0a-4df5-b2dd-a4f29a1b7e67">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ReferenceProfileLoci})]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<crosstabHeaderCell>
+					<cellContents style="table_CH"/>
+				</crosstabHeaderCell>
+				<rowGroup name="name" width="70">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{name}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<property name="local_mesure_unitheight" value="pixel"/>
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="15" uuid="946dbc58-953b-40b1-9c9b-a9043dcd2f2f"/>
+								<textFieldExpression><![CDATA[$V{name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="sampleId" height="15">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{sampleId}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque" style="table_CH">
+							<property name="local_mesure_unitheight" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="82" height="15" uuid="e8221c2e-7e81-43e4-87b0-04b2a6c0d61e"/>
+								<textFieldExpression><![CDATA[$V{sampleId}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="allelesMeasure" class="java.lang.String">
+					<measureExpression><![CDATA[$F{alleles}]]></measureExpression>
+				</measure>
+				<crosstabCell width="82" height="15">
+					<cellContents mode="Opaque">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isStretchWithOverflow="true" pattern="">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="82" height="15" uuid="b14c0eeb-0c3b-4d42-a83a-46cb443ec431"/>
+							<textFieldExpression><![CDATA[$V{allelesMeasure}.replaceAll("\\[","").replaceAll("\\]","").replaceAll("\\,","").replaceAll("\\'","")]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="82" height="25" rowTotalGroup="name">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="sampleId">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="name" columnTotalGroup="sampleId">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<staticText>
+				<reportElement x="32" y="20" width="508" height="20" uuid="172b686b-9ddf-43be-bac9-64a159784f71"/>
+				<text><![CDATA[The following reference profiles were loaded for this analysis:]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="32" y="79" width="495" height="51" uuid="158a7e8b-7cde-434c-9dc7-c02db318b585"/>
+				<textFieldExpression><![CDATA[($F{DisabledReferenceProfiles}.size()>0?"The reference profile" + ($F{DisabledReferenceProfiles}.size()>1?"s ":" ") + $F{DisabledReferenceProfiles}.toString().replaceAll("\\[","").replaceAll("\\]", "")  + ($F{DisabledReferenceProfiles}.size()>1?" were ":" was ")+ "disabled for this analysis.":"") + "\n\nThe contents of the reference profiles is listed below:"]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="Float" x="32" y="179" width="494" height="40" isPrintWhenDetailOverflows="true" uuid="e166505a-8060-4150-9ae0-29d9488cd054">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 1_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="ReferenceProfileNotesTable"/>
+					<printWhenExpression><![CDATA[!$F{ReferenceProfilesNotes}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="HomozygotizedLociDataset" uuid="6168e97e-e4a9-47c0-9860-6317312d73fc">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ReferenceProfilesNotes})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="494" uuid="e5dd98d3-45a6-4b2f-a92f-1be224178815">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table 1_CH" height="20">
+							<staticText>
+								<reportElement x="0" y="0" width="494" height="20" uuid="373b53c8-18cb-45a4-ab1f-42e2c7ab3bd4"/>
+								<text><![CDATA[Notes:]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="20">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="494" height="20" uuid="be708351-315e-4475-be86-81ff5ef49bff"/>
+								<textElement>
+									<paragraph leftIndent="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{_THIS}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="38" splitType="Stretch">
+			<textField>
+				<reportElement x="212" y="8" width="80" height="20" uuid="8dec6542-9449-44f6-acb1-f7dff941835c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="292" y="8" width="40" height="20" uuid="99e0b356-1887-4c29-8235-7cdbeb26a2b5"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="1" width="554" height="1" forecolor="#DEDEDE" uuid="28081fb3-d2e4-4607-a363-c211e4b1f8ce">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="355" splitType="Prevent">
+			<staticText>
+				<reportElement positionType="Float" x="31" y="80" width="494" height="270" uuid="7631d9e3-cf94-4ff9-af82-7d7133c4d846"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[For more information about the probabilistic model implemented in LRmix Studio see:
+
+- P. Gill & H.Haned. A new methodological framework to interpret complex DNA profiles using likelihood ratios. Forensic Sci. Int. Genet. (2013).
+
+- H. Haned, et al., Exploratory data analysis for the interpretation of low template DNA mixtures, Forensic Sci. Int. Genet. (2012).
+
+­ P. Gill et al, DNA commission of the International Society of Forensic Genetics: Recommendations on the evaluation of STR-typing results that may include drop-out and/or drop-in using probabilistic methods, Forensic Sci. Int. Genetics (2012).
+
+- Haned, H. & Gill, P. Analysis of complex DNA mixtures using the Forensim package, Forensic Sci. Int. Genetics. Supplement Series ( 2011).
+
+­ P. Gill, A. Kirkham and J. Curran, LoComatioN: a software tool for the analysis of low copy number DNA-profiles, Forensic Sci. Int., (2007).
+
+­ J.M. Curran, P. Gill and M.R. Bill, Interpretation of repeat measurement DNA evidence allowing for multiple contributors and population substructure, Forensic Sci. Int., (2005).
+
+- Buckleton, J.; Triggs, C. M. & Walsh, S. J. Forensic DNA evidence interpretation, Chapter 4: ‘Relatedness’,  CRC PRESS, 2005
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="1" y="60" width="552" height="20" uuid="3edc02e9-95cd-4bda-ab92-62f7c13b9460"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[More Information]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="32" y="30" width="493" height="20" uuid="251eac22-c521-4f4b-b346-192d4ff333c1">
+					<printWhenExpression><![CDATA[!$F{Remarks}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Remarks}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="552" height="20" uuid="7949f42d-ecab-4017-b165-78c31e8bc1b9">
+					<printWhenExpression><![CDATA[!$F{Remarks}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporting Officer's remarks]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

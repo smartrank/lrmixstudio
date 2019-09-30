@@ -1,0 +1,66 @@
+======= Log file: LRs per locus ==========
+============= Input files ================
+SAMPLE FILE:
+C:/Users/apc_bi_hihan/Desktop/LRDyNAmix/test cases/3-person/case 3.5/D2Sample3.txt
+
+
+SUSPECT FILE:
+C:/Users/apc_bi_hihan/Desktop/LRDyNAmix/test cases/3-person/case 3.5/D2Donor1.txt
+
+
+VICTIM FILE:
+
+
+
+SELECTED LOCI:
+D10S1248 vWA D16S539 D2S1338 D8S1179 D21S11 D18S51 D22S1045 D19S433 TH01 FGA D2S441 D3S1358 D1S1656 D12S391
+
+
+SELECTED REPLICATES:
+R1
+
+
+
+
+============ User parameters =============
+Drop-out value under Hp:
+D2Donor1: 0.1
+Unknown1: 0.1
+Unknown2: 0.1
+=======================
+Drop-out value under Hd:
+Unknown1: 0.1
+Unknown2: 0.1
+Unknown3: 0.1
+=======================
+Drop-in value: 0.05
+Theta value: 0
+Unknowns under Hp: 2
+Unknowns under Hd: 3
+
+
+
+
+=============== Hypotheses ===============
+Under Hp: D2Donor1 + 2 unknown(s)
+Under Hd: 3 unknown(s)
+
+
+=========== Log10(LR) vs. Pr(D) ===========
+Locus Pr(E|Hp) Pr(E|Hd) LR log(LR)
+D10S1248 0.2736 0.1993 1.373 0.1377
+vWA 0.02322 0.02497 0.9298 -0.03163
+D16S539 0.07086 0.0356 1.99 0.2989
+D2S1338 0.01791 0.001259 14.23 1.153
+D8S1179 0.003611 0.0006119 5.902 0.771
+D21S11 0.001821 8.262e-05 22.04 1.343
+D18S51 0.0352 0.01205 2.921 0.4655
+D22S1045 0.2294 0.1896 1.21 0.08289
+D19S433 0.06975 0.04058 1.719 0.2353
+TH01 0.1203 0.0395 3.046 0.4838
+FGA 0.02485 0.008019 3.1 0.4913
+D2S441 0.3759 0.2033 1.849 0.267
+D3S1358 0.2004 0.1136 1.764 0.2466
+D1S1656 0.0009918 0.0002071 4.788 0.6801
+D12S391 0.01763 0.0006528 27.01 1.431
+product 1.177e-22 1.033e-30 113900000 8.056

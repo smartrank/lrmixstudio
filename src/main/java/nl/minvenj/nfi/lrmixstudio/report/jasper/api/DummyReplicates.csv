@@ -1,0 +1,5 @@
+SampleName,Marker,Allele1,Allele2,Allele3,Allele4,Allele5,Allele6,Allele7,Allele8
+Replicate1,SomeLocus,13,,,,,,,
+Replicate2,SomeLocus,13,14,,,,,,
+Replicate1,SomeOtherLocus,13,14,,,,,,
+Replicate2,SomeOtherLocus,13,,,,,,,

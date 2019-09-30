@@ -1,0 +1,16 @@
+SampleName	Marker	Allele1	Allele2	Allele3	Allele4	Allele5	Allele6	Allele7	Allele8	Allele9	Allele10	
+R1	D10S1248	13	14	15	16							
+R1	vWA	15	16	17	18	19						
+R1	D16S539	10	11	12	13							
+R1	D2S1338	16	20	21	22	23	24					
+R1	D8S1179	11	12	13	14	15						
+R1	D21S11	28	29	30	30.2	31	32	32.2				
+R1	D18S51	12	14	15	16	17						
+R1	D22S1045	15	16	17								
+R1	D19S433	13.2	14	15								
+R1	TH01	6	7	9	9.3							
+R1	FGA	18	20	21	22	23						
+R1	D2S441	11	11.3	14	16							
+R1	D3S1358	14	15	16	17	18						
+R1	D1S1656	11	12	14	15	16	17					
+R1	D12S391	15	16	17	18	19	21					
