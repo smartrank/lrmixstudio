@@ -154,9 +154,9 @@ public class DropoutEstimationProgressListener implements AnalysisProgressListen
     }
 
     @Override
-    public void analysisFinished(final Exception e) {
+    public void analysisFinished(final Throwable e) {
         if (!(e instanceof InterruptedException)) {
-            LOG.info("Analysis encountered exception: {}", e);
+            LOG.info("Analysis encountered exception:", e);
         }
         else {
             _interrupted = true;

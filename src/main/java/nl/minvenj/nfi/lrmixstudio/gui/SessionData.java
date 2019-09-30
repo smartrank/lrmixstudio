@@ -130,8 +130,10 @@ public class SessionData extends ConfigurationData {
 
     public void setStatusMessage(final String statusMessage) {
         LOG.debug("Setting Status message to {}", statusMessage);
-        this.statusMessage = statusMessage;
-        fireUpdated(ConfigurationDataElement.STATUS_MESSAGE);
+        if (statusMessage == null || !statusMessage.equals(this.statusMessage)) {
+            this.statusMessage = statusMessage;
+            fireUpdated(ConfigurationDataElement.STATUS_MESSAGE);
+        }
     }
 
     public void setErrorMessage(final String errorMessage) {

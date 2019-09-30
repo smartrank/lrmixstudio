@@ -43,7 +43,7 @@ public interface AnalysisProgressListener {
      *
      * @param e The exception that caused the analysis to terminate
      */
-    public void analysisFinished(Exception e);
+    public void analysisFinished(Throwable e);
 
     /**
      * Called when analysis starts for a given hypothesis.

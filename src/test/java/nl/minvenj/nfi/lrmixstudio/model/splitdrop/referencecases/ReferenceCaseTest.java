@@ -43,7 +43,7 @@ public class ReferenceCaseTest {
         }
 
         @Override
-        public void analysisFinished(final Exception e) {
+        public void analysisFinished(final Throwable e) {
         }
 
         @Override

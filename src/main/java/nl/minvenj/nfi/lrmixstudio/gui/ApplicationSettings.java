@@ -18,6 +18,7 @@ package nl.minvenj.nfi.lrmixstudio.gui;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import nl.minvenj.nfi.lrmixstudio.domain.PopulationStatistics;
 
 public class ApplicationSettings {
+    private static long _settingsLastModified;
+
     private ApplicationSettings() {
     }
 
@@ -76,22 +79,27 @@ public class ApplicationSettings {
     private static final String OVERVIEW_SHOWGRID = "overview." + SHOWGRID;
 
     private static void load() {
-        try {
-            properties.clear();
-            final FileInputStream fis = new FileInputStream(SETTINGS_FILENAME);
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (!(line.startsWith("#") || line.isEmpty())) {
-                    final int idx = line.indexOf("=");
-                    properties.put(line.substring(0, idx).trim(), line.substring(idx + 1).trim());
+        final File f = new File(SETTINGS_FILENAME);
+        if (f.lastModified() != _settingsLastModified) {
+            try {
+                _settingsLastModified = f.lastModified();
+                properties.clear();
+                final FileInputStream fis = new FileInputStream(SETTINGS_FILENAME);
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!(line.startsWith("#") || line.isEmpty())) {
+                        final int idx = line.indexOf("=");
+                        properties.put(line.substring(0, idx).trim(), line.substring(idx + 1).trim());
+                    }
                 }
             }
-        } catch (final FileNotFoundException ex) {
-        }
-        catch (final IOException ex) {
-            LOG.warn("Error reading from {}", SETTINGS_FILENAME, ex);
+            catch (final FileNotFoundException ex) {
+            }
+            catch (final IOException ex) {
+                LOG.warn("Error reading from {}", SETTINGS_FILENAME, ex);
+            }
         }
     }
 

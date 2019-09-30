@@ -54,16 +54,16 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testDoAnalysis() throws InterruptedException {
         System.out.println("doAnalysis");
-        ConfigurationData config = new ConfigurationData();
-        PopulationStatistics popStats = new PopulationStatistics("DummyPopStats");
+        final ConfigurationData config = new ConfigurationData();
+        final PopulationStatistics popStats = new PopulationStatistics("DummyPopStats");
         config.setProsecution(new Hypothesis("Prosecution", popStats));
         config.setDefense(new Hypothesis("Defense", popStats));
         config.setStatistics(popStats);
         config.setCaseNumber("Case Number");
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        LikelihoodRatio lr = instance.doAnalysis(config);
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final LikelihoodRatio lr = instance.doAnalysis(config);
         assertNotNull(lr);
-        Ratio overall = lr.getOverallRatio();
+        final Ratio overall = lr.getOverallRatio();
         assertNotNull(overall);
         assertEquals(1.0, overall.getRatio(), 0.00001);
     }
@@ -75,8 +75,8 @@ public class SplitDropThreadPoolTest {
     @Ignore("Not supported yet")
     public void testDoSensitivityAnalysis() {
         System.out.println("doSensitivityAnalysis");
-        ConfigurationData config = null;
-        SplitDropThreadPool instance = new SplitDropThreadPool();
+        final ConfigurationData config = null;
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
         instance.doSensitivityAnalysis(config);
     }
 
@@ -87,8 +87,8 @@ public class SplitDropThreadPoolTest {
     @Ignore("Not supported yet")
     public void testDoPerformanceAnalysis() {
         System.out.println("doPerformanceAnalysis");
-        ConfigurationData config = null;
-        SplitDropThreadPool instance = new SplitDropThreadPool();
+        final ConfigurationData config = null;
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
         instance.doPerformanceAnalysis(config);
     }
 
@@ -98,8 +98,8 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testAddProgressListener() {
         System.out.println("addProgressListener");
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
         instance.addProgressListener(progress);
     }
 
@@ -109,8 +109,8 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testAnalysisStarted() {
         System.out.println("analysisStarted");
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
         instance.addProgressListener(progress);
         instance.analysisStarted();
         assertEquals("analysisStarted", progress.getLog());
@@ -123,9 +123,9 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testAnalysisFinished_Exception() {
         System.out.println("analysisFinished");
-        Exception e = new Exception();
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
+        final Exception e = new Exception();
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
         instance.addProgressListener(progress);
         instance.analysisFinished(e);
         assertEquals("analysisFinished exception=java.lang.Exception", progress.getLog());
@@ -137,9 +137,9 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testHypothesisStarted() {
         System.out.println("hypothesisStarted");
-        Hypothesis hypothesis = new Hypothesis("Prosecution", new PopulationStatistics("dummyPopStats"));
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
+        final Hypothesis hypothesis = new Hypothesis("Prosecution", new PopulationStatistics("dummyPopStats"));
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
         instance.addProgressListener(progress);
         instance.hypothesisStarted(hypothesis);
         assertEquals("hypothesisStarted Prosecution", progress.getLog());
@@ -151,10 +151,10 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testHypothesisFinished() {
         System.out.println("hypothesisFinished");
-        Hypothesis hypothesis = new Hypothesis("Prosecution", new PopulationStatistics("dummyPopStats"));
-        LocusProbabilities probabilities = new LocusProbabilities();
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
+        final Hypothesis hypothesis = new Hypothesis("Prosecution", new PopulationStatistics("dummyPopStats"));
+        final LocusProbabilities probabilities = new LocusProbabilities();
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
         instance.addProgressListener(progress);
         instance.hypothesisFinished(hypothesis, probabilities);
         assertEquals("hypothesisFinished Prosecution", progress.getLog());
@@ -166,11 +166,11 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testLocusStarted() {
         System.out.println("locusStarted");
-        Hypothesis hypothesis = new Hypothesis("Prosecution", new PopulationStatistics("dummyPopStats"));
-        String locusName = "vWA";
-        long jobsize = 0L;
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
+        final Hypothesis hypothesis = new Hypothesis("Prosecution", new PopulationStatistics("dummyPopStats"));
+        final String locusName = "vWA";
+        final long jobsize = 0L;
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final AnalysisProgressListenerImpl progress = new AnalysisProgressListenerImpl();
         instance.addProgressListener(progress);
         instance.locusStarted(hypothesis, locusName, jobsize);
         assertEquals("locusStarted vWA", progress.getLog());
@@ -182,9 +182,9 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testGetId() {
         System.out.println("getId");
-        SplitDropThreadPool instance = new SplitDropThreadPool();
-        String expResult = "SplitDrop Threadpool Edition";
-        String result = instance.getId();
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
+        final String expResult = "SplitDrop Threadpool Edition";
+        final String result = instance.getId();
         assertEquals(expResult, result);
     }
 
@@ -194,7 +194,7 @@ public class SplitDropThreadPoolTest {
     @Test
     public void testInterrupt() {
         System.out.println("interrupt");
-        SplitDropThreadPool instance = new SplitDropThreadPool();
+        final SplitDropThreadPool instance = new SplitDropThreadPool();
         instance.interrupt();
     }
 
@@ -206,10 +206,10 @@ public class SplitDropThreadPoolTest {
         System.out.println("getLikelihoodRatio");
         try {
 
-            SplitDropThreadPool instance = new SplitDropThreadPool();
-            LikelihoodRatio result = instance.getLikelihoodRatio();
+            final SplitDropThreadPool instance = new SplitDropThreadPool();
+            final LikelihoodRatio result = instance.getLikelihoodRatio();
             fail("Expected exception not thrown!");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             if (!"Analysis not running!".equalsIgnoreCase(e.getMessage())) {
                 throw e;
             }
@@ -234,32 +234,32 @@ public class SplitDropThreadPoolTest {
         }
 
         @Override
-        public void analysisFinished(LikelihoodRatio lr) {
+        public void analysisFinished(final LikelihoodRatio lr) {
             log.append("analysisFinished with LR");
         }
 
         @Override
-        public void analysisFinished(Exception e) {
+        public void analysisFinished(final Throwable e) {
             log.append("analysisFinished exception=").append(e);
         }
 
         @Override
-        public void hypothesisStarted(Hypothesis hypothesis) {
+        public void hypothesisStarted(final Hypothesis hypothesis) {
             log.append("hypothesisStarted ").append(hypothesis.getId());
         }
 
         @Override
-        public void hypothesisFinished(Hypothesis hypothesis, LocusProbabilities probability) {
+        public void hypothesisFinished(final Hypothesis hypothesis, final LocusProbabilities probability) {
             log.append("hypothesisFinished ").append(hypothesis.getId());
         }
 
         @Override
-        public void locusStarted(Hypothesis hypothesis, String locusName, long jobsize) {
+        public void locusStarted(final Hypothesis hypothesis, final String locusName, final long jobsize) {
             log.append("locusStarted ").append(locusName);
         }
 
         @Override
-        public void locusFinished(Hypothesis hypothesis, String locusName, Double locusProbability) {
+        public void locusFinished(final Hypothesis hypothesis, final String locusName, final Double locusProbability) {
             log.append("locusFinished ").append(locusName);
         }
     }

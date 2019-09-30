@@ -78,7 +78,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
     private static final double DEFAULT_DROPOUT_TO = 0.99d;
     private static final double DEFAULT_DROPOUT_FROM = 0.00d;
     private static final int DEFAULT_DROPOUT_ESTIMATION_STEPS = 99;
-    private static final int DEFAULT_DROPOUT_STEPS = 10;
+    private static final int DEFAULT_DROPOUT_STEPS = 99;
     private static final int DEFAULT_DROPOUT_ESTMATION_ITERATIONS = 1000;
 
     public static final String DEFENSE_UNKNOWN_CONTRIBUTORS = "Defense Unknown Contributors";
@@ -779,6 +779,10 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         final BigDecimal roundedTheta = new BigDecimal((Double) theta.getModel().getValue()).round(new MathContext(2));
         final BigDecimal roundedDropin = new BigDecimal((Double) sensitivityAnalysisDropin.getModel().getValue()).round(new MathContext(2));
 
+        if (analysisThread != null) {
+            analysisThread.interrupt();
+        }
+
         analysisThread = new SensitivityAnalysis(
                 session,
                 (String) locusComboBox.getSelectedItem(),
@@ -794,6 +798,9 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         if (analysisThread != null && analysisThread.isAlive()) {
             analysisThread.interrupt();
         }
+        else {
+            session.setApplicationState(APP_STATE.READY_FOR_ANALYSIS);
+        }
     }//GEN-LAST:event_sensitivityStopButtonActionPerformed
 
     private void deleteButtonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -807,6 +814,9 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
     private void dropoutStopButtonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropoutStopButtonActionPerformed
         if (analysisThread != null && analysisThread.isAlive()) {
             analysisThread.interrupt();
+        }
+        else {
+            session.setApplicationState(APP_STATE.READY_FOR_ANALYSIS);
         }
     }//GEN-LAST:event_dropoutStopButtonActionPerformed
 
@@ -839,6 +849,10 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         final BigDecimal roundedDropoutTo = new BigDecimal((Double) dropoutEstimationTo.getModel().getValue()).round(new MathContext(2));
         final BigDecimal roundedDropoutFrom = new BigDecimal((Double) dropoutEstimationFrom.getModel().getValue()).round(new MathContext(2));
         final BigDecimal roundedDropin = new BigDecimal((Double) dropoutEstimationDropin.getModel().getValue()).round(new MathContext(2));
+
+        if (analysisThread != null && analysisThread.isAlive()) {
+            analysisThread.interrupt();
+        }
 
         LOG.info("Starting Dropout estimation");
         analysisThread = new DropoutEstimator(

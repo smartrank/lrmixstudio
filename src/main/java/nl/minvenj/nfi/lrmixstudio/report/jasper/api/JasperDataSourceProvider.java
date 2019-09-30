@@ -56,9 +56,9 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
     }
 
     @Override
-    public JRDataSource create(JasperReport jr) throws JRException {
+    public JRDataSource create(final JasperReport jr) throws JRException {
         System.out.println("JRDataSource.create(" + jr.getName() + ")");
-        ArrayList<AnalysisReport> list = new ArrayList<>();
+        final ArrayList<AnalysisReport> list = new ArrayList<>();
         list.add(new AnalysisReport() {
             private Hypothesis defense;
             private Hypothesis prosecution;
@@ -85,7 +85,7 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
                     prosecution.setUnknownDropoutProbability(0.1);
 
                     boolean first = true;
-                    for (Sample sample : profiles) {
+                    for (final Sample sample : profiles) {
                         if (first) {
                             defense.addNonContributor(sample, 0.1);
                             first = false;
@@ -94,7 +94,7 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
                         }
                         prosecution.addContributor(sample, 0.1);
                     }
-                } catch (Exception ex) {
+                } catch (final Exception ex) {
                     System.out.println("Klabats die arme kikker." + ex);
                     Logger.getLogger(JasperDataSourceProvider.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -103,12 +103,12 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
 
             @Override
             public LikelihoodRatio getLikelihoodRatio() {
-                LikelihoodRatio lr = new LikelihoodRatio();
-                LocusProbabilities pros = new LocusProbabilities();
+                final LikelihoodRatio lr = new LikelihoodRatio();
+                final LocusProbabilities pros = new LocusProbabilities();
                 pros.addLocusProbability("DummyLocus 1", .5);
                 pros.addLocusProbability("DummyLocus 2", .4);
                 pros.addLocusProbability("DummyLocus 3", .3);
-                LocusProbabilities def = new LocusProbabilities();
+                final LocusProbabilities def = new LocusProbabilities();
                 def.addLocusProbability("DummyLocus 1", .6);
                 def.addLocusProbability("DummyLocus 2", .4);
                 def.addLocusProbability("DummyLocus 3", .3);
@@ -142,7 +142,7 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
             }
 
             @Override
-            public Exception getException() {
+            public Throwable getException() {
                 return null;
             }
 
@@ -158,10 +158,10 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
 
             @Override
             public SensitivityAnalysisResults getSensitivityAnalysisResults() {
-                SensitivityAnalysisResults results = new SensitivityAnalysisResults();
+                final SensitivityAnalysisResults results = new SensitivityAnalysisResults();
                 results.addRange(LR, "Theta 0.05", new double[][]{{0, 10}, {0.3, 6}, {0.6, 3}, {0.9, 11}});
                 results.addRange(LR, "Theta 0.01", new double[][]{{0, 50}, {0.3, 40}, {0.6, 30}, {0.9, 41}});
-                DropoutEstimation dropout = new DropoutEstimation();
+                final DropoutEstimation dropout = new DropoutEstimation();
                 dropout.setValues("Prosecution", new BigDecimal(0.3), new BigDecimal(0.6));
                 dropout.setValues("Defense", new BigDecimal(0.5), new BigDecimal(0.7));
                 dropout.setAlleleCount(20);
@@ -194,7 +194,7 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
 
             @Override
             public NonContributorTestResults getNonContributorTestResults() {
-                NonContributorTestResults results = new NonContributorTestResults("Dummy");
+                final NonContributorTestResults results = new NonContributorTestResults("Dummy");
                 results.setOriginalLR(20F);
                 results.setMinimum(-150F);
                 results.setOnePercent(-120F);
@@ -212,10 +212,10 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
             @Override
             public Collection getRareAlleles() {
                 final Collection<Allele> rareAlleles = new ArrayList<>();
-                for (Sample sample : replicates) {
+                for (final Sample sample : replicates) {
                     if (sample.isEnabled()) {
-                        for (Locus locus : sample.getLoci()) {
-                            for (Allele allele : locus.getAlleles()) {
+                        for (final Locus locus : sample.getLoci()) {
+                            for (final Allele allele : locus.getAlleles()) {
                                 if (getProsecutionHypothesis().getPopulationStatistics().isRareAllele(allele)) {
                                     rareAlleles.add(allele);
                                 }
@@ -224,10 +224,10 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
                     }
                 }
 
-                for (Sample sample : profiles) {
+                for (final Sample sample : profiles) {
                     if (sample.isEnabled()) {
-                        for (Locus locus : sample.getLoci()) {
-                            for (Allele allele : locus.getAlleles()) {
+                        for (final Locus locus : sample.getLoci()) {
+                            for (final Allele allele : locus.getAlleles()) {
                                 if (getProsecutionHypothesis().getPopulationStatistics().isRareAllele(allele)) {
                                     rareAlleles.add(allele);
                                 }
@@ -244,7 +244,7 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
             }
 
             @Override
-            public void addProcessingTime(long processingTime) {
+            public void addProcessingTime(final long processingTime) {
             }
 
             @Override
@@ -263,17 +263,17 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
             }
 
             @Override
-            public boolean isDropoutCompatible(AnalysisReport currentReport) {
+            public boolean isDropoutCompatible(final AnalysisReport currentReport) {
                 return false;
             }
 
             @Override
-            public boolean isSensitivityCompatible(AnalysisReport currentReport) {
+            public boolean isSensitivityCompatible(final AnalysisReport currentReport) {
                 return false;
             }
 
             @Override
-            public void setSensitivityAnalysisResults(SensitivityAnalysisResults sensitivityAnalysisResults) {
+            public void setSensitivityAnalysisResults(final SensitivityAnalysisResults sensitivityAnalysisResults) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
@@ -283,7 +283,7 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
             }
 
             @Override
-            public void setLogfileName(String name) {
+            public void setLogfileName(final String name) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
@@ -292,12 +292,12 @@ public class JasperDataSourceProvider implements JRDataSourceProvider {
     }
 
     @Override
-    public void dispose(JRDataSource jrds) throws JRException {
+    public void dispose(final JRDataSource jrds) throws JRException {
         System.out.println("JasperDataSourceProvider.dispose(" + jrds.toString() + ")");
     }
 
     @Override
-    public JRField[] getFields(JasperReport jr) throws JRException, UnsupportedOperationException {
+    public JRField[] getFields(final JasperReport jr) throws JRException, UnsupportedOperationException {
         return JasperDataSource.getFields();
     }
 }

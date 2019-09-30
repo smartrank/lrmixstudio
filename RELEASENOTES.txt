@@ -4,6 +4,16 @@ LRmix Studio Release Notes
 Version: ${project.version}
 Release date: ${buildTimestamp}
 ------------------------
+LRDYN-249:  Fixed a performance issue in the application that caused slow response when enabling or disabling a replicate or sample. 
+LRDYN-250:  In order to reduce the number of combinations for unknown contributors, alleles from the population statistics that are not present in 
+			the samples or profiles are grouped into a single 'other' category that has a combined probability.   
+LRDYN-251:  Sensitivity Analysis and Dropout estimation made more robust.
+LRDYN-252:  Number of dropout steps has been set to 99 for sensitivity analysis.
+
+
+Version: 2.1.1-CommunityEdition
+Release date: 2016-06-13
+------------------------
 LRDYN-223:  When reading a GeneMapper or LRMix file containing a replicate ID number, this replicate ID 
             is now incorporated into the sample name. 
             This fixes a problem in the scenario where replicates are spread over multiple files, in 

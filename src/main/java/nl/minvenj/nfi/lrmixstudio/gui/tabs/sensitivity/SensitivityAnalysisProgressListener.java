@@ -210,7 +210,7 @@ public class SensitivityAnalysisProgressListener implements AnalysisProgressList
     }
 
     @Override
-    public void analysisFinished(final Exception e) {
+    public void analysisFinished(final Throwable e) {
         LOG.debug("Analysis finished with exception", e);
         if (!(e instanceof InterruptedException) && !(e.getCause() instanceof InterruptedException) && !(e instanceof RejectedExecutionException)) {
             LOG.error("Analysis Finished!", e);

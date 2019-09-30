@@ -4,15 +4,15 @@
  */
 package nl.minvenj.nfi.lrmixstudio.model;
 
-import nl.minvenj.nfi.lrmixstudio.model.AnalysisProgressListener;
-import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
-import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
-import nl.minvenj.nfi.lrmixstudio.domain.LocusProbabilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
+import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
+import nl.minvenj.nfi.lrmixstudio.domain.LocusProbabilities;
 
 /**
  *
@@ -45,7 +45,7 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testAnalysisStarted() {
         System.out.println("analysisStarted");
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.analysisStarted();
     }
 
@@ -55,8 +55,8 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testAnalysisDone() {
         System.out.println("analysisDone");
-        LikelihoodRatio lr = null;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final LikelihoodRatio lr = null;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.analysisFinished(lr);
     }
 
@@ -66,8 +66,8 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testHypothesisStarted() {
         System.out.println("hypothesisStarted");
-        Hypothesis hypothesis = null;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final Hypothesis hypothesis = null;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.hypothesisStarted(hypothesis);
     }
 
@@ -77,9 +77,9 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testHypothesisFinished() {
         System.out.println("hypothesisFinished");
-        Hypothesis hypothesis = null;
-        LocusProbabilities probabilities = null;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final Hypothesis hypothesis = null;
+        final LocusProbabilities probabilities = null;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.hypothesisFinished(hypothesis, probabilities);
     }
 
@@ -89,10 +89,10 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testLocusStarted() {
         System.out.println("locusStarted");
-        Hypothesis hypothesis = null;
-        String locusName = "";
-        long jobsize = 0L;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final Hypothesis hypothesis = null;
+        final String locusName = "";
+        final long jobsize = 0L;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.locusStarted(hypothesis, locusName, jobsize);
     }
 
@@ -102,10 +102,10 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testLocusFinished() {
         System.out.println("locusFinished");
-        String locusName = "";
-        Hypothesis hypothesis = null;
-        Double locusProbability = null;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final String locusName = "";
+        final Hypothesis hypothesis = null;
+        final Double locusProbability = null;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.locusFinished(hypothesis, locusName, locusProbability);
     }
 
@@ -115,8 +115,8 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testAnalysisFinished_LikelihoodRatio() {
         System.out.println("analysisFinished");
-        LikelihoodRatio lr = null;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final LikelihoodRatio lr = null;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.analysisFinished(lr);
     }
 
@@ -126,8 +126,8 @@ public class AnalysisProgressListenerTest {
     @Test
     public void testAnalysisFinished_Exception() {
         System.out.println("analysisFinished");
-        Exception e = null;
-        AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
+        final Exception e = null;
+        final AnalysisProgressListener instance = new AnalysisProgressListenerImpl();
         instance.analysisFinished(e);
     }
 
@@ -138,27 +138,27 @@ public class AnalysisProgressListenerTest {
         }
 
         @Override
-        public void hypothesisStarted(Hypothesis hypothesis) {
+        public void hypothesisStarted(final Hypothesis hypothesis) {
         }
 
         @Override
-        public void hypothesisFinished(Hypothesis hypothesis, LocusProbabilities probabilities) {
+        public void hypothesisFinished(final Hypothesis hypothesis, final LocusProbabilities probabilities) {
         }
 
         @Override
-        public void locusStarted(Hypothesis hypothesis, String locusName, long jobsize) {
+        public void locusStarted(final Hypothesis hypothesis, final String locusName, final long jobsize) {
         }
 
         @Override
-        public void locusFinished(Hypothesis hypothesis, String locusName, Double locusProbability) {
+        public void locusFinished(final Hypothesis hypothesis, final String locusName, final Double locusProbability) {
         }
 
         @Override
-        public void analysisFinished(LikelihoodRatio lr) {
+        public void analysisFinished(final LikelihoodRatio lr) {
         }
 
         @Override
-        public void analysisFinished(Exception e) {
+        public void analysisFinished(final Throwable e) {
         }
     }
 }

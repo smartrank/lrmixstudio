@@ -222,7 +222,7 @@ class NonContributorTestProgressListener implements AnalysisProgressListener {
     }
 
     @Override
-    public void analysisFinished(final Exception e) {
+    public void analysisFinished(final Throwable e) {
         if (!_summaryLogged.getAndSet(true)) {
             _guiThread.interrupt();
             LOG.error(e.getMessage(), e);

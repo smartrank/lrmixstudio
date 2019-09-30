@@ -60,20 +60,20 @@ public class AnalysisReportImplTest {
         defense = new Hypothesis("Defense", popStats);
         prosecution = new Hypothesis("Defense", popStats);
 
-        Sample replicate1 = new Sample("Replicate 1");
-        Locus locus1 = new Locus("Locus 1");
+        final Sample replicate1 = new Sample("Replicate 1");
+        final Locus locus1 = new Locus("Locus 1");
         locus1.addAllele(new Allele("11"));
         locus1.addAllele(new Allele("12"));
         replicate1.addLocus(locus1);
 
-        Sample replicate2 = new Sample("Replicate 2");
-        Locus locus2 = new Locus("Locus 1");
+        final Sample replicate2 = new Sample("Replicate 2");
+        final Locus locus2 = new Locus("Locus 1");
         locus2.addAllele(new Allele("11"));
         locus2.addAllele(new Allele("11"));
         replicate2.addLocus(locus2);
 
-        Sample profile1 = new Sample("Profile 1");
-        Locus locus3 = new Locus("Locus 1");
+        final Sample profile1 = new Sample("Profile 1");
+        final Locus locus3 = new Locus("Locus 1");
         locus3.addAllele(new Allele("12"));
         locus3.addAllele(new Allele("12"));
         profile1.addLocus(locus3);
@@ -103,8 +103,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetLikelihoodRatio() {
         System.out.println("getLikelihoodRatio");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        LikelihoodRatio expResult = new LikelihoodRatio();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final LikelihoodRatio expResult = new LikelihoodRatio();
         assertNull(instance.getLikelihoodRatio());
         instance.analysisFinished(expResult);
         assertEquals(expResult, instance.getLikelihoodRatio());
@@ -116,8 +116,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetDefenseHypothesis() {
         System.out.println("getDefenseHypothesis");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Hypothesis result = instance.getDefenseHypothesis();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Hypothesis result = instance.getDefenseHypothesis();
         assertEquals(defense, result);
     }
 
@@ -127,8 +127,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetProsecutionHypothesis() {
         System.out.println("getProsecutionHypothesis");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Hypothesis result = instance.getProsecutionHypothesis();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Hypothesis result = instance.getProsecutionHypothesis();
         assertEquals(prosecution, result);
     }
 
@@ -138,8 +138,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetStartTime() {
         System.out.println("getStartTime");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        long now = System.currentTimeMillis();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final long now = System.currentTimeMillis();
         instance.analysisStarted();
         assertEquals(now, instance.getStartTime(), 1000);
     }
@@ -150,11 +150,11 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetStopTime() {
         System.out.println("getStopTime");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.analysisStarted();
         instance.analysisFinished(new Exception("Test Exception"));
-        long now = System.currentTimeMillis();
-        long result = instance.getStopTime();
+        final long now = System.currentTimeMillis();
+        final long result = instance.getStopTime();
         assertEquals(now, result, 1000);
     }
 
@@ -164,7 +164,7 @@ public class AnalysisReportImplTest {
     @Test
     public void testIsSucceeded() {
         System.out.println("isSucceeded");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         assertFalse(instance.isSucceeded());
         instance.analysisFinished(new LikelihoodRatio());
         assertTrue(instance.isSucceeded());
@@ -176,9 +176,9 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetException() {
         System.out.println("getException");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Exception expResult = null;
-        Exception result = instance.getException();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Throwable expResult = null;
+        final Throwable result = instance.getException();
         assertEquals(expResult, result);
     }
 
@@ -188,7 +188,7 @@ public class AnalysisReportImplTest {
     @Test
     public void testAnalysisStarted() {
         System.out.println("analysisStarted");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.analysisStarted();
     }
 
@@ -198,8 +198,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testAnalysisFinished_LikelihoodRatio() {
         System.out.println("analysisFinished");
-        LikelihoodRatio lr = new LikelihoodRatio();
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final LikelihoodRatio lr = new LikelihoodRatio();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.analysisFinished(lr);
         assertEquals(lr, instance.getLikelihoodRatio());
     }
@@ -210,8 +210,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testAnalysisFinished_Exception() {
         System.out.println("analysisFinished");
-        Exception e = new Exception("Test Exception");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Exception e = new Exception("Test Exception");
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.analysisFinished(e);
         assertFalse(instance.isSucceeded());
         assertEquals(e, instance.getException());
@@ -223,7 +223,7 @@ public class AnalysisReportImplTest {
     @Test
     public void testHypothesisStarted() {
         System.out.println("hypothesisStarted");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.hypothesisStarted(defense);
     }
 
@@ -233,8 +233,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testHypothesisFinished() {
         System.out.println("hypothesisFinished");
-        LocusProbabilities probabilities = new LocusProbabilities();
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final LocusProbabilities probabilities = new LocusProbabilities();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.hypothesisFinished(defense, probabilities);
     }
 
@@ -244,9 +244,9 @@ public class AnalysisReportImplTest {
     @Test
     public void testLocusStarted() {
         System.out.println("locusStarted");
-        String locusName = "FGA";
-        long jobsize = 0L;
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final String locusName = "FGA";
+        final long jobsize = 0L;
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.locusStarted(defense, locusName, jobsize);
     }
 
@@ -256,9 +256,9 @@ public class AnalysisReportImplTest {
     @Test
     public void testLocusFinished() {
         System.out.println("locusFinished");
-        String locusName = "FGA";
-        Double locusProbability = 0.0;
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final String locusName = "FGA";
+        final Double locusProbability = 0.0;
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
         instance.locusFinished(defense, locusName, locusProbability);
     }
 
@@ -268,10 +268,10 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetCaseNumber() {
         System.out.println("getCaseNumber");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        String expResult = "4321";
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final String expResult = "4321";
         instance.setCaseNumber(expResult);
-        String result = instance.getCaseNumber();
+        final String result = instance.getCaseNumber();
         assertEquals(expResult, result);
     }
 
@@ -281,8 +281,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetProgramVersion() {
         System.out.println("getProgramVersion");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        String result = instance.getProgramVersion();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final String result = instance.getProgramVersion();
         assertEquals(programVersion, result);
     }
 
@@ -292,8 +292,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetReplicates() {
         System.out.println("getReplicates");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Collection result = instance.getReplicates();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Collection result = instance.getReplicates();
         assertArrayEquals(replicates.toArray(), result.toArray());
     }
 
@@ -303,8 +303,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetProfiles() {
         System.out.println("getProfiles");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Collection result = instance.getProfiles();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Collection result = instance.getProfiles();
         assertArrayEquals(profiles.toArray(), result.toArray());
     }
 
@@ -314,8 +314,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetPopulationStatistics() {
         System.out.println("getPopulationStatistics");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        PopulationStatistics result = instance.getPopulationStatistics();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final PopulationStatistics result = instance.getPopulationStatistics();
         assertEquals(popStats, result);
     }
 
@@ -326,9 +326,9 @@ public class AnalysisReportImplTest {
     @Test
     public void testGetSensitivityAnalysisResults() {
         System.out.println("getSensitivityAnalysisResults");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        SensitivityAnalysisResults expResult = new SensitivityAnalysisResults();
-        SensitivityAnalysisResults result = instance.getSensitivityAnalysisResults();
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final SensitivityAnalysisResults expResult = new SensitivityAnalysisResults();
+        final SensitivityAnalysisResults result = instance.getSensitivityAnalysisResults();
         assertEquals(expResult.toString(), result.toString());
     }
 
@@ -338,8 +338,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testSetCaseNumber() {
         System.out.println("setCaseNumber");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        String expResult = "4321";
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final String expResult = "4321";
         instance.setCaseNumber(expResult);
     }
 
@@ -349,8 +349,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testSetDefenseHypothesis() {
         System.out.println("setDefenseHypothesis");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Hypothesis newDefense = new Hypothesis("New Defense", popStats);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Hypothesis newDefense = new Hypothesis("New Defense", popStats);
         assertEquals(defense, instance.getDefenseHypothesis());
         instance.setDefenseHypothesis(newDefense);
         assertEquals(newDefense, instance.getDefenseHypothesis());
@@ -362,8 +362,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testSetProsecutionHypothesis() {
         System.out.println("setProsecutionHypothesis");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        Hypothesis newProsecution = new Hypothesis("New Prosecution", popStats);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final Hypothesis newProsecution = new Hypothesis("New Prosecution", popStats);
         assertEquals(prosecution, instance.getProsecutionHypothesis());
         instance.setProsecutionHypothesis(newProsecution);
         assertEquals(newProsecution, instance.getProsecutionHypothesis());
@@ -399,8 +399,8 @@ public class AnalysisReportImplTest {
     @Test
     public void testEnrich() {
         System.out.println("enrich");
-        AnalysisReportImpl instance = new AnalysisReportImpl(config);
-        AnalysisReportImpl other = new AnalysisReportImpl(config);
+        final AnalysisReportImpl instance = new AnalysisReportImpl(config);
+        final AnalysisReportImpl other = new AnalysisReportImpl(config);
         assertNull(other.getSensitivityAnalysisResults().getDropoutEstimation());
         other.getSensitivityAnalysisResults().setDropoutEstimation(new DropoutEstimation());
         instance.enrich(other);

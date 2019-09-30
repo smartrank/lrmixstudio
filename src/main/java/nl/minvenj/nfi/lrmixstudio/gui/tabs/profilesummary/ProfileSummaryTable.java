@@ -75,13 +75,12 @@ public class ProfileSummaryTable extends JTable {
         return (DefaultTableModel) super.getModel();
     }
 
-    public void setAlleleCountListener(PropertyChangeListener listener) {
+    public void setAlleleCountListener(final PropertyChangeListener listener) {
         _alleleCountListener = listener;
     }
 
     private void updateTableModel() {
-        LOG.debug("Updating table model");
-        ProfileSummaryTableModel model = new ProfileSummaryTableModel();
+        final ProfileSummaryTableModel model = new ProfileSummaryTableModel();
 
         getTableHeader().setResizingAllowed(true);
 
@@ -97,7 +96,7 @@ public class ProfileSummaryTable extends JTable {
         setDefaultRenderer(Sample.class, new DefaultTableCellRendererImpl(_session));
         setDefaultRenderer(String.class, new DefaultTableCellRendererImpl(_session));
 
-        for (Sample profile : _profiles) {
+        for (final Sample profile : _profiles) {
             model.addColumn(profile.getId());
         }
         model.addColumn("Distinct Alleles");
@@ -105,14 +104,14 @@ public class ProfileSummaryTable extends JTable {
         _decorator.resetCount();
         int maxCount = 0;
 
-        for (Sample replicate : _replicates) {
+        for (final Sample replicate : _replicates) {
             LOG.debug("Adding replicate {}", replicate.getId());
             ArrayList rowData = new ArrayList();
             rowData.add(replicate.isEnabled());
             rowData.add(replicate);
             model.addRow(rowData.toArray());
 
-            for (String locusName : _session.getAllLoci()) {
+            for (final String locusName : _session.getAllLoci()) {
                 LOG.debug("Adding Locus {}", locusName);
                 Locus locus = replicate.getLocus(locusName);
                 rowData = new ArrayList();
@@ -120,20 +119,20 @@ public class ProfileSummaryTable extends JTable {
                     locus = new Locus(locusName);
                     locus.setSample(replicate);
                 }
-                ArrayList<Allele> uniqueAlleles = new ArrayList<>();
+                final ArrayList<Allele> uniqueAlleles = new ArrayList<>();
                 rowData.add(_session.isLocusEnabled(locus.getName()));
                 rowData.add(locus);
 
-                for (Allele a : locus.getAlleles()) {
+                for (final Allele a : locus.getAlleles()) {
                     if (!uniqueAlleles.contains(a)) {
                         uniqueAlleles.add(a);
                     }
                 }
 
                 rowData.add(_decorator.apply(replicate, replicate, locus.getName(), locus.getAlleles().toString().replaceAll("[\\[\\]\\,\\']*", "")));
-                for (Sample profile : _profiles) {
+                for (final Sample profile : _profiles) {
                     LOG.debug("Adding profile {}", profile);
-                    Locus profileLocus = profile.getLocus(locus.getName());
+                    final Locus profileLocus = profile.getLocus(locus.getName());
                     if (profileLocus != null) {
                         rowData.add(_decorator.apply(replicate, profile, profileLocus.getName(), profileLocus.getAlleles().toString().replaceAll("[\\[\\]\\,\\']*", "")));
                     }
@@ -159,8 +158,8 @@ public class ProfileSummaryTable extends JTable {
 
         for (int idx = 0; idx < model.getRowCount(); idx++) {
             if (model.getValueAt(idx, model.getColumnCount() - 1) instanceof Integer) {
-                Integer i = (Integer) model.getValueAt(idx, model.getColumnCount() - 1);
-                String count = i.toString().replaceAll("-", "");
+                final Integer i = (Integer) model.getValueAt(idx, model.getColumnCount() - 1);
+                final String count = i.toString().replaceAll("-", "");
                 if (i == maxCount) {
                     model.setValueAt("<html>" + _decorator.highlight(count, i >= 0), idx, model.getColumnCount() - 1);
                 }
@@ -175,19 +174,17 @@ public class ProfileSummaryTable extends JTable {
             }
         }
 
-        TableColumn col = getColumnModel().getColumn(0);
+        final TableColumn col = getColumnModel().getColumn(0);
         col.setMaxWidth(50);
         col.setResizable(false);
     }
 
-    public void addReplicates(Collection<Sample> replicates) {
+    public void addReplicates(final Collection<Sample> replicates) {
         _replicates.addAll(replicates);
-        updateTableModel();
     }
 
-    public void addProfiles(Collection<Sample> profiles) {
+    public void addProfiles(final Collection<Sample> profiles) {
         _profiles.addAll(profiles);
-        updateTableModel();
     }
 
     public void clear() {
@@ -203,7 +200,7 @@ public class ProfileSummaryTable extends JTable {
      *                        highlight alleles
      *
      */
-    void setDecorator(AlleleDecorator decorator) {
+    void setDecorator(final AlleleDecorator decorator) {
         if (decorator == null) {
             this._decorator = new DefaultDecorator();
         }
@@ -213,15 +210,15 @@ public class ProfileSummaryTable extends JTable {
         updateTableModel();
     }
 
-    public void setContext(SessionData session) {
+    public void setContext(final SessionData session) {
         LOG.debug("setContext");
         this._session = session;
         setModel(new ProfileSummaryTableModel());
     }
 
     @Override
-    public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat) {
-        Printable p = super.getPrintable(printMode, null, footerFormat);
+    public Printable getPrintable(final PrintMode printMode, final MessageFormat headerFormat, final MessageFormat footerFormat) {
+        final Printable p = super.getPrintable(printMode, null, footerFormat);
         return new ProfileSummaryPrintable(p, headerFormat.toPattern(), _decorator.getDescription().replaceAll("\\<[^\\<]*\\>", ""));
     }
 
@@ -230,14 +227,14 @@ public class ProfileSummaryTable extends JTable {
     }
 
     @Override
-    public void tableChanged(TableModelEvent e) {
+    public void tableChanged(final TableModelEvent e) {
         if (e.getType() == TableModelEvent.UPDATE) {
             if (getModel().getRowCount() > 0) {
                 try {
-                    Object obj = getValueAt(e.getFirstRow(), 1);
+                    final Object obj = getValueAt(e.getFirstRow(), 1);
                     if (obj instanceof Locus) {
-                        Boolean isSelected = (Boolean) getValueAt(e.getFirstRow(), 0);
-                        String locusName = getValueAt(e.getFirstRow(), 1).toString();
+                        final Boolean isSelected = (Boolean) getValueAt(e.getFirstRow(), 0);
+                        final String locusName = getValueAt(e.getFirstRow(), 1).toString();
                         _session.setLocusEnabled(locusName, isSelected);
                         for (int idx = 0; idx < getModel().getRowCount(); idx++) {
                             if (getValueAt(idx, 1).toString().equalsIgnoreCase(locusName) && getValueAt(idx, 0) != isSelected) {
@@ -255,8 +252,8 @@ public class ProfileSummaryTable extends JTable {
                         }
                     }
                     if (obj instanceof Sample) {
-                        Boolean isSelected = (Boolean) getValueAt(e.getFirstRow(), 0);
-                        Sample s = (Sample) getValueAt(e.getFirstRow(), 1);
+                        final Boolean isSelected = (Boolean) getValueAt(e.getFirstRow(), 0);
+                        final Sample s = (Sample) getValueAt(e.getFirstRow(), 1);
                         s.setEnabled(isSelected);
                         _session.fireUpdated(ConfigurationDataElement.ACTIVEREPLICATES);
                         if (_session.getActiveReplicates().isEmpty()) {
@@ -269,7 +266,7 @@ public class ProfileSummaryTable extends JTable {
                         }
                     }
                 }
-                catch (ArrayIndexOutOfBoundsException aoobe) {
+                catch (final ArrayIndexOutOfBoundsException aoobe) {
                     LOG.warn("", aoobe);
                 }
             }
@@ -284,12 +281,12 @@ public class ProfileSummaryTable extends JTable {
     private void checkMissingLoci() {
         if (_session != null && !_session.getActiveReplicates().isEmpty() && !_session.getActiveProfiles().isEmpty()) {
             // Check if all loci in the replicates feature in all profiles
-            for (Sample replicate : _session.getActiveReplicates()) {
-                for (Locus replicateLocus : replicate.getLoci()) {
-                    String locusName = replicateLocus.getName();
-                    for (Sample profile : _session.getActiveProfiles()) {
+            for (final Sample replicate : _session.getActiveReplicates()) {
+                for (final Locus replicateLocus : replicate.getLoci()) {
+                    final String locusName = replicateLocus.getName();
+                    for (final Sample profile : _session.getActiveProfiles()) {
                         if (_session.isLocusValid(locusName) && _session.isLocusEnabled(locusName)) {
-                            Locus profileLocus = profile.getLocus(locusName);
+                            final Locus profileLocus = profile.getLocus(locusName);
                             if (profileLocus == null) {
                                 LOG.debug("Profile {} does not contain locus {}", profile, locusName);
                                 _session.setStatusMessage("Profile " + profile.getId() + " does not contain locus " + locusName + ". You cannot continue unless the locus is disabled.");
@@ -309,7 +306,7 @@ public class ProfileSummaryTable extends JTable {
 
         private int _highlightedAlleleCount;
 
-        public void setHighlightedAlleleCount(int count) {
+        public void setHighlightedAlleleCount(final int count) {
             _highlightedAlleleCount = count;
         }
 
@@ -318,7 +315,7 @@ public class ProfileSummaryTable extends JTable {
         }
 
         @Override
-        public Class<?> getColumnClass(int columnIndex) {
+        public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
                 return Boolean.class;
             }
@@ -329,8 +326,8 @@ public class ProfileSummaryTable extends JTable {
         }
 
         @Override
-        public boolean isCellEditable(int row, int column) {
-            Object o = getValueAt(row, 1);
+        public boolean isCellEditable(final int row, final int column) {
+            final Object o = getValueAt(row, 1);
             if (o instanceof Locus) {
                 return column == 0 && _session.isLocusValid(((Locus) o).getName());
             }
@@ -347,13 +344,13 @@ public class ProfileSummaryTable extends JTable {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             if (table.getValueAt(row, 1) instanceof Sample) {
                 setBackground(REPLICATE_ROW_COLOR);
                 setForeground(REPLICATE_ROW_TEXT_COLOR);
             }
             else {
-                Locus locus = (Locus) table.getValueAt(row, 1);
+                final Locus locus = (Locus) table.getValueAt(row, 1);
                 setBackground(row % 2 == 0 ? EVEN_ROW_COLOR : ODD_ROW_COLOR);
                 if (session.isLocusEnabled(locus.getName()) && locus.getSample().isEnabled()) {
                     setForeground(Color.BLACK);
@@ -379,14 +376,14 @@ public class ProfileSummaryTable extends JTable {
             setOpaque(true);
             addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(final ActionEvent e) {
                     _table.setValueAt(isSelected(), _row, 0);
                 }
             });
         }
 
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected, final int row, final int column) {
             _table = table;
             _row = row;
             if (table.getValueAt(row, 1) instanceof Sample) {
@@ -396,7 +393,7 @@ public class ProfileSummaryTable extends JTable {
             }
             else {
                 setHorizontalAlignment(JLabel.CENTER);
-                Locus locus = (Locus) table.getValueAt(row, 1);
+                final Locus locus = (Locus) table.getValueAt(row, 1);
                 setBackground(row % 2 == 0 ? EVEN_ROW_COLOR : ODD_ROW_COLOR);
                 setEnabled(locus.getSample().isEnabled() && _session.isLocusValid(locus.getName()));
             }
@@ -410,12 +407,12 @@ public class ProfileSummaryTable extends JTable {
         }
 
         @Override
-        public boolean isCellEditable(EventObject anEvent) {
+        public boolean isCellEditable(final EventObject anEvent) {
             return true;
         }
 
         @Override
-        public boolean shouldSelectCell(EventObject anEvent) {
+        public boolean shouldSelectCell(final EventObject anEvent) {
             return false;
         }
 
@@ -429,11 +426,11 @@ public class ProfileSummaryTable extends JTable {
         }
 
         @Override
-        public void addCellEditorListener(CellEditorListener l) {
+        public void addCellEditorListener(final CellEditorListener l) {
         }
 
         @Override
-        public void removeCellEditorListener(CellEditorListener l) {
+        public void removeCellEditorListener(final CellEditorListener l) {
         }
     }
 
@@ -447,8 +444,8 @@ public class ProfileSummaryTable extends JTable {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(final JTable table, final Object value,
+                                                       final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             if (table.getValueAt(row, 1) instanceof Sample) {
                 setHorizontalAlignment(JLabel.LEFT);
                 setBackground(REPLICATE_ROW_COLOR);
@@ -457,8 +454,8 @@ public class ProfileSummaryTable extends JTable {
             }
             else {
                 setHorizontalAlignment(JLabel.CENTER);
-                Locus locus = (Locus) table.getValueAt(row, 1);
-                boolean locusValid = _session.isLocusValid(locus.getName());
+                final Locus locus = (Locus) table.getValueAt(row, 1);
+                final boolean locusValid = _session.isLocusValid(locus.getName());
                 setBackground(row % 2 == 0 ? EVEN_ROW_COLOR : ODD_ROW_COLOR);
                 setEnabled(locus.getSample().isEnabled() && locusValid);
                 if (!locusValid) {

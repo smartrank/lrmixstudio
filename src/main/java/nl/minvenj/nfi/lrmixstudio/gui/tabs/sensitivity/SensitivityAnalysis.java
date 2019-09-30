@@ -271,7 +271,8 @@ public class SensitivityAnalysis extends Thread {
             masterReport.getSensitivityAnalysisResults().addRange(P_DEFENSE, "log10(Pr(E|Hd))" + rangeName.toString(), defenceProbabilityPoints);
             masterReport.analysisFinished(masterReport.getLikelihoodRatio());
             progress.analysisFinished();
-        } catch (final Exception ex) {
+        }
+        catch (final Throwable ex) {
             if (ex instanceof InterruptedException || ex instanceof RejectedExecutionException) {
                 if (mathematicalModel != null) {
                     mathematicalModel.interrupt();

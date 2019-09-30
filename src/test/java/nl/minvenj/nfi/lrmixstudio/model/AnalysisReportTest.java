@@ -52,9 +52,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetLikelihoodRatio() {
         System.out.println("getLikelihoodRatio");
-        AnalysisReport instance = new AnalysisReportImpl();
-        LikelihoodRatio expResult = null;
-        LikelihoodRatio result = instance.getLikelihoodRatio();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final LikelihoodRatio expResult = null;
+        final LikelihoodRatio result = instance.getLikelihoodRatio();
         assertEquals(expResult, result);
     }
 
@@ -64,9 +64,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetDefenseHypothesis() {
         System.out.println("getDefenseHypothesis");
-        AnalysisReport instance = new AnalysisReportImpl();
-        Hypothesis expResult = null;
-        Hypothesis result = instance.getDefenseHypothesis();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final Hypothesis expResult = null;
+        final Hypothesis result = instance.getDefenseHypothesis();
         assertEquals(expResult, result);
     }
 
@@ -76,9 +76,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetProsecutionHypothesis() {
         System.out.println("getProsecutionHypothesis");
-        AnalysisReport instance = new AnalysisReportImpl();
-        Hypothesis expResult = null;
-        Hypothesis result = instance.getProsecutionHypothesis();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final Hypothesis expResult = null;
+        final Hypothesis result = instance.getProsecutionHypothesis();
         assertEquals(expResult, result);
     }
 
@@ -88,9 +88,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetStartTime() {
         System.out.println("getStartTime");
-        AnalysisReport instance = new AnalysisReportImpl();
-        long expResult = 0L;
-        long result = instance.getStartTime();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final long expResult = 0L;
+        final long result = instance.getStartTime();
         assertEquals(expResult, result);
     }
 
@@ -100,9 +100,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetStopTime() {
         System.out.println("getStopTime");
-        AnalysisReport instance = new AnalysisReportImpl();
-        long expResult = 0L;
-        long result = instance.getStopTime();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final long expResult = 0L;
+        final long result = instance.getStopTime();
         assertEquals(expResult, result);
     }
 
@@ -112,9 +112,9 @@ public class AnalysisReportTest {
     @Test
     public void testIsSucceeded() {
         System.out.println("isSucceeded");
-        AnalysisReport instance = new AnalysisReportImpl();
-        boolean expResult = false;
-        boolean result = instance.isSucceeded();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final boolean expResult = false;
+        final boolean result = instance.isSucceeded();
         assertEquals(expResult, result);
     }
 
@@ -124,9 +124,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetException() {
         System.out.println("getException");
-        AnalysisReport instance = new AnalysisReportImpl();
-        Exception expResult = null;
-        Exception result = instance.getException();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final Throwable expResult = null;
+        final Throwable result = instance.getException();
         assertEquals(expResult, result);
     }
 
@@ -136,9 +136,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetCaseNumber() {
         System.out.println("getCaseNumber");
-        AnalysisReport instance = new AnalysisReportImpl();
-        String expResult = "";
-        String result = instance.getCaseNumber();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final String expResult = "";
+        final String result = instance.getCaseNumber();
         assertEquals(expResult, result);
     }
 
@@ -148,9 +148,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetProgramVersion() {
         System.out.println("getProgramVersion");
-        AnalysisReport instance = new AnalysisReportImpl();
-        String expResult = "";
-        String result = instance.getProgramVersion();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final String expResult = "";
+        final String result = instance.getProgramVersion();
         assertEquals(expResult, result);
     }
 
@@ -160,9 +160,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetSensitivityAnalysisResults() {
         System.out.println("getSensitivityAnalysisResults");
-        AnalysisReport instance = new AnalysisReportImpl();
-        SensitivityAnalysisResults expResult = null;
-        SensitivityAnalysisResults result = instance.getSensitivityAnalysisResults();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final SensitivityAnalysisResults expResult = null;
+        final SensitivityAnalysisResults result = instance.getSensitivityAnalysisResults();
         assertEquals(expResult, result);
     }
 
@@ -172,9 +172,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetPopulationStatistics() {
         System.out.println("getPopulationStatistics");
-        AnalysisReport instance = new AnalysisReportImpl();
-        PopulationStatistics expResult = null;
-        PopulationStatistics result = instance.getPopulationStatistics();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final PopulationStatistics expResult = null;
+        final PopulationStatistics result = instance.getPopulationStatistics();
         assertEquals(expResult, result);
     }
 
@@ -184,9 +184,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetReplicates() {
         System.out.println("getReplicates");
-        AnalysisReport instance = new AnalysisReportImpl();
-        Collection expResult = null;
-        Collection result = instance.getReplicates();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final Collection expResult = null;
+        final Collection result = instance.getReplicates();
         assertEquals(expResult, result);
     }
 
@@ -196,9 +196,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetProfiles() {
         System.out.println("getProfiles");
-        AnalysisReport instance = new AnalysisReportImpl();
-        Collection expResult = null;
-        Collection result = instance.getProfiles();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final Collection expResult = null;
+        final Collection result = instance.getProfiles();
         assertEquals(expResult, result);
     }
 
@@ -208,9 +208,9 @@ public class AnalysisReportTest {
     @Test
     public void testGetGuid() {
         System.out.println("getGuid");
-        AnalysisReport instance = new AnalysisReportImpl();
-        int expResult = 0;
-        int result = instance.getGuid();
+        final AnalysisReport instance = new AnalysisReportImpl();
+        final int expResult = 0;
+        final int result = instance.getGuid();
         assertEquals(expResult, result);
     }
 
@@ -307,7 +307,7 @@ public class AnalysisReportTest {
         }
 
         @Override
-        public void addProcessingTime(long processingTime) {
+        public void addProcessingTime(final long processingTime) {
         }
 
         @Override
@@ -326,17 +326,17 @@ public class AnalysisReportTest {
         }
 
         @Override
-        public boolean isDropoutCompatible(AnalysisReport currentReport) {
+        public boolean isDropoutCompatible(final AnalysisReport currentReport) {
             return false;
         }
 
         @Override
-        public boolean isSensitivityCompatible(AnalysisReport currentReport) {
+        public boolean isSensitivityCompatible(final AnalysisReport currentReport) {
             return false;
         }
 
         @Override
-        public void setSensitivityAnalysisResults(SensitivityAnalysisResults sensitivityAnalysisResults) {
+        public void setSensitivityAnalysisResults(final SensitivityAnalysisResults sensitivityAnalysisResults) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -346,7 +346,7 @@ public class AnalysisReportTest {
         }
 
         @Override
-        public void setLogfileName(String name) {
+        public void setLogfileName(final String name) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

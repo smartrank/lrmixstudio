@@ -44,7 +44,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
     private final ArrayList<AnalysisProgressListener> progress = new ArrayList();
     private ExecutorService service;
     private final Map<String, LocusProbabilities> probabilities;
-    private AtomicInteger locusCount;
+    private final AtomicInteger locusCount;
     private LikelihoodRatio lr;
     private final ArrayList<Future<LocusProbability>> futures = new ArrayList<>();
     private Thread _watchDog;
@@ -54,15 +54,15 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
 
         Collection<Future<LocusProbability>> _futures;
 
-        public WatchdogThread(Collection<Future<LocusProbability>> futures) {
+        public WatchdogThread(final Collection<Future<LocusProbability>> futures) {
             _futures = futures;
         }
 
         @Override
         public void run() {
             try {
-                for (Future<LocusProbability> f : futures) {
-                    LocusProbability prob = f.get();
+                for (final Future<LocusProbability> f : futures) {
+                    final LocusProbability prob = f.get();
                     LocusProbabilities probs = probabilities.get(prob.getHypothesis().getId());
                     if (probs == null) {
                         probs = new LocusProbabilities();
@@ -83,7 +83,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
             } catch (InterruptedException | ExecutionException ex) {
                 analysisFinished(ex);
             }
-            catch (Throwable t) {
+            catch (final Throwable t) {
                 analysisFinished(new UnsupportedOperationException(t));
             }
         }
@@ -93,7 +93,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
         this(null);
     }
 
-    public SplitDropThreadPool(AnalysisProgressListener progressListener) {
+    public SplitDropThreadPool(final AnalysisProgressListener progressListener) {
         if (progressListener != null) {
             addProgressListener(progressListener);
         }
@@ -102,7 +102,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
     }
 
     @Override
-    public void startAnalysis(ConfigurationData config) {
+    public void startAnalysis(final ConfigurationData config) {
         System.gc();
         LOG.debug("Starting analysis with {} threads", config.getThreadCount());
         _interrupted = false;
@@ -111,8 +111,8 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
         probabilities.put("Defense", new LocusProbabilities());
         probabilities.put("Prosecution", new LocusProbabilities());
         analysisStarted();
-        ArrayList<LocusProbabilityJob> jobs = new ArrayList<>();
-        for (String locusName : config.getEnabledLoci()) {
+        final ArrayList<LocusProbabilityJob> jobs = new ArrayList<>();
+        for (final String locusName : config.getEnabledLoci()) {
             if (config.getProsecution() != null) {
                 jobs.addAll(LocusProbabilityJobGenerator.generate(locusName, config.getActiveReplicates(), config.getProsecution(), this));
             }
@@ -121,7 +121,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
             }
         }
 
-        for (LocusProbabilityJob job : jobs) {
+        for (final LocusProbabilityJob job : jobs) {
             futures.add(service.submit(job));
         }
         service.shutdown();
@@ -130,7 +130,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
     }
 
     @Override
-    public LikelihoodRatio doAnalysis(ConfigurationData config) throws InterruptedException {
+    public LikelihoodRatio doAnalysis(final ConfigurationData config) throws InterruptedException {
         startAnalysis(config);
         _watchDog.join();
         if (_interrupted) {
@@ -140,17 +140,17 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
     }
 
     @Override
-    public void doSensitivityAnalysis(ConfigurationData config) {
+    public void doSensitivityAnalysis(final ConfigurationData config) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void doPerformanceAnalysis(ConfigurationData config) {
+    public void doPerformanceAnalysis(final ConfigurationData config) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addProgressListener(AnalysisProgressListener listener) {
+    public void addProgressListener(final AnalysisProgressListener listener) {
         if (listener != null) {
             progress.add(listener);
         }
@@ -158,7 +158,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
 
     @Override
     public void analysisStarted() {
-        for (AnalysisProgressListener listener : progress) {
+        for (final AnalysisProgressListener listener : progress) {
             listener.analysisStarted();
         }
     }
@@ -168,7 +168,7 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                for (AnalysisProgressListener listener : progress) {
+                for (final AnalysisProgressListener listener : progress) {
                     listener.analysisFinished(lr);
                 }
             }
@@ -176,44 +176,44 @@ public final class SplitDropThreadPool implements LRMathModel, AnalysisProgressL
     }
 
     @Override
-    public void analysisFinished(Exception e) {
+    public void analysisFinished(final Throwable e) {
         if (!((e instanceof InterruptedException) || (e.getCause() instanceof InterruptedException))) {
             LOG.error(e.getMessage(), e);
         } else
             _interrupted = true;
-        for (AnalysisProgressListener listener : progress) {
+        for (final AnalysisProgressListener listener : progress) {
             listener.analysisFinished(e);
         }
     }
 
     @Override
-    public void hypothesisStarted(Hypothesis hypothesis) {
-        for (AnalysisProgressListener listener : progress) {
+    public void hypothesisStarted(final Hypothesis hypothesis) {
+        for (final AnalysisProgressListener listener : progress) {
             listener.hypothesisStarted(hypothesis);
         }
     }
 
     @Override
-    public void hypothesisFinished(Hypothesis hypothesis, LocusProbabilities probabilities) {
-        for (AnalysisProgressListener listener : progress) {
+    public void hypothesisFinished(final Hypothesis hypothesis, final LocusProbabilities probabilities) {
+        for (final AnalysisProgressListener listener : progress) {
             listener.hypothesisFinished(hypothesis, probabilities);
         }
     }
 
     @Override
-    public synchronized void locusStarted(Hypothesis hypothesis, String locusName, long jobsize) {
+    public synchronized void locusStarted(final Hypothesis hypothesis, final String locusName, final long jobsize) {
         locusCount.incrementAndGet();
         LOG.debug("Job {} Hypothesis {} Locus {} started with jobsize {}", locusCount, hypothesis.getId(), locusName, jobsize);
-        for (AnalysisProgressListener listener : progress) {
+        for (final AnalysisProgressListener listener : progress) {
             listener.locusStarted(hypothesis, locusName, jobsize);
         }
     }
 
     @Override
-    public synchronized void locusFinished(Hypothesis hypothesis, String locusName, Double locusProbability) {
+    public synchronized void locusFinished(final Hypothesis hypothesis, final String locusName, final Double locusProbability) {
         LOG.debug("Hypothesis {} Locus {} finished with result {}", hypothesis.getId(), locusName, locusProbability);
         LOG.debug("{} jobs still active", locusCount);
-        for (AnalysisProgressListener listener : progress) {
+        for (final AnalysisProgressListener listener : progress) {
             listener.locusFinished(hypothesis, locusName, locusProbability);
         }
     }

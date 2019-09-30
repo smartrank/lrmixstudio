@@ -38,7 +38,7 @@ public interface AnalysisReport {
 
     public boolean isSucceeded();
 
-    public Exception getException();
+    public Throwable getException();
 
     public String getCaseNumber();
 

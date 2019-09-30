@@ -1,7 +1,6 @@
 package nl.minvenj.nfi.lrmixstudio.model.splitdrop.referencecases;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
 
 import java.util.Collection;
 import java.util.concurrent.TimeoutException;
@@ -31,7 +30,6 @@ public class Case15Test extends ReferenceCaseTest {
 
     @Test
     public void testReferenceCase15Parameter1() throws InterruptedException, TimeoutException {
-        assumeTrue(Runtime.getRuntime().availableProcessors() >= 16);
         System.out.println("testReferenceCase15Parameter1");
         final Collection<Sample> replicates = readReplicates(REFERENCE_SAMPLE_FILENAME);
         final Collection<Sample> suspectSamples = readProfiles(REFERENCE_SUSPECT1_FILENAME);
@@ -72,7 +70,6 @@ public class Case15Test extends ReferenceCaseTest {
     @Test
     @Ignore("This test fails. Need to find out why the calculated result (slightly more likely) differs from the expected result (more likely)")
     public void testReferenceCase15Parameter2() throws InterruptedException, TimeoutException {
-        assumeTrue(Runtime.getRuntime().availableProcessors() >= 16);
         System.out.println("testReferenceCase15Parameter2");
         final Collection<Sample> replicates = readReplicates(REFERENCE_SAMPLE_FILENAME);
         final Collection<Sample> suspectSamples = readProfiles(REFERENCE_SUSPECT1_FILENAME);
@@ -112,7 +109,6 @@ public class Case15Test extends ReferenceCaseTest {
 
     @Test
     public void testReferenceCase15Parameter3() throws InterruptedException, TimeoutException {
-        assumeTrue(Runtime.getRuntime().availableProcessors() >= 16);
         System.out.println("testReferenceCase15Parameter3");
         final Collection<Sample> replicates = readReplicates(REFERENCE_SAMPLE_FILENAME);
         final Collection<Sample> suspectSamples = readProfiles(REFERENCE_SUSPECT1_FILENAME);
@@ -152,7 +148,6 @@ public class Case15Test extends ReferenceCaseTest {
 
     @Test
     public void testReferenceCase15Parameter4() throws InterruptedException, TimeoutException {
-        assumeTrue(Runtime.getRuntime().availableProcessors() >= 16);
         System.out.println("testReferenceCase15Parameter4");
         final Collection<Sample> replicates = readReplicates(REFERENCE_SAMPLE_FILENAME);
         final Collection<Sample> suspectSamples = readProfiles(REFERENCE_SUSPECT2_FILENAME);
@@ -192,7 +187,6 @@ public class Case15Test extends ReferenceCaseTest {
 
     @Test
     public void testReferenceCase15Parameter5() throws InterruptedException, TimeoutException {
-        assumeTrue(Runtime.getRuntime().availableProcessors() >= 16);
         System.out.println("testReferenceCase15Parameter5");
         final Collection<Sample> replicates = readReplicates(REFERENCE_SAMPLE_FILENAME);
         final Collection<Sample> suspectSamples = readProfiles(REFERENCE_SUSPECT2_FILENAME);
@@ -232,7 +226,6 @@ public class Case15Test extends ReferenceCaseTest {
 
     @Test
     public void testReferenceCase15Parameter6() throws InterruptedException, TimeoutException {
-        assumeTrue(Runtime.getRuntime().availableProcessors() >= 16);
         System.out.println("testReferenceCase15Parameter6");
         final Collection<Sample> replicates = readReplicates(REFERENCE_SAMPLE_FILENAME);
         final Collection<Sample> suspectSamples = readProfiles(REFERENCE_SUSPECT2_FILENAME);

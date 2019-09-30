@@ -35,7 +35,7 @@ import nl.minvenj.nfi.lrmixstudio.model.SensitivityAnalysisResults.Range;
 public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListener {
 
     private LikelihoodRatio lr;
-    private Exception exception;
+    private Throwable exception;
     private long stopTime;
     private long startTime;
     private boolean success;
@@ -55,7 +55,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     private long _processingTime;
     private String _logfileName;
 
-    public AnalysisReportImpl(ConfigurationData config) {
+    public AnalysisReportImpl(final ConfigurationData config) {
         LOG.debug("Creating new report from {}", config);
         prosecutionHypothesis = config.getProsecution();
         defenseHypothesis = config.getDefense();
@@ -99,7 +99,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public Exception getException() {
+    public Throwable getException() {
         return exception;
     }
 
@@ -110,7 +110,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public void analysisFinished(LikelihoodRatio lr) {
+    public void analysisFinished(final LikelihoodRatio lr) {
         stopTime = System.currentTimeMillis();
         addProcessingTime(stopTime - startTime);
         if (lr != null) {
@@ -122,9 +122,9 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public synchronized void analysisFinished(Exception e) {
-        // We will receive this call for each thread that was still running. 
-        // Only add the processing time once. 
+    public synchronized void analysisFinished(final Throwable e) {
+        // We will receive this call for each thread that was still running.
+        // Only add the processing time once.
         if (stopTime == 0) {
             stopTime = System.currentTimeMillis();
             addProcessingTime(stopTime - startTime);
@@ -136,21 +136,21 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public synchronized void hypothesisStarted(Hypothesis hypothesis) {
+    public synchronized void hypothesisStarted(final Hypothesis hypothesis) {
         LOG.debug("Hypothesis {} started", hypothesis.getId());
     }
 
     @Override
-    public synchronized void hypothesisFinished(Hypothesis hypothesis, LocusProbabilities probabilities) {
+    public synchronized void hypothesisFinished(final Hypothesis hypothesis, final LocusProbabilities probabilities) {
         LOG.debug("Hypothesis {} done: {}", hypothesis.getId(), probabilities);
     }
 
     @Override
-    public void locusStarted(Hypothesis hypothesis, String locusName, long jobsize) {
+    public void locusStarted(final Hypothesis hypothesis, final String locusName, final long jobsize) {
     }
 
     @Override
-    public void locusFinished(Hypothesis hypothesis, String locusName, Double locusProbability) {
+    public void locusFinished(final Hypothesis hypothesis, final String locusName, final Double locusProbability) {
     }
 
     @Override
@@ -183,27 +183,27 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
         return sensitivityAnalysisResults;
     }
 
-    public void setCaseNumber(String caseNumber) {
+    public void setCaseNumber(final String caseNumber) {
         this.caseNumber = caseNumber;
     }
 
-    public void setDefenseHypothesis(Hypothesis defenseHypothesis) {
+    public void setDefenseHypothesis(final Hypothesis defenseHypothesis) {
         this.defenseHypothesis = defenseHypothesis;
     }
 
-    public void setProsecutionHypothesis(Hypothesis prosecutionHypothesis) {
+    public void setProsecutionHypothesis(final Hypothesis prosecutionHypothesis) {
         this.prosecutionHypothesis = prosecutionHypothesis;
     }
 
     @Override
     public int getGuid() {
         // Generate a unique(ish) number based on the defense and prosecution hypotheses, and the list of enabled loci
-        int guid = getDefenseHypothesis().getGuid() + 2 * getProsecutionHypothesis().getGuid() + 3 * deepHash(_enabledLoci) + 5 * deepHash(replicates);
+        final int guid = getDefenseHypothesis().getGuid() + 2 * getProsecutionHypothesis().getGuid() + 3 * deepHash(_enabledLoci) + 5 * deepHash(replicates);
 
         return guid;
     }
 
-    public void enrich(AnalysisReport other) {
+    public void enrich(final AnalysisReport other) {
         LOG.debug("Enriching report {} with data from report {}", this, other);
         if (getGuid() != other.getGuid()) {
             throw new IllegalArgumentException("Cannot enrich report '" + getGuid() + "' with data from report '" + other.getGuid() + "'. The hypotheses are not compatible!");
@@ -213,7 +213,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
             this.lr = other.getLikelihoodRatio();
         }
 
-        for (Range range : other.getSensitivityAnalysisResults().getRanges()) {
+        for (final Range range : other.getSensitivityAnalysisResults().getRanges()) {
             getSensitivityAnalysisResults().addRange(range);
         }
 
@@ -232,7 +232,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
         return performanceTestResults;
     }
 
-    public void setPerformanceTestResults(NonContributorTestResults testResults) {
+    public void setPerformanceTestResults(final NonContributorTestResults testResults) {
         performanceTestResults = testResults;
     }
 
@@ -244,11 +244,11 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     @Override
     public Collection<Allele> getRareAlleles() {
         final Collection<Allele> rareAlleles = new ArrayList<>();
-        for (Sample sample : replicates) {
+        for (final Sample sample : replicates) {
             if (sample.isEnabled()) {
-                for (Locus locus : sample.getLoci()) {
+                for (final Locus locus : sample.getLoci()) {
                     if (_config.isLocusEnabled(locus.getName())) {
-                        for (Allele allele : locus.getAlleles()) {
+                        for (final Allele allele : locus.getAlleles()) {
                             if (getProsecutionHypothesis().getPopulationStatistics().isRareAllele(allele)) {
                                 rareAlleles.add(allele);
                                 LOG.debug("Allele {} in {} of {} is rare", allele.getAllele(), allele.getLocus(), allele.getLocus().getSampleId());
@@ -259,11 +259,11 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
             }
         }
 
-        for (Sample sample : profiles) {
+        for (final Sample sample : profiles) {
             if (sample.isEnabled()) {
-                for (Locus locus : sample.getLoci()) {
+                for (final Locus locus : sample.getLoci()) {
                     if (_config.isLocusEnabled(locus.getName())) {
-                        for (Allele allele : locus.getAlleles()) {
+                        for (final Allele allele : locus.getAlleles()) {
                             if (getProsecutionHypothesis().getPopulationStatistics().isRareAllele(allele)) {
                                 rareAlleles.add(allele);
                                 LOG.debug("Allele {} in {} of {} is rare", allele.getAllele(), allele.getLocus(), allele.getLocus().getSampleId());
@@ -286,7 +286,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
      *
      * @param exported true if the report has been exported, false otherwise
      */
-    public void setExported(boolean exported) {
+    public void setExported(final boolean exported) {
         _exported = exported;
     }
 
@@ -296,7 +296,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public void addProcessingTime(long processingTime) {
+    public void addProcessingTime(final long processingTime) {
         LOG.debug("Adding processing time {}", processingTime);
         _processingTime += processingTime;
     }
@@ -308,10 +308,10 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
 
     @Override
     public Collection<String> getDisabledLoci() {
-        ArrayList<String> disabled = new ArrayList<>();
-        for (Sample replicate : _config.getActiveReplicates()) {
-            for (Locus replicateLocus : replicate.getLoci()) {
-                String name = replicateLocus.getName();
+        final ArrayList<String> disabled = new ArrayList<>();
+        for (final Sample replicate : _config.getActiveReplicates()) {
+            for (final Locus replicateLocus : replicate.getLoci()) {
+                final String name = replicateLocus.getName();
                 if (_config.isLocusValid(name) && !disabled.contains(name)) {
                     disabled.add(name);
                 }
@@ -326,10 +326,10 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
         191, 193, 197, 199, 211, 223, 227, 229,
         233};
 
-    private int deepHash(Collection collection) {
+    private int deepHash(final Collection collection) {
         int retval = 0;
         int idx = 0;
-        for (Object s : collection) {
+        for (final Object s : collection) {
             if (s instanceof Sample) {
                 retval += primes[idx++] * ((Sample) s).getId().hashCode();
             } else {
@@ -340,14 +340,14 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public boolean isDropoutCompatible(AnalysisReport otherReport) {
+    public boolean isDropoutCompatible(final AnalysisReport otherReport) {
 
         // Other report must be the same type
         if (!(otherReport instanceof AnalysisReportImpl)) {
             return false;
         }
 
-        AnalysisReportImpl other = (AnalysisReportImpl) otherReport;
+        final AnalysisReportImpl other = (AnalysisReportImpl) otherReport;
 
         // Replicates
         if (!compareCollections(replicates, other.replicates)) {
@@ -374,14 +374,14 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public boolean isSensitivityCompatible(AnalysisReport otherReport) {
+    public boolean isSensitivityCompatible(final AnalysisReport otherReport) {
 
         // Other report must be the same type
         if (!(otherReport instanceof AnalysisReportImpl)) {
             return false;
         }
 
-        AnalysisReportImpl other = (AnalysisReportImpl) otherReport;
+        final AnalysisReportImpl other = (AnalysisReportImpl) otherReport;
 
         // Replicates
         if (!compareCollections(replicates, other.replicates)) {
@@ -407,12 +407,12 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
         return (prosecutionHypothesis.getGuidForSensitivityAnalysis() == other.prosecutionHypothesis.getGuidForSensitivityAnalysis());
     }
 
-    private boolean compareCollections(Collection<?> theOne, Collection<?> theOther) {
+    private boolean compareCollections(final Collection<?> theOne, final Collection<?> theOther) {
         return theOne.containsAll(theOther) && theOther.containsAll(theOne);
     }
 
     @Override
-    public void setSensitivityAnalysisResults(SensitivityAnalysisResults results) {
+    public void setSensitivityAnalysisResults(final SensitivityAnalysisResults results) {
         sensitivityAnalysisResults = results;
     }
 
@@ -422,7 +422,7 @@ public class AnalysisReportImpl implements AnalysisReport, AnalysisProgressListe
     }
 
     @Override
-    public void setLogfileName(String name) {
+    public void setLogfileName(final String name) {
         _logfileName = name;
     }
 }

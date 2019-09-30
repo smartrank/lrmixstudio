@@ -26,26 +26,26 @@ public class DefaultAnalysisProgressListenerImpl implements AnalysisProgressList
     }
 
     @Override
-    public void analysisFinished(LikelihoodRatio lr) {
+    public void analysisFinished(final LikelihoodRatio lr) {
     }
 
     @Override
-    public void hypothesisStarted(Hypothesis hypothesis) {
+    public void hypothesisStarted(final Hypothesis hypothesis) {
     }
 
     @Override
-    public void hypothesisFinished(Hypothesis hypothesis, LocusProbabilities probabilities) {
+    public void hypothesisFinished(final Hypothesis hypothesis, final LocusProbabilities probabilities) {
     }
 
     @Override
-    public void locusStarted(Hypothesis hypothesis, String locusName, long jobsize) {
+    public void locusStarted(final Hypothesis hypothesis, final String locusName, final long jobsize) {
     }
 
     @Override
-    public void locusFinished(Hypothesis hypothesis, String locusName, Double locusProbability) {
+    public void locusFinished(final Hypothesis hypothesis, final String locusName, final Double locusProbability) {
     }
 
     @Override
-    public void analysisFinished(Exception e) {
+    public void analysisFinished(final Throwable e) {
     }
 }

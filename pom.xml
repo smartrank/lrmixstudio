@@ -4,13 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.minvenj.nfi</groupId>
   <artifactId>lrmixstudio</artifactId>
-  <version>2.1.1-CommunityEdition</version>
+  <version>2.1.2-CommunityEdition</version>
   <name>LRmixStudio</name>
-  <description>Parent POM for (all) NFI Maven projects</description>
-  <organization>
-    <name>NFI</name>
-    <url>http://www.forensischinstituut.nl/</url>
-  </organization>
   <properties>
     <version.junit>4.12</version.junit>
     <version.itext>2.1.5</version.itext>

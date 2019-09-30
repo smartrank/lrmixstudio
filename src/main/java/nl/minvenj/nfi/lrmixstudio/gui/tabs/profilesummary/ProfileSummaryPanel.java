@@ -160,7 +160,9 @@ public class ProfileSummaryPanel extends javax.swing.JPanel implements Configura
         decoratorList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             @Override
             public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
-                decoratorListValueChanged(evt);
+                if (!evt.getValueIsAdjusting() && !_suppressDecoratorListUpdates) {
+                    decoratorListValueChanged(evt);
+                }
             }
         });
         jScrollPane2.setViewportView(decoratorList);
@@ -399,7 +401,7 @@ public class ProfileSummaryPanel extends javax.swing.JPanel implements Configura
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void decoratorListValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_decoratorListValueChanged
-        LOG.info("decoratorListValueChanged");
+        LOG.debug("decoratorListValueChanged");
         if (decoratorList.getModel().getSize() > 0) {
             profileSummaryTable.setDecorator((AlleleDecorator) decoratorList.getSelectedValue());
         }
@@ -489,11 +491,11 @@ public class ProfileSummaryPanel extends javax.swing.JPanel implements Configura
     private nl.minvenj.nfi.lrmixstudio.gui.tabs.profilesummary.ProfileSummaryTable profileSummaryTable;
     private javax.swing.JCheckBox textColorCheckBox;
     private javax.swing.JCheckBox underlinedCheckbox;
+    private boolean _suppressDecoratorListUpdates;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void dataChanged(final ConfigurationDataElement element) {
-        LOG.debug("dataChanged {}", element);
         switch (element) {
             case ACTIVELOCI:
             case ACTIVEREPLICATES:
@@ -502,7 +504,6 @@ public class ProfileSummaryPanel extends javax.swing.JPanel implements Configura
             case REPLICATES:
                 profileSummaryTable.clear();
                 final int idx = Math.max(decoratorList.getSelectedIndex(), 0);
-                decoratorList.setListData(new Object[0]);
                 final DefaultListModel model = new DefaultListModel<>();
                 // Add decorators for dropped in and dropped out alleles
                 model.addElement(new SampleOnlyAllelesDecorator(session));
@@ -519,7 +520,9 @@ public class ProfileSummaryPanel extends javax.swing.JPanel implements Configura
                 }
 
                 profileSummaryTable.addProfiles(activeProfiles);
+                _suppressDecoratorListUpdates = true;
                 decoratorList.setModel(model);
+                _suppressDecoratorListUpdates = false;
                 decoratorList.setSelectedIndex(idx);
                 break;
         }

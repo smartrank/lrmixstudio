@@ -57,7 +57,7 @@ public class DropoutEstimator extends Thread {
     private final BigDecimal dropoutTo;
     private final BigDecimal dropoutSteps;
 
-    public DropoutEstimator(SessionData session, ArrayList<Sample> personsOfInterest, BigDecimal dropoutFrom, BigDecimal dropoutTo, BigDecimal dropoutSteps, BigDecimal dropin, DropoutEstimationProgressListener progress, Integer iterations, boolean varyDefenseUnknowns, boolean varyProsecutionUnknowns) {
+    public DropoutEstimator(final SessionData session, final ArrayList<Sample> personsOfInterest, final BigDecimal dropoutFrom, final BigDecimal dropoutTo, final BigDecimal dropoutSteps, final BigDecimal dropin, final DropoutEstimationProgressListener progress, final Integer iterations, final boolean varyDefenseUnknowns, final boolean varyProsecutionUnknowns) {
         LOG.trace("DropoutEstimator");
         this.observedAlleleCount = session.getObservedAlleleCount();
         this.session = session;
@@ -85,7 +85,7 @@ public class DropoutEstimator extends Thread {
         LOG.debug("Observed alleles: {}", observedAlleleCount);
 
         // This arraylist is used to store all dropouts at which a monte carlo simulation yields a number of surviving alleles that matches the observed allele count
-        ArrayList<Double> succesfulDropouts = new ArrayList<>();
+        final ArrayList<Double> succesfulDropouts = new ArrayList<>();
 
         // Work out the step size
         BigDecimal dropoutStepsize = dropoutTo.subtract(dropoutFrom).divide(dropoutSteps, 2, RoundingMode.HALF_UP);
@@ -95,13 +95,13 @@ public class DropoutEstimator extends Thread {
             dropoutStepsize = new BigDecimal("0.01");
         }
 
-        int steps = dropoutTo.subtract(dropoutFrom).divide(dropoutStepsize, RoundingMode.UP).intValue();
+        final int steps = dropoutTo.subtract(dropoutFrom).divide(dropoutStepsize, RoundingMode.UP).intValue();
 
-        int[][] results = new int[iterations][steps + 1];
+        final int[][] results = new int[iterations][steps + 1];
         progress.hypothesisStarted(hypothesis);
 
-        ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        ArrayList<Future<ArrayList<Double>>> futures = new ArrayList<>();
+        final ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        final ArrayList<Future<ArrayList<Double>>> futures = new ArrayList<>();
 
         // Perform the dropout estimation using the configured number of iterations
         for (int iteration = 0; iteration < iterations; iteration++) {
@@ -112,8 +112,8 @@ public class DropoutEstimator extends Thread {
 
         for (int iteration = 0; iteration < iterations; iteration++) {
             try {
-                Future<ArrayList<Double>> future = futures.remove(0);
-                ArrayList<Double> iterationResults = future.get();
+                final Future<ArrayList<Double>> future = futures.remove(0);
+                final ArrayList<Double> iterationResults = future.get();
                 if (!iterationResults.isEmpty()) {
                     LOG.debug("Iteration {} resulted in {} Succesful dropouts: {}", iteration, iterationResults.size(), iterationResults);
                     succesfulDropouts.addAll(iterationResults);
@@ -160,39 +160,43 @@ public class DropoutEstimator extends Thread {
 
             // Determine frequencies
             // Obtain the 5% and 95% percentiles.
-            Percentile percentile = new Percentile();
-            double[] dropouts = new double[succesfulDropouts.size()];
+            final Percentile percentile = new Percentile();
+            final double[] dropouts = new double[succesfulDropouts.size()];
             for (int idx = 0; idx < dropouts.length; idx++) {
                 dropouts[idx] = succesfulDropouts.get(idx);
             }
             percentile.setData(dropouts);
 
-            double min = percentile.evaluate(5);
+            final double min = percentile.evaluate(5);
             LOG.debug("5% Percentile = {}", min);
-            double max = percentile.evaluate(95);
+            final double max = percentile.evaluate(95);
             LOG.debug("95% Percentile = {}", max);
 
             dropoutEstimation.setValues(hypothesis.getId(), new BigDecimal(min), new BigDecimal(max));
             progress.hypothesisFinished(hypothesis, new LocusProbabilities());
         } else {
-            IllegalArgumentException ex = new IllegalArgumentException("Dropout estimation resulted in no matching attempts for " + hypothesis.getId());
-            progress.analysisFinished(ex);
+            final IllegalArgumentException ex = new IllegalArgumentException("Dropout estimation resulted in no matching attempts for " + hypothesis.getId());
             throw ex;
         }
 
     }
 
     public DropoutEstimation estimate() throws InterruptedException {
-        DropoutEstimation dropoutEstimation = new DropoutEstimation();
+        final DropoutEstimation dropoutEstimation = new DropoutEstimation();
         dropoutEstimation.setAlleleCount(observedAlleleCount);
         dropoutEstimation.setReplicateCount(session.getActiveReplicates().size());
         dropoutEstimation.setIterations(iterations);
         progress.analysisStarted();
-        long start = System.currentTimeMillis();
-        estimate(dropoutEstimation, session.getDefense(), varyDefenseUnknowns);
-        estimate(dropoutEstimation, session.getProsecution(), varyProsecutionUnknowns);
-        session.getCurrentReport().addProcessingTime(System.currentTimeMillis() - start);
-        progress.analysisFinished(new LikelihoodRatio());
+        try {
+            final long start = System.currentTimeMillis();
+            estimate(dropoutEstimation, session.getDefense(), varyDefenseUnknowns);
+            estimate(dropoutEstimation, session.getProsecution(), varyProsecutionUnknowns);
+            session.getCurrentReport().addProcessingTime(System.currentTimeMillis() - start);
+            progress.analysisFinished(new LikelihoodRatio());
+        }
+        catch (final Throwable t) {
+            progress.analysisFinished(t);
+        }
         return dropoutEstimation;
     }
 
@@ -202,15 +206,16 @@ public class DropoutEstimator extends Thread {
             session.setApplicationState(ApplicationStateChangeListener.APP_STATE.DROPOUT_ESTIMATION_RUNNING);
             estimate = estimate();
             session.getCurrentReport().getSensitivityAnalysisResults().setDropoutEstimation(estimate);
-            for (AnalysisReport report : session.getEquivalentReportsForDropoutEstimate(session.getCurrentReport())) {
+            for (final AnalysisReport report : session.getEquivalentReportsForDropoutEstimate(session.getCurrentReport())) {
                 if (report.getSensitivityAnalysisResults().getDropoutEstimation() == null) {
                     report.getSensitivityAnalysisResults().setDropoutEstimation(estimate);
                 }
             }
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
             LOG.info("Dropout estimation interrupted");
             session.setStatusMessage("Dropout estimation interrupted");
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (final Throwable ex) {
             if (ex.getCause() instanceof InterruptedException) {
                 LOG.info("Dropout estimation interrupted");
                 session.setStatusMessage("Dropout estimation interrupted");

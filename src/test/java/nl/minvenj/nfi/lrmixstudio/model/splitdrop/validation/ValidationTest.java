@@ -2,7 +2,6 @@ package nl.minvenj.nfi.lrmixstudio.model.splitdrop.validation;
 
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,9 +60,9 @@ public class ValidationTest {
         private final String _dropin;
         private final String _theta;
 
-        private ValidationCase(String line) {
+        private ValidationCase(final String line) {
             // Read csv data and fill the case object
-            String[] fields = line.split(",");
+            final String[] fields = line.split(",");
             _caseId = fields[0];
             _caseName = fields[1];
             _sample = fields[2];
@@ -87,22 +86,22 @@ public class ValidationTest {
             try {
                 setCaseNumber(_caseId);
                 
-                PopulationStatisticsReader popStatsReader = new PopulationStatisticsReader("Allele frequencies to use in DyNAmix.csv", getClass().getResourceAsStream("data/Allele frequencies to use in DyNAmix.csv"));
+                final PopulationStatisticsReader popStatsReader = new PopulationStatisticsReader("Allele frequencies to use in DyNAmix.csv", getClass().getResourceAsStream("data/Allele frequencies to use in DyNAmix.csv"));
                 setStatistics(popStatsReader.getStatistics());
                 setRareAlleleFrequency(1.0 / (2 * 2085));
                 
-                SampleReader replicateReader = new SampleReader(_sample, getClass().getResourceAsStream("data/" + _caseName + "/" + _sample), true);
+                final SampleReader replicateReader = new SampleReader(_sample, getClass().getResourceAsStream("data/" + _caseName + "/" + _sample), true);
                 addReplicates(replicateReader.getSamples());
                 
-                Hypothesis pros = new Hypothesis("Prosecution", Integer.parseInt(_unknownCountP), getStatistics(), new BigDecimal(_dropin).doubleValue(), new BigDecimal(_unknownDropoutP).doubleValue(), new BigDecimal(_theta).doubleValue());
+                final Hypothesis pros = new Hypothesis("Prosecution", Integer.parseInt(_unknownCountP), getStatistics(), new BigDecimal(_dropin).doubleValue(), new BigDecimal(_unknownDropoutP).doubleValue(), new BigDecimal(_theta).doubleValue());
                 setProsecution(pros);
                 
-                Hypothesis def = new Hypothesis("Defense", Integer.parseInt(_unknownCountD), getStatistics(), new BigDecimal(_dropin).doubleValue(), new BigDecimal(_unknownDropoutD).doubleValue(), new BigDecimal(_theta).doubleValue());
+                final Hypothesis def = new Hypothesis("Defense", Integer.parseInt(_unknownCountD), getStatistics(), new BigDecimal(_dropin).doubleValue(), new BigDecimal(_unknownDropoutD).doubleValue(), new BigDecimal(_theta).doubleValue());
                 setDefense(def);
                 
-                SampleReader suspectReader = new SampleReader(_suspect, getClass().getResourceAsStream("data/" + _caseName + "/" + _suspect), false);
+                final SampleReader suspectReader = new SampleReader(_suspect, getClass().getResourceAsStream("data/" + _caseName + "/" + _suspect), false);
                 addProfiles(suspectReader.getSamples());
-                for (Sample suspectSample : suspectReader.getSamples()) {
+                for (final Sample suspectSample : suspectReader.getSamples()) {
                     pros.addContributor(suspectSample, new BigDecimal(_dropoutSuspect).doubleValue());
                     def.addNonContributor(suspectSample, new BigDecimal(_dropoutSuspect).doubleValue());
                 }
@@ -112,7 +111,7 @@ public class ValidationTest {
                 addKnown(_known3, _dropoutKnown3);
                 addKnown(_known4, _dropoutKnown4);
                 
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
                 Logger.getLogger(ValidationTest.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -121,10 +120,10 @@ public class ValidationTest {
             return _caseId;
         }
 
-        private void addKnown(String known, String dropoutKnown) throws IOException {
+        private void addKnown(final String known, final String dropoutKnown) throws IOException {
             if (!known.equals("0")) {
-                SampleReader knownReader = new SampleReader(known, getClass().getResourceAsStream("data/" + _caseName + "/" + known), false);
-                for (Sample knownSample : knownReader.getSamples()) {
+                final SampleReader knownReader = new SampleReader(known, getClass().getResourceAsStream("data/" + _caseName + "/" + known), false);
+                for (final Sample knownSample : knownReader.getSamples()) {
                     getProsecution().addContributor(knownSample, new BigDecimal(dropoutKnown).doubleValue());
                     getDefense().addContributor(knownSample, new BigDecimal(dropoutKnown).doubleValue());
                 }
@@ -137,12 +136,12 @@ public class ValidationTest {
         private final String _caseId;
         private final Ratio _ratio;
 
-        private ExpectedResult(String line) {
-            String[] fields = line.split(",");
+        private ExpectedResult(final String line) {
+            final String[] fields = line.split(",");
             _caseId = fields[0];
             try {
                 _ratio = new Ratio(fields[2], new BigDecimal(fields[3]).doubleValue(), new BigDecimal(fields[4]).doubleValue());
-            } catch (NumberFormatException nfe) {
+            } catch (final NumberFormatException nfe) {
                 throw new RuntimeException(line, nfe);
             }
         }
@@ -164,22 +163,15 @@ public class ValidationTest {
     public ValidationTest() {
     }
 
-    private void runCase(String caseId) {
+    private void runCase(final String caseId) {
         try {
-            ValidationCase currentCase = _validationCases.get(caseId);
+            final ValidationCase currentCase = _validationCases.get(caseId);
             assumeNotNull(currentCase);
 
-            if (currentCase.getProsecution().getUnknownCount() > 2) {
-                assumeTrue(Runtime.getRuntime().availableProcessors() > 8);
-            }
-            if (currentCase.getProsecution().getUnknownCount() > 3) {
-                assumeTrue(Runtime.getRuntime().availableProcessors() > 16);
-            }
-
-            LRMathModel model = LRMathModelFactory.getMathematicalModel(LRMathModelFactory.getDefaultModelName());
-            LikelihoodRatio lr = model.doAnalysis(currentCase);
-            for (Ratio ratio : lr.getRatios()) {
-                ExpectedResult expected = _expectedResults.get(caseId + ratio.getLocusName().toUpperCase());
+            final LRMathModel model = LRMathModelFactory.getMathematicalModel(LRMathModelFactory.getDefaultModelName());
+            final LikelihoodRatio lr = model.doAnalysis(currentCase);
+            for (final Ratio ratio : lr.getRatios()) {
+                final ExpectedResult expected = _expectedResults.get(caseId + ratio.getLocusName().toUpperCase());
                 if (expected == null) {
                     fail("Result for case " + caseId + ", locus " + ratio.getLocusName() + " not found!");
                 }
@@ -198,17 +190,17 @@ public class ValidationTest {
         try {
             _validationCases = new HashMap<>();
             _expectedResults = new HashMap<>();
-            InputStream caseDescriptions = ValidationTest.class.getResourceAsStream("Validation_data_description_feb2013.csv");
-            InputStream expectedResults = ValidationTest.class.getResourceAsStream("Validation_data_LRMix_results_march2013_2.csv");
+            final InputStream caseDescriptions = ValidationTest.class.getResourceAsStream("Validation_data_description_feb2013.csv");
+            final InputStream expectedResults = ValidationTest.class.getResourceAsStream("Validation_data_LRMix_results_march2013_2.csv");
 
-            BufferedReader caseReader = new BufferedReader(new InputStreamReader(caseDescriptions));
-            BufferedReader resultsReader = new BufferedReader(new InputStreamReader(expectedResults));
+            final BufferedReader caseReader = new BufferedReader(new InputStreamReader(caseDescriptions));
+            final BufferedReader resultsReader = new BufferedReader(new InputStreamReader(expectedResults));
 
             // Skip header line for case descriptions
             String line = caseReader.readLine();
             while ((line = caseReader.readLine()) != null) {
                 if (!line.matches("\\,*")) {
-                    ValidationCase newCase = new ValidationCase(line);
+                    final ValidationCase newCase = new ValidationCase(line);
                     _validationCases.put(newCase.getCaseId(), newCase);
                 }
             }
@@ -218,12 +210,12 @@ public class ValidationTest {
             while ((line = resultsReader.readLine()) != null) {
                 if (!line.matches("\\,*")) {
                     line = line.replaceAll("\\\"(\\d+),(\\d+e?-?\\d*)\\\"", "$1\\.$2");
-                    ExpectedResult newResult = new ExpectedResult(line);
+                    final ExpectedResult newResult = new ExpectedResult(line);
                     _expectedResults.put(newResult.getCaseId() + newResult.getLocus().toUpperCase(), newResult);
                 }
             }
 
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             System.out.println();
         }
     }

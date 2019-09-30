@@ -383,7 +383,7 @@ public class AnalysisProgressListenerImpl implements AnalysisProgressListener {
     }
 
     @Override
-    public void analysisFinished(final Exception e) {
+    public void analysisFinished(final Throwable e) {
         final boolean logged = summaryLogged.getAndSet(true);
         if (!logged) {
             if (ApplicationSettings.isValidationMode()) {
