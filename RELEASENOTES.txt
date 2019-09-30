@@ -4,6 +4,13 @@ LRmix Studio Release Notes
 Version: ${project.version}
 Release date: ${buildTimestamp}
 ------------------------
+LRDYN-268: To allow running the application from a read-only folder, the properties file can now also be placed in the ~/.lrmixstudio folder.
+LRDYN-269: The file loci.properties - which holds the list of loci presented in the profile editor - can now be located in either the ~/.lrmixstudio folder or the application folder to override the default version. 
+
+
+Version: 2.1.4-CommunityEdition
+Release date: 2018-11-16
+------------------------
 LRDYN-257: Added View menu where the fontsize used for tables can be changed. Also made the parameters panels resizable in the Analysis and Sensitivity Analysis tabs.
 LRDYN-259: Fixed a problem where data containing more than 50 loci (e.g. Microhaplotype) would cause undefined behaviour.
 LRDYN-260: All LRs calculated in a non contributor test can now be exported to a separate file.
@@ -13,6 +20,7 @@ LRDYN-263: Fixed behaviour when a logfile is dropped on the Sample Files table.
 LRDYN-265: Values entered for dropout and FST are now stored, and used as initial values the next time the software is started. 
 LRDYN-266: Added a list of disabled loci to the log file and report, explaining the reason why the locus is disabled.
 LRDYN-267: Improved handling of ranges in the Sensitivity Analysis tab.
+
 
 Version: 2.1.3-CommunityEdition
 Release date: 2016-07-05

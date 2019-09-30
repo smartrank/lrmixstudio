@@ -17,16 +17,14 @@
 package nl.minvenj.nfi.lrmixstudio.gui;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,19 +32,20 @@ import org.slf4j.LoggerFactory;
 import nl.minvenj.nfi.lrmixstudio.domain.PopulationStatistics;
 
 public class ApplicationSettings {
-    private static long _settingsLastModified;
-
     private ApplicationSettings() {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationSettings.class);
-    private static final HashMap<String, String> properties = new HashMap<>();
-    private static final Properties staticProperties = new Properties();
+    private static final Properties SETTINGS = new Properties();
+    private static final Properties STATIC_SETTINGS = new Properties();
     /**
      * Dynamic properties sourced from the LRmixStudio.properties file in the
-     * install directory
+     * install directory or the user's home directory
      */
     private static final String SETTINGS_FILENAME = "LRmixStudio.properties";
+    private static final String DEFAULT_SETTINGS_FILENAME = new File(SETTINGS_FILENAME).getAbsolutePath();
+    private static final String USER_HOME_SETTINGS_FILENAME = new File(new File(System.getProperty("user.home"), ".lrmixstudio"), SETTINGS_FILENAME).getAbsolutePath();
+    
     private static final String CASEFILES_PATH = "caseFilesPath";
     private static final String ALLELEFREQUENCIES_PATH = "alleleFrequenciesPath";
     private static final String RARE_ALLELE_FREQUENCY = "rareAlleleFrequency";
@@ -70,7 +69,10 @@ public class ApplicationSettings {
     private static final String LATEST_THETA = "latestTheta";
     private static final Double DEFAULT_THETA = 0.01;
     private static final String FONT_SIZE = "fontSize";
-    private static final int DEFAULT_FONT_SIZE = 11;
+    private static final String DEFAULT_FONT_SIZE = "11";
+
+    private static String _settingsFileName = System.getProperty("lrmixStudioSettings");
+    private static long _lastModified;
 
     /**
      * Static properties sourced from LRmixStudio.properties in the resources
@@ -85,57 +87,92 @@ public class ApplicationSettings {
     private static final String SAMPLES_SHOWGRID = "samples." + SHOWGRID;
     private static final String OVERVIEW_SHOWGRID = "overview." + SHOWGRID;
     private static final String MAXUNKNOWNS = "maxUnknowns";
-    private static final int DEFAULT_MAXUNKNOWNS = 4;
+    private static final String DEFAULT_MAXUNKNOWNS = "4";
+    private static final AtomicBoolean IS_STORE_ERROR_LOGGED = new AtomicBoolean();
+    private static final AtomicBoolean IS_LOAD_SOURCE_LOGGED = new AtomicBoolean();
 
     private static void load() {
-        final File f = new File(SETTINGS_FILENAME);
-        if (f.lastModified() != _settingsLastModified) {
-            try {
-                _settingsLastModified = f.lastModified();
-                properties.clear();
-                final FileInputStream fis = new FileInputStream(SETTINGS_FILENAME);
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if (!(line.startsWith("#") || line.isEmpty())) {
-                        final int idx = line.indexOf("=");
-                        properties.put(line.substring(0, idx).trim(), line.substring(idx + 1).trim());
+        if (_settingsFileName == null) {
+            if(new File(DEFAULT_SETTINGS_FILENAME).canWrite()) {
+                load(DEFAULT_SETTINGS_FILENAME);
+            } else {
+                if(!load(USER_HOME_SETTINGS_FILENAME))
+                    load(DEFAULT_SETTINGS_FILENAME);
+            }
+        }
+        else {
+            load(_settingsFileName);
+        }
+    }
+
+    private static boolean load(final String fileName) {
+        File file = new File(fileName);
+        if (fileName.equals(_settingsFileName) && _lastModified == file.lastModified()) {
+            return true;
+        }
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            SETTINGS.load(fis);
+            if(!IS_LOAD_SOURCE_LOGGED.getAndSet(true)) {
+                LOG.info("Loaded settings from {}", fileName);
+            }
+            return true;
+        }
+        catch (final FileNotFoundException ex) {
+            LOG.debug("Properties file {} does not exist yet.", fileName);
+        }
+        catch (final Exception ex) {
+            LOG.debug("Error loading properties file: \n" + ex.getLocalizedMessage());
+        }
+        return false;
+    }
+
+    private static void store() {
+        if(_settingsFileName==null) {
+            IS_LOAD_SOURCE_LOGGED.set(false);
+            if (!store(DEFAULT_SETTINGS_FILENAME)) {
+                if(!store(USER_HOME_SETTINGS_FILENAME)) {
+                    if(!IS_STORE_ERROR_LOGGED.getAndSet(true)) {
+                        LOG.error("Could not store settings in either '{}' or '{}'", DEFAULT_SETTINGS_FILENAME, USER_HOME_SETTINGS_FILENAME);
                     }
                 }
             }
-            catch (final FileNotFoundException ex) {
-            }
-            catch (final IOException ex) {
-                LOG.warn("Error reading from {}", SETTINGS_FILENAME, ex);
+        } else {
+            if(!store(_settingsFileName)) {
+                if(!IS_STORE_ERROR_LOGGED.getAndSet(true)) {
+                    LOG.error("Could not store settings in '{}'", _settingsFileName);
+                }
             }
         }
     }
 
-    private static void store() {
-        try {
-            final FileOutputStream fos = new FileOutputStream(SETTINGS_FILENAME);
-            for (final String key : properties.keySet()) {
-                fos.write((key + "=" + properties.get(key) + "\n").getBytes());
-            }
+    private static boolean store(final String fileName) {
+        File propertiesFileDirectory = new File(fileName).getParentFile();
+        if(propertiesFileDirectory!=null) {
+            propertiesFileDirectory.mkdirs();
         }
-        catch (final FileNotFoundException ex) {
-            LOG.warn("Error writing to {}", SETTINGS_FILENAME, ex);
-        } catch (final IOException ex) {
-            LOG.warn("Error writing to {}", SETTINGS_FILENAME, ex);
+        try (FileOutputStream fos = new FileOutputStream(fileName)) {
+            SETTINGS.store(fos, "Created by LRmixStudio v" + LRmixStudio.class.getPackage().getImplementationVersion());
+            _settingsFileName = fileName;
+            _lastModified = new File(fileName).lastModified();
+            return true;
         }
+        catch (final Exception ex) {
+            LOG.debug("Error writing properties to " + fileName + " - " + ex.getClass().getSimpleName() + " - " + ex.getLocalizedMessage());
+        }
+        return false;
     }
 
     private static void removeByPrefix(final String prefix) {
         final ArrayList<String> toRemove = new ArrayList<>();
-        for (final String key : properties.keySet()) {
-            if (key.startsWith(prefix)) {
-                toRemove.add(key);
+        for (final Object key : SETTINGS.keySet()) {
+            if (key.toString().startsWith(prefix)) {
+                toRemove.add(key.toString());
             }
         }
 
         for (final String removeThisKey : toRemove) {
-            properties.remove(removeThisKey);
+            SETTINGS.remove(removeThisKey);
         }
 
         store();
@@ -143,34 +180,38 @@ public class ApplicationSettings {
 
     private static void set(final String key, final String value) {
         if (value != null) {
-        properties.put(key, value);
-        } else {
-            properties.remove(key);
+            SETTINGS.put(key, value);
+        }
+        else {
+            SETTINGS.remove(key);
         }
         store();
     }
 
-    private static String get(final String key) {
-        load();
-        if (properties.containsKey(key)) {
-            return properties.get(key);
+    private static String get(final String key, final String defaultValue) {
+        String value = System.getProperty(key);
+        if (value == null) {
+            load();
+            value = SETTINGS.getProperty(key);
+            if (value == null || value.isEmpty()) {
+                set(key, defaultValue);
+                value = defaultValue;
+            }
         }
-        return "";
+        return value;
     }
 
     public static void setHighlightColor(final Color c) {
         if (c == null) {
             set(HIGHLIGHT_COLOR, "");
-        } else {
+        }
+        else {
             set(HIGHLIGHT_COLOR, Integer.toHexString(c.getRGB()));
         }
     }
 
     public static Color getHighlightColor() {
-        String colorString = get(HIGHLIGHT_COLOR);
-        if (colorString.isEmpty()) {
-            return Color.white;
-        }
+        String colorString = get(HIGHLIGHT_COLOR, "FFFFFF");
         if (colorString.length() > 6) {
             colorString = colorString.substring(colorString.length() - 6);
         }
@@ -178,22 +219,20 @@ public class ApplicationSettings {
     }
 
     public static boolean isSetHighlightColor() {
-        return !get(HIGHLIGHT_COLOR).isEmpty();
+        return !get(HIGHLIGHT_COLOR, "").isEmpty();
     }
 
     public static void setHighlightBackgroundColor(final Color c) {
         if (c == null) {
             set(HIGHLIGHT_BACKGROUND_COLOR, "");
-        } else {
+        }
+        else {
             set(HIGHLIGHT_BACKGROUND_COLOR, Integer.toHexString(c.getRGB()));
         }
     }
 
     public static Color getHighlightBackgroundColor() {
-        String colorString = get(HIGHLIGHT_BACKGROUND_COLOR);
-        if (colorString.isEmpty()) {
-            return Color.blue;
-        }
+        String colorString = get(HIGHLIGHT_BACKGROUND_COLOR, "FF0000");
         if (colorString.length() > 6) {
             colorString = colorString.substring(colorString.length() - 6);
         }
@@ -201,7 +240,7 @@ public class ApplicationSettings {
     }
 
     public static boolean isSetHighlightBackgroundColor() {
-        return !get(HIGHLIGHT_BACKGROUND_COLOR).isEmpty();
+        return !get(HIGHLIGHT_BACKGROUND_COLOR, "").isEmpty();
     }
 
     public static void setHighlightUnderlined(final boolean isUnderlined) {
@@ -209,10 +248,7 @@ public class ApplicationSettings {
     }
 
     public static boolean getHighlightUnderlined() {
-        final String isUnderlined = get(HIGHLIGHT_UNDERLINE);
-        if (isUnderlined.isEmpty()) {
-            return true;
-        }
+        final String isUnderlined = get(HIGHLIGHT_UNDERLINE, "false");
         return Boolean.parseBoolean(isUnderlined);
     }
 
@@ -221,10 +257,7 @@ public class ApplicationSettings {
     }
 
     public static boolean getHighlightBold() {
-        final String isBold = get(HIGHLIGHT_BOLD);
-        if (isBold.isEmpty()) {
-            return true;
-        }
+        final String isBold = get(HIGHLIGHT_BOLD, "true");
         return Boolean.parseBoolean(isBold);
     }
 
@@ -233,10 +266,7 @@ public class ApplicationSettings {
     }
 
     public static boolean getHighlightItalic() {
-        final String isItalic = get(HIGHLIGHT_ITALIC);
-        if (isItalic.isEmpty()) {
-            return true;
-        }
+        final String isItalic = get(HIGHLIGHT_ITALIC, "false");
         return Boolean.parseBoolean(isItalic);
     }
 
@@ -251,7 +281,7 @@ public class ApplicationSettings {
     }
 
     public static String getCaseFilesPath() {
-        return get(CASEFILES_PATH);
+        return get(CASEFILES_PATH, "");
     }
 
     public static void setCaseFilesPath(final String path) {
@@ -259,7 +289,7 @@ public class ApplicationSettings {
     }
 
     public static String getAlleleFrequenciesPath() {
-        return get(ALLELEFREQUENCIES_PATH);
+        return get(ALLELEFREQUENCIES_PATH, "");
     }
 
     public static void setAlleleFrequenciesPath(final String path) {
@@ -271,26 +301,22 @@ public class ApplicationSettings {
     }
 
     public static boolean isLogAllNonConLRs() {
-        final String isLogged = get(LOGALLNONCONTRIBUTORLRS);
+        final String isLogged = get(LOGALLNONCONTRIBUTORLRS, "false");
         return Boolean.parseBoolean(isLogged);
     }
 
     public static int getMaxUnknowns() {
         try {
-            return Integer.parseInt(get(MAXUNKNOWNS));
+            return Integer.parseInt(get(MAXUNKNOWNS, DEFAULT_MAXUNKNOWNS));
         }
         catch (final Exception e) {
-            set(MAXUNKNOWNS, "" + DEFAULT_MAXUNKNOWNS);
-            return DEFAULT_MAXUNKNOWNS;
+            set(MAXUNKNOWNS, DEFAULT_MAXUNKNOWNS);
+            return Integer.parseInt(DEFAULT_MAXUNKNOWNS);
         }
     }
 
     public static String getRareAlleleFrequency(final PopulationStatistics statistics) {
-        final String rare = get(RARE_ALLELE_FREQUENCY + (statistics == null ? "" : statistics.getFileHash()));
-        if (rare.isEmpty()) {
-            return "" + PopulationStatistics.DEFAULT_FREQUENCY;
-        }
-        return rare;
+        return get(RARE_ALLELE_FREQUENCY + (statistics == null ? "" : statistics.getFileHash()), "" + PopulationStatistics.DEFAULT_FREQUENCY);
     }
 
     public static void setRareAlleleFrequency(final PopulationStatistics statistics, final double freq) {
@@ -302,10 +328,7 @@ public class ApplicationSettings {
     }
 
     public static int getFontSize() {
-        final String size = get(FONT_SIZE);
-        if (size.isEmpty())
-            return DEFAULT_FONT_SIZE;
-        return Integer.parseInt(size);
+        return Integer.parseInt(get(FONT_SIZE, DEFAULT_FONT_SIZE));
     }
 
     public static void setThreadCount(final int threadCount) {
@@ -316,7 +339,7 @@ public class ApplicationSettings {
         final ArrayList<String> mru = new ArrayList<>();
         int idx = 0;
         String mruSession;
-        while (idx < getMaxMostRecentlyUsedEntries() && !(mruSession = get(MRU + idx)).isEmpty()) {
+        while (idx < getMaxMostRecentlyUsedEntries() && !(mruSession = get(MRU + idx, "")).isEmpty()) {
             idx++;
             mru.add(mruSession);
         }
@@ -328,7 +351,7 @@ public class ApplicationSettings {
         mru.add(fileName);
         int idx = 0;
         String mruSession;
-        while (idx < getMaxMostRecentlyUsedEntries() && !(mruSession = get(MRU + idx)).isEmpty()) {
+        while (idx < getMaxMostRecentlyUsedEntries() && !(mruSession = get(MRU + idx, "")).isEmpty()) {
             idx++;
             if (!mruSession.equalsIgnoreCase(fileName)) {
                 mru.add(mruSession);
@@ -344,7 +367,7 @@ public class ApplicationSettings {
         final ArrayList<String> mru = new ArrayList<>();
         int idx = 0;
         String mruSession;
-        while (idx < getMaxMostRecentlyUsedEntries() && !(mruSession = get(MRU + idx)).isEmpty()) {
+        while (idx < getMaxMostRecentlyUsedEntries() && !(mruSession = get(MRU + idx, "")).isEmpty()) {
             idx++;
             if (!mruSession.equalsIgnoreCase(fileName)) {
                 mru.add(mruSession);
@@ -358,10 +381,11 @@ public class ApplicationSettings {
     }
 
     public static int getThreadCount() {
-        final String threadCount = get(THREADCOUNT);
+        final String threadCount = get(THREADCOUNT, "");
         try {
             return Integer.parseInt(threadCount);
-        } catch (final NumberFormatException nfe) {
+        }
+        catch (final NumberFormatException nfe) {
             return DEFAULT_THREADCOUNT;
         }
     }
@@ -371,10 +395,11 @@ public class ApplicationSettings {
     }
 
     public static long getLostTimeThreshold() {
-        final String threshold = get(LOSTTIMETHRESHOLD);
+        final String threshold = get(LOSTTIMETHRESHOLD, "");
         try {
             return Long.parseLong(threshold);
-        } catch (final NumberFormatException nfe) {
+        }
+        catch (final NumberFormatException nfe) {
             return DEFAULT_LOSTTIMETHRESHOLD;
         }
     }
@@ -384,19 +409,21 @@ public class ApplicationSettings {
     }
 
     public static int getMaxMostRecentlyUsedEntries() {
-        final String maxMru = get(MRU_MAX_ENTRIES);
+        final String maxMru = get(MRU_MAX_ENTRIES, "" + DEFAULT_MAX_MRU_ENTRIES);
         try {
             return Integer.parseInt(maxMru);
-        } catch (final NumberFormatException nfe) {
+        }
+        catch (final NumberFormatException nfe) {
             return DEFAULT_MAX_MRU_ENTRIES;
         }
     }
 
     private static void staticInit() {
-        if (staticProperties.isEmpty()) {
+        if (STATIC_SETTINGS.isEmpty()) {
             try {
-                staticProperties.load(ApplicationSettings.class.getResourceAsStream("/resources/LRmixStudio.properties"));
-            } catch (final IOException ex) {
+                STATIC_SETTINGS.load(ApplicationSettings.class.getResourceAsStream("/resources/LRmixStudio.properties"));
+            }
+            catch (final IOException ex) {
             }
         }
     }
@@ -410,27 +437,27 @@ public class ApplicationSettings {
 
     public static String getIcon(final int idx) {
         staticInit();
-        return staticProperties.getProperty(ICON + idx);
+        return STATIC_SETTINGS.getProperty(ICON + idx);
     }
 
     public static String getIdleTrayIcon(final int idx) {
         staticInit();
-        return staticProperties.getProperty(TRAYICON_IDLE + idx);
+        return STATIC_SETTINGS.getProperty(TRAYICON_IDLE + idx);
     }
 
     public static String getBusyTrayIcon(final int idx) {
         staticInit();
-        return staticProperties.getProperty(TRAYICON_BUSY + idx);
+        return STATIC_SETTINGS.getProperty(TRAYICON_BUSY + idx);
     }
 
     public static boolean isOverviewGridShown() {
         staticInit();
-        return Boolean.parseBoolean(staticProperties.getProperty(OVERVIEW_SHOWGRID, "true"));
+        return Boolean.parseBoolean(STATIC_SETTINGS.getProperty(OVERVIEW_SHOWGRID, "true"));
     }
 
     public static Color getColor(final String propertyName) {
         staticInit();
-        final String colorString = staticProperties.getProperty(propertyName, "255,255,255");
+        final String colorString = STATIC_SETTINGS.getProperty(propertyName, "255,255,255");
         final String[] components = colorString.split(",");
         return new Color(Integer.parseInt(components[0]), Integer.parseInt(components[1]), Integer.parseInt(components[2]));
     }
@@ -460,12 +487,12 @@ public class ApplicationSettings {
     }
 
     public static boolean isAdvancedMode() {
-        return "true".equalsIgnoreCase(get(ADVANCED_MODE));
+        return "true".equalsIgnoreCase(get(ADVANCED_MODE, "false"));
     }
 
     public static Double getLatestDropIn() {
 
-        final String dropIn = get(LATEST_DROPIN);
+        final String dropIn = get(LATEST_DROPIN, DEFAULT_DROPIN.toString());
         try {
             return Double.valueOf(dropIn);
 }
@@ -480,7 +507,7 @@ public class ApplicationSettings {
 
     public static Double getLatestTheta() {
 
-        final String theta = get(LATEST_THETA);
+        final String theta = get(LATEST_THETA, DEFAULT_THETA.toString());
         try {
             return Double.valueOf(theta);
         }

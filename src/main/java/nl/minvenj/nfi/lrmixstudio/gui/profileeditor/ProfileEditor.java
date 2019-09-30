@@ -20,7 +20,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -119,7 +121,8 @@ public class ProfileEditor extends javax.swing.JDialog {
     public void setContext(SessionData session) {
         _session = session;
         ArrayList<String> allLoci = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResource("loci.properties").openStream()))) {
+        
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(findLociPropertiesFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -134,6 +137,23 @@ public class ProfileEditor extends javax.swing.JDialog {
         for (String locusName : allLoci) {
             ((DefaultTableModel) locusTable.getModel()).addRow(new Object[]{locusName});
         }
+    }
+
+    private InputStream findLociPropertiesFile() throws IOException {
+        // Find the loci.properties file containing the list of loci to render in the editor
+        String[] fileNames = {
+            new File("loci.properties").getAbsolutePath(),
+            System.getProperty("user.home") + File.separatorChar + ".lrmixstudio" + File.separator+ "loci.properties"
+        };
+        for(String fileName : fileNames) {
+            try {
+                return new FileInputStream(fileName);
+            } catch (Exception e) {
+                LOG.debug("Looking for loci.properties: " + e.getClass().getSimpleName() + " - " + e.getMessage() + " for file '" + fileName + "'");
+            }
+        }
+        LOG.debug("Loading default loci.properties from " + getClass().getResource("/loci.properties"));
+        return getClass().getResource("/loci.properties").openStream();
     }
 
     /**

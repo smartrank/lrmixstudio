@@ -59,8 +59,6 @@ public class LRDYN262Test extends ReferenceCaseTest {
         session.addReplicates(replicates);
         session.addProfiles(suspectSamples);
 
-        ApplicationSettings.setValidationMode(true);
-
         final SplitDropThreadPool instance = new SplitDropThreadPool();
         instance.doAnalysis(session);
         final LikelihoodRatio result = instance.getLikelihoodRatio();
