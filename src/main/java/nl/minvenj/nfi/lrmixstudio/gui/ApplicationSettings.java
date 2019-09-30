@@ -71,6 +71,9 @@ public class ApplicationSettings {
     private static final String FONT_SIZE = "fontSize";
     private static final String DEFAULT_FONT_SIZE = "11";
 
+    private static final String REPORT_TEMPLATE_FILENAME = "reportTemplateFilename";
+    private static final String DEFAULT_REPORT_TEMPLATE_FILENAME = "report/LRmixStudio.jrxml";
+
     private static String _settingsFileName = System.getProperty("lrmixStudioSettings");
     private static long _lastModified;
 
@@ -519,4 +522,8 @@ public class ApplicationSettings {
     public static void setLatestTheta(final Double theta) {
         set(LATEST_THETA, theta.toString());
     }
+
+    public static String getReportTemplateFilename() {
+        return get(REPORT_TEMPLATE_FILENAME, DEFAULT_REPORT_TEMPLATE_FILENAME);
+}
 }

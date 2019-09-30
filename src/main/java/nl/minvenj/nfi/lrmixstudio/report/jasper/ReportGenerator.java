@@ -41,6 +41,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.fill.JRExpressionEvalException;
 import net.sf.jasperreports.swing.JRViewer;
+import nl.minvenj.nfi.lrmixstudio.gui.ApplicationSettings;
 import nl.minvenj.nfi.lrmixstudio.gui.ApplicationStateChangeListener;
 import nl.minvenj.nfi.lrmixstudio.gui.SessionData;
 import nl.minvenj.nfi.lrmixstudio.model.AnalysisReport;
@@ -102,7 +103,7 @@ public class ReportGenerator {
                 _monitor.setProgress(1);
                 _monitor.setNote("Loading report definition");
                 LOG.debug("Attempting to load report definition");
-                InputStream reportStream = new FileInputStream("report/LRmixStudio.jrxml");
+                InputStream reportStream = new FileInputStream(ApplicationSettings.getReportTemplateFilename());
 
                 Map<String, Object> parameters = new HashMap<>();
 

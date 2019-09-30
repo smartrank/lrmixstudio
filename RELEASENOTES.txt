@@ -4,6 +4,12 @@ LRmix Studio Release Notes
 Version: ${project.version}
 Release date: ${buildTimestamp}
 ------------------------
+LRDYN-270: Made location of report template configurable.
+
+
+Version: 2.1.5-CommunityEdition
+Release date: 2018-12-07
+------------------------
 LRDYN-268: To allow running the application from a read-only folder, the properties file can now also be placed in the ~/.lrmixstudio folder.
 LRDYN-269: The file loci.properties - which holds the list of loci presented in the profile editor - can now be located in either the ~/.lrmixstudio folder or the application folder to override the default version. 
 
