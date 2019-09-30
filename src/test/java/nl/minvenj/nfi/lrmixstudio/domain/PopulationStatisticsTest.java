@@ -14,6 +14,7 @@ import java.util.Collection;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,11 +50,24 @@ public class PopulationStatisticsTest {
     @Test
     public void testAddStatistic() {
         System.out.println("addStatistic");
-        String locusId = "vWA";
-        String allele = "16";
-        BigDecimal probability = new BigDecimal(0.2);
-        PopulationStatistics instance = new PopulationStatistics("");
+        final String locusId = "vWA";
+        final String allele = "16";
+        final BigDecimal probability = new BigDecimal(0.2);
+        final PopulationStatistics instance = new PopulationStatistics("");
         instance.addStatistic(locusId, allele, probability);
+    }
+
+    @Test
+    public void testAddCompoundStatistic() {
+        System.out.println("addCompoundStatistic");
+        final String locusId = "vWA";
+        final String allele = "16";
+        final BigDecimal probability = new BigDecimal(0.2);
+        final PopulationStatistics instance = new PopulationStatistics("");
+        instance.addStatistic(locusId, allele, probability);
+        Assert.assertArrayEquals(new String[]{"16"}, instance.getAlleles("vWA").toArray());
+        instance.addCompoundStatistic("vWA", "Q", new BigDecimal(0.1));
+        Assert.assertArrayEquals(new String[]{"16"}, instance.getAlleles("vWA").toArray());
     }
 
     /**
@@ -62,10 +76,10 @@ public class PopulationStatisticsTest {
     @Test
     public void testGetProbability() {
         System.out.println("getProbability");
-        String locusId = "vWA";
-        String allele = "16";
-        BigDecimal probability = new BigDecimal(0.2);
-        PopulationStatistics instance = new PopulationStatistics("");
+        final String locusId = "vWA";
+        final String allele = "16";
+        final BigDecimal probability = new BigDecimal(0.2);
+        final PopulationStatistics instance = new PopulationStatistics("");
         instance.addStatistic(locusId, allele, probability);
         assertEquals(new BigDecimal("0.2").doubleValue(), instance.getProbability(locusId, allele).doubleValue(), 0.0);
         assertEquals(0.001f, instance.getProbability("OtherLocus", "1").doubleValue(), 0.000000001f);
@@ -77,8 +91,8 @@ public class PopulationStatisticsTest {
     @Test
     public void testGetAlleles() {
         System.out.println("getAlleles");
-        String id = "Locus";
-        PopulationStatistics instance = new PopulationStatistics("");
+        final String id = "Locus";
+        final PopulationStatistics instance = new PopulationStatistics("");
         Collection result = instance.getAlleles(id);
         assertNotNull(result);
         assertTrue("Empty population statistics expected to result in empty allele collection", result.isEmpty());
@@ -96,7 +110,7 @@ public class PopulationStatisticsTest {
      */
     @Test
     public void setFileHash() {
-        PopulationStatistics instance = new PopulationStatistics("");
+        final PopulationStatistics instance = new PopulationStatistics("");
         instance.setFileHash("dummy hash");
     }
 
@@ -105,8 +119,8 @@ public class PopulationStatisticsTest {
      */
     @Test
     public void getFileHash() {
-        PopulationStatistics instance = new PopulationStatistics("");
-        String expResult = "dummy hash";
+        final PopulationStatistics instance = new PopulationStatistics("");
+        final String expResult = "dummy hash";
         instance.setFileHash(expResult);
         assertEquals(expResult, instance.getFileHash());
     }
@@ -116,7 +130,7 @@ public class PopulationStatisticsTest {
      */
     @Test
     public void toStringTest() {
-        PopulationStatistics instance = new PopulationStatistics("id");
+        final PopulationStatistics instance = new PopulationStatistics("id");
         instance.setFileHash("hash");
         assertEquals("id hash", instance.toString());
     }

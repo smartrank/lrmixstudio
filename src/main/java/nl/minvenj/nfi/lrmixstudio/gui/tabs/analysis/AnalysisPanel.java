@@ -957,6 +957,22 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
                     return;
                 }
             }
+
+            // Warn the user if Hp specifies a different number of contributors that Hd
+            final int hpCon = _session.getProsecution().getContributors().size() + _session.getProsecution().getUnknownCount();
+            final int hdCon = _session.getDefense().getContributors().size() + _session.getDefense().getUnknownCount();
+            if (hpCon != hdCon) {
+                if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(
+                                                                           this,
+                                                                           String.format("<html>The prosecution hypothesis specifies <b>%d</b> contributor%s, but the defense hypothesis specifies <b>%d</b>.<br>Are you sure this is what you intended?",
+                                                                                         hpCon,
+                                                                                         hpCon == 1 ? "" : "s",
+                                                                                         hdCon),
+                                                                           "LRmixStudio Sanity check", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
+                    return;
+                }
+            }
+
             _mathematicalModel = LRMathModelFactory.getMathematicalModel(_session.getMathematicalModelName());
             _mathematicalModel.addProgressListener(new AnalysisProgressListenerImpl(_session, this));
             _mathematicalModel.startAnalysis(_session);

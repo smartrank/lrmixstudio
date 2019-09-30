@@ -4,6 +4,13 @@ LRmix Studio Release Notes
 Version: ${project.version}
 Release date: ${buildTimestamp}
 ------------------------
+LRDYN-253:  Added a warning message when the total number of contributors under Hp differs from that under Hd.
+LRDYN-256:  Changed wording in the report describing rare alleles (i.e. alleles that are not present in the population statistics)
+
+
+Version: 2.1.2-CommunityEdition
+Release date: 2016-07-01
+------------------------
 LRDYN-249:  Fixed a performance issue in the application that caused slow response when enabling or disabling a replicate or sample. 
 LRDYN-250:  In order to reduce the number of combinations for unknown contributors, alleles from the population statistics that are not present in 
 			the samples or profiles are grouped into a single 'other' category that has a combined probability.   

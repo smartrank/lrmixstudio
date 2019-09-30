@@ -28,25 +28,28 @@ import org.slf4j.LoggerFactory;
 
 public class PopulationStatistics {
 
-    private final ArrayList<String> loci;
-    private final ArrayList<String> allelesForLocus;
-    private final String fileName;
-
-    public static final double DEFAULT_FREQUENCY = 0.001;
-    private String fileHash;
-    private final double[][] probs = new double[100][1024];
-    private final boolean[][] rare = new boolean[100][1024];
-    private final boolean[] _locusInitialized = new boolean[100];
     private static final Logger LOG = LoggerFactory.getLogger(PopulationStatistics.class);
+    public static final double DEFAULT_FREQUENCY = 0.001;
+
+    private final ArrayList<String> _loci;
+    private final ArrayList<String> _allelesForLocus;
+    private final ArrayList<String> _compoundAlleles;
+    private final String _fileName;
+    private final double[][] _probs = new double[100][1024];
+    private final boolean[][] _rare = new boolean[100][1024];
+    private final boolean[] _locusInitialized = new boolean[100];
+
+    private String _fileHash;
     private double _rareAlleleFrequency;
 
-    public PopulationStatistics(String fileNamez) {
-        loci = new ArrayList<>();
-        allelesForLocus = new ArrayList<>();
-        for (int idx = 0; idx < rare.length; idx++) {
-            Arrays.fill(rare[idx], true);
+    public PopulationStatistics(final String fileNamez) {
+        _loci = new ArrayList<>();
+        _allelesForLocus = new ArrayList<>();
+        _compoundAlleles = new ArrayList<>();
+        for (int idx = 0; idx < _rare.length; idx++) {
+            Arrays.fill(_rare[idx], true);
         }
-        fileName = fileNamez;
+        _fileName = fileNamez;
         _rareAlleleFrequency = DEFAULT_FREQUENCY;
     }
 
@@ -67,54 +70,57 @@ public class PopulationStatistics {
      * @param probability The probability that the allele is observed at the
      * locus
      */
-    public void addStatistic(String locusName, String alleleName, BigDecimal probability) {
-        String normalizedAllele = Allele.normalize(alleleName);
-        if (!loci.contains(locusName)) {
-            loci.add(locusName);
+    public void addStatistic(final String locusName, final String alleleName, final BigDecimal probability) {
+        final String normalizedAllele = Allele.normalize(alleleName);
+        if (!_loci.contains(locusName)) {
+            _loci.add(locusName);
         }
-        int locusId = Locus.getId(locusName);
-        int alleleId = Allele.getId(normalizedAllele);
-        probs[locusId][alleleId] = probability.doubleValue();
-        rare[locusId][alleleId] = false;
+        final int locusId = Locus.getId(locusName);
+        final int alleleId = Allele.getId(normalizedAllele);
+        _probs[locusId][alleleId] = probability.doubleValue();
+        _rare[locusId][alleleId] = false;
         _locusInitialized[locusId] = true;
-        allelesForLocus.add(locusName + normalizedAllele);
+        _allelesForLocus.add(locusName + normalizedAllele);
     }
 
-    private Double getProbability(int locusId, int alleleId) {
-        if (rare[locusId][alleleId]) {
+    private Double getProbability(final int locusId, final int alleleId) {
+        if (_rare[locusId][alleleId]) {
             return _rareAlleleFrequency;
         }
-        return probs[locusId][alleleId];
+        return _probs[locusId][alleleId];
     }
 
-    public Double getProbability(Locus locus, Allele allele) {
+    public Double getProbability(final Locus locus, final Allele allele) {
         return getProbability(locus.getId(), allele.getId());
     }
 
-    public Double getProbability(String locusId, String allele) {
+    public Double getProbability(final String locusId, final String allele) {
         return getProbability(Locus.getId(locusId), Allele.getId(allele));
     }
 
-    public Collection<String> getAlleles(String id) {
-        ArrayList<String> alleles = new ArrayList<>();
-        for (String locus : allelesForLocus) {
+    public Collection<String> getAlleles(final String id) {
+        final ArrayList<String> alleles = new ArrayList<>();
+        for (final String locus : _allelesForLocus) {
             if (locus.startsWith(id)) {
-                alleles.add(locus.substring(id.length()));
+                final String alleleName = locus.substring(id.length());
+                if (!_compoundAlleles.contains(alleleName)) {
+                    alleles.add(alleleName);
+                }
             }
         }
         return alleles;
     }
 
     public String getFileName() {
-        return fileName;
+        return _fileName;
     }
 
     public Collection<String> getLoci() {
-        return Collections.unmodifiableCollection(loci);
+        return Collections.unmodifiableCollection(_loci);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
@@ -122,10 +128,10 @@ public class PopulationStatistics {
             return false;
         }
         final PopulationStatistics other = (PopulationStatistics) obj;
-        if (!Objects.equals(this.loci, other.loci)) {
+        if (!Objects.equals(this._loci, other._loci)) {
             return false;
         }
-        if (!Objects.equals(this.fileName, other.fileName)) {
+        if (!Objects.equals(this._fileName, other._fileName)) {
             return false;
         }
         return true;
@@ -134,8 +140,8 @@ public class PopulationStatistics {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.loci);
-        hash = 83 * hash + Objects.hashCode(this.fileName);
+        hash = 83 * hash + Objects.hashCode(this._loci);
+        hash = 83 * hash + Objects.hashCode(this._fileName);
         hash = 83 * hash + ("" + _rareAlleleFrequency).hashCode();
         return hash;
     }
@@ -145,20 +151,20 @@ public class PopulationStatistics {
      *
      * @param fileHash The hash to set
      */
-    public void setFileHash(String fileHash) {
-        this.fileHash = fileHash;
+    public void setFileHash(final String fileHash) {
+        this._fileHash = fileHash;
     }
 
     /**
      * @return the fileHash
      */
     public String getFileHash() {
-        return fileHash;
+        return _fileHash;
     }
 
     @Override
     public String toString() {
-        return fileName + " " + fileHash;
+        return _fileName + " " + _fileHash;
     }
 
     /**
@@ -168,8 +174,8 @@ public class PopulationStatistics {
      * @param allele The allele to query
      * @return true if the supplied allele is rare
      */
-    public boolean isRareAllele(Allele allele) {
-        return rare[allele.getLocus().getId()][allele.getId()];
+    public boolean isRareAllele(final Allele allele) {
+        return _rare[allele.getLocus().getId()][allele.getId()];
     }
 
     /**
@@ -178,7 +184,7 @@ public class PopulationStatistics {
      *
      * @param rareAlleleFrequency the frequency for rare alleles.
      */
-    public void setRareAlleleFrequency(Double rareAlleleFrequency) {
+    public void setRareAlleleFrequency(final Double rareAlleleFrequency) {
         _rareAlleleFrequency = rareAlleleFrequency;
     }
 
@@ -190,8 +196,24 @@ public class PopulationStatistics {
      *
      * @return true if the locus is present in the population statistics
      */
-    public boolean isPresent(String locusName) {
-        int id = Locus.getId(locusName);
+    public boolean isPresent(final String locusName) {
+        final int id = Locus.getId(locusName);
         return id < _locusInitialized.length && _locusInitialized[id];
+    }
+
+    /**
+     * Adds a compound statistic to the table. A compound statistic can help in optimizing the number of permutations
+     * for unknown contributors by clustering the frequency of unobserved alleles into a single compound allele.
+     * These compound alleles should not be used when iterating over the alleles in the statistics (e.g. for generating random profiles).
+     *
+     * @param locusName the name of the locus for which to add a compound allele
+     * @param alleleName the name of the allele
+     * @param probability the frequency of the compound allele
+     */
+    public void addCompoundStatistic(final String locusName, final String alleleName, final BigDecimal probability) {
+        addStatistic(locusName, alleleName, probability);
+        if (!_compoundAlleles.contains(alleleName)) {
+            _compoundAlleles.add(alleleName);
+        }
     }
 }

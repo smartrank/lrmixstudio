@@ -1159,13 +1159,13 @@
 				<reportElement x="32" y="20" width="520" height="36" uuid="88d6e319-a749-48f7-ad90-390c590a64cb">
 					<printWhenExpression><![CDATA[!$F{RareAlleles}.isEmpty()]]></printWhenExpression>
 				</reportElement>
-				<textFieldExpression><![CDATA["The alleles listed below have been detected as rare. They have been assigned the frequency " + $F{RareAlleleFrequency}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["The alleles listed below are not present in the population statistics. They have been assigned the frequency " + $F{RareAlleleFrequency}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="32" y="20" width="520" height="36" uuid="7267b016-fa3e-4767-9943-709c80c25f20">
 					<printWhenExpression><![CDATA[$F{RareAlleles}.isEmpty()]]></printWhenExpression>
 				</reportElement>
-				<textFieldExpression><![CDATA["No rare alleles have been detected."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["All observed alleles are present in the population statistics."]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement key="table 16" style="table 16" x="32" y="56" width="495" height="25" uuid="6f81b020-45d9-44df-8c32-aaa5d8b475c8"/>

@@ -111,7 +111,7 @@ public class LocusProbabilityJobGenerator {
             // Do not add the combined allele if its frequency is not a number, infinity or zero
             if (!otherFrequency.isInfinite() && !otherFrequency.isNaN() && otherFrequency > 0) {
                 alleleCollection.add(locusName + "-other");
-                hypothesis.getPopulationStatistics().addStatistic(locusName, locusName + "-other", new BigDecimal(otherFrequency));
+                hypothesis.getPopulationStatistics().addCompoundStatistic(locusName, locusName + "-other", new BigDecimal(otherFrequency));
             }
 
             final String[] alleles = alleleCollection.toArray(new String[0]);
