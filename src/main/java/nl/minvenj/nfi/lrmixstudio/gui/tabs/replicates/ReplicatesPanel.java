@@ -20,6 +20,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
@@ -27,6 +28,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -144,7 +147,16 @@ public class ReplicatesPanel extends javax.swing.JPanel implements Configuration
                 try {
                     dtde.acceptDrop(dtde.getDropAction());
                     final Collection<File> droppedFiles = (Collection<File>) dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    loadFiles(droppedFiles.toArray(new File[droppedFiles.size()]));
+
+                    // If the user only dropped a single log file, then try to restore the session from that logfile
+                    final File droppedFile = droppedFiles.iterator().next();
+                    if (droppedFiles.size() == 1 && droppedFile.getName().toLowerCase().endsWith(".log")) {
+                        session.restore(new PathResolver(ReplicatesPanel.this), droppedFile);
+                    }
+                    else {
+                        // More than one file, or multiple files were dropped. Treat them as profile CSVs
+                        loadFiles(droppedFiles.toArray(new File[droppedFiles.size()]));
+                    }
                     dtde.dropComplete(true);
                 } catch (UnsupportedFlavorException | IOException ex) {
                     LOG.info("Error reading dropped files", ex);
@@ -235,6 +247,22 @@ public class ReplicatesPanel extends javax.swing.JPanel implements Configuration
             _samplesTable.getColumnModel().getColumn(1).setPreferredWidth(100);
             _samplesTable.getColumnModel().getColumn(2).setPreferredWidth(300);
         }
+        _samplesScrollPane.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(final MouseWheelEvent e) {
+                if (e.isControlDown()) {
+                    if (e.getWheelRotation() < 0) {
+                        final Font font = new Font(getFont().getName(), getFont().getStyle(), getFont().getSize() + 1);
+                        setFont(font);
+                    }
+                    if (e.getWheelRotation() > 0) {
+                        final Font font = new Font(getFont().getName(), getFont().getStyle(), getFont().getSize() - 1);
+                        setFont(font);
+                    }
+//                    e.consume();
+                }
+            }
+        });
 
         addProfileButton.setText("Add profile...");
         addProfileButton.addActionListener(new java.awt.event.ActionListener() {
@@ -329,6 +357,22 @@ public class ReplicatesPanel extends javax.swing.JPanel implements Configuration
         });
         _detailTable.setFillsViewportHeight(true);
         _detailScrollPane.setViewportView(_detailTable);
+        _detailScrollPane.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(final MouseWheelEvent e) {
+                if (e.isControlDown()) {
+                    if (e.getWheelRotation() < 0) {
+                        final Font font = new Font(getFont().getName(), getFont().getStyle(), getFont().getSize() + 1);
+                        setFont(font);
+                    }
+                    if (e.getWheelRotation() > 0) {
+                        final Font font = new Font(getFont().getName(), getFont().getStyle(), getFont().getSize() - 1);
+                        setFont(font);
+                    }
+                    e.consume();
+                }
+            }
+        });
 
         _warningPanel = new JPanel();
         _warningPanel.setMinimumSize(new Dimension(10, 100));

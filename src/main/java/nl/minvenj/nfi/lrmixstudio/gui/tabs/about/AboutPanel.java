@@ -16,6 +16,7 @@
  */
 package nl.minvenj.nfi.lrmixstudio.gui.tabs.about;
 
+import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -119,7 +120,7 @@ public class AboutPanel extends javax.swing.JPanel implements ApplicationStateCh
         infoLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         copyrightLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        copyrightLabel.setText("<html>&copy; 2013-2016 Netherlands Forensic Institute");
+        copyrightLabel.setText("<html>&copy; 2013-2018 Netherlands Forensic Institute");
         copyrightLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         versionLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -132,7 +133,7 @@ public class AboutPanel extends javax.swing.JPanel implements ApplicationStateCh
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Tahoma", Font.PLAIN, jTextArea1.getFont().getSize())); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setText("The development of this software was  partly  supported  by  a  grant  from  the Netherlands  Genomics  Initiative/Netherlands  Organization  for Scientific  Research  (NWO)  within  the  framework  of  the  Forensic Genomics  Consortium  Netherlands. \n");
@@ -145,7 +146,7 @@ public class AboutPanel extends javax.swing.JPanel implements ApplicationStateCh
 
         licenseText.setEditable(false);
         licenseText.setColumns(20);
-        licenseText.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        licenseText.setFont(new java.awt.Font("Monospaced", Font.PLAIN, licenseText.getFont().getSize())); // NOI18N
         licenseText.setRows(5);
         jScrollPane2.setViewportView(licenseText);
 

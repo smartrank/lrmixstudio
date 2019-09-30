@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Netherlands Forensic Institute
+ * Copyright (C) 2013, 2014, 2018 Netherlands Forensic Institute
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -16,7 +16,10 @@
  */
 package nl.minvenj.nfi.lrmixstudio.gui.tabs.noncontributor;
 
+import static nl.minvenj.nfi.lrmixstudio.utils.LogUtils.addPadding;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
@@ -33,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
 import nl.minvenj.nfi.lrmixstudio.domain.Contributor;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 import nl.minvenj.nfi.lrmixstudio.domain.Locus;
@@ -163,6 +167,19 @@ class NonContributorTestProgressListener implements AnalysisProgressListener {
         LOG.info("=================");
         LOG.info("Enabled loci: {}", enabledLoci);
 
+        final Collection<DisabledLocus> disabledLoci = _session.getDisabledLoci();
+        if (disabledLoci.isEmpty()) {
+            LOG.info("Disabled loci: None");
+        }
+        else {
+            LOG.info("Disabled loci:");
+            LOG.info("   Name       |  Reason");
+            LOG.info("  ------------+------------------------------------");
+            for (final DisabledLocus locus : disabledLoci) {
+                LOG.info("   {} |  {}", addPadding(locus.getName(), 10), locus.getReason());
+            }
+        }
+
         final Collection<Allele> rareAlleles = _session.getRareAlleles();
         LOG.info("=================");
         if (!rareAlleles.isEmpty()) {
@@ -205,7 +222,32 @@ class NonContributorTestProgressListener implements AnalysisProgressListener {
         LOG.info("     Maximum: {}", _session.formatNumber(results.getMaximum()));
         LOG.info("   LRs>1:      {}% ({} of {})", results.getPercentageOver1(), results.getOver1Count(), results.getIterations());
         LOG.info("   LRs>LR_POI: {}% ({} of {})", results.getPercentageOverOriginalLR(), results.getOverOriginalCount(), results.getIterations());
+        if (ApplicationSettings.isLogAllNonConLRs()) {
+            logDetailedResults(results);
+        }
         LOG.info("=================");
+    }
+
+    /**
+     * Logs the detailed results of a non-contributor test to a separate file.
+     *
+     * @param results the {@link NonContributorTestResults} holding the test results
+     */
+    private void logDetailedResults(final NonContributorTestResults results) {
+        final FileAppender caseAppender = (FileAppender) org.apache.log4j.Logger.getLogger("CaseLogger").getAppender("CaseAppender");
+        final String fileName = caseAppender.getFile().replaceAll(".log$", "-detailedresults.log");
+        final File outFile = new File(fileName);
+        try (FileOutputStream fos = new FileOutputStream(outFile)) {
+            fos.write("LR,LOG10(LR)\n".getBytes());
+            for (final double lr : results.getSortedResults()) {
+                fos.write(String.format("\"%e\",\"%e\"\n", lr, Math.log10(lr)).getBytes());
+            }
+            LOG.info("  Detailed results stored in: {}", fileName);
+        }
+        catch (final Exception e) {
+            LOG.error("  Error writing detailed results to {}!", fileName, e);
+            _session.setErrorMessage("<html>Could not write detailed results!<br><i>Filename: </i>" + fileName + "<br><i>Exception: </i><b>" + e.getClass().getSimpleName() + "</b><br><i>Message: </i>" + e.getMessage());
+        }
     }
 
     public void iterationDone(final Double prosecutionProbability) {

@@ -4,6 +4,8 @@
  */
 package nl.minvenj.nfi.lrmixstudio.gui.tabs.sensitivity;
 
+import static nl.minvenj.nfi.lrmixstudio.utils.LogUtils.addPadding;
+
 import java.awt.EventQueue;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
 import nl.minvenj.nfi.lrmixstudio.domain.Contributor;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 import nl.minvenj.nfi.lrmixstudio.domain.Locus;
@@ -291,6 +294,19 @@ public class SensitivityAnalysisProgressListener implements AnalysisProgressList
 
             LOG.info("Enabled loci: {}", _targetLocus.equalsIgnoreCase("All loci") ? enabledLoci : _targetLocus);
 
+            final Collection<DisabledLocus> disabledLoci = _session.getDisabledLoci();
+            if (disabledLoci.isEmpty()) {
+                LOG.info("Disabled loci: None");
+            }
+            else {
+                LOG.info("Disabled loci:");
+                LOG.info("   Name       |  Reason");
+                LOG.info("  ------------+------------------------------------");
+                for (final DisabledLocus locus : disabledLoci) {
+                    LOG.info("   {} |  {}", addPadding(locus.getName(), 10), locus.getReason());
+                }
+            }
+
             final Collection<Allele> rareAlleles = _session.getRareAlleles();
             LOG.info("=================");
             if (!rareAlleles.isEmpty()) {
@@ -411,10 +427,5 @@ public class SensitivityAnalysisProgressListener implements AnalysisProgressList
         catch (final UnknownHostException ex) {
             return ex.getClass().getName() + " - " + ex.getMessage();
         }
-    }
-
-    private String addPadding(final String value, final int length) {
-        final String retval = value + "                                        ";
-        return retval.substring(value.startsWith("-") ? 1 : 0, length);
     }
 }

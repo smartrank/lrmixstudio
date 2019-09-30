@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Netherlands Forensic Institute
+ * Copyright (C) 2013, 2014, 2017 Netherlands Forensic Institute
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 
@@ -33,7 +31,6 @@ import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
  */
 public class NonContributorTestResults {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NonContributorTestResults.class);
     private final String _description;
     private Double _original;
     private Double _minimum;
@@ -48,45 +45,46 @@ public class NonContributorTestResults {
     private int _over1Count;
     private int _percentageOverOriginalLR;
     private int _percentageOver1;
+    private double[] _rawResults;
 
-    public NonContributorTestResults(String description) {
+    public NonContributorTestResults(final String description) {
         _description = description;
     }
 
-    public NonContributorTestResults(String description, long iterations, LikelihoodRatio originalLR, Collection<Double> prosecutionProbabilities) {
+    public NonContributorTestResults(final String description, final long iterations, final LikelihoodRatio originalLR, final Collection<Double> prosecutionProbabilities) {
 
         _iterations = iterations;
         _description = description;
         if (originalLR != null) {
             _original = Math.log10(originalLR.getOverallRatio().getRatio());
             if (prosecutionProbabilities.size() > 0) {
-                Percentile percentile = new Percentile();
-                double[] doubles = new double[prosecutionProbabilities.size()];
-                Iterator<Double> iterator = prosecutionProbabilities.iterator();
+                final Percentile percentile = new Percentile();
+                _rawResults = new double[prosecutionProbabilities.size()];
+                final Iterator<Double> iterator = prosecutionProbabilities.iterator();
                 int idx = 0;
                 _over1Count = 0;
                 _overOriginalCount = 0;
                 while (iterator.hasNext()) {
-                    doubles[idx] = iterator.next() / originalLR.getOverallRatio().getDefenseProbability();
-                    if (doubles[idx] > 1) {
+                    _rawResults[idx] = iterator.next() / originalLR.getOverallRatio().getDefenseProbability();
+                    if (_rawResults[idx] > 1) {
                         _over1Count++;
                     }
-                    if (doubles[idx] > originalLR.getOverallRatio().getRatio()) {
+                    if (_rawResults[idx] > originalLR.getOverallRatio().getRatio()) {
                         _overOriginalCount++;
                     }
                     idx++;
                 }
-                Arrays.sort(doubles);
-                _minimum = Math.log10(doubles[0]);
-                _maximum = Math.log10(doubles[doubles.length - 1]);
-                percentile.setData(doubles);
+                Arrays.sort(_rawResults);
+                _minimum = Math.log10(_rawResults[0]);
+                _maximum = Math.log10(_rawResults[_rawResults.length - 1]);
+                percentile.setData(_rawResults);
 
                 _onePercent = Math.log10(percentile.evaluate(1));
                 _fiftyPercent = Math.log10(percentile.evaluate(50));
                 _ninetyninePercent = Math.log10(percentile.evaluate(99));
 
-                _percentageOver1 = (_over1Count * 100) / doubles.length;
-                _percentageOverOriginalLR = (_overOriginalCount * 100) / doubles.length;
+                _percentageOver1 = (_over1Count * 100) / _rawResults.length;
+                _percentageOverOriginalLR = (_overOriginalCount * 100) / _rawResults.length;
             } else {
                 _onePercent = 0.0;
                 _fiftyPercent = 0.0;
@@ -163,7 +161,7 @@ public class NonContributorTestResults {
      *
      * @param minimum The value to set
      */
-    public void setMinimum(Number minimum) {
+    public void setMinimum(final Number minimum) {
         this._minimum = Math.log10(minimum.doubleValue());
     }
 
@@ -173,7 +171,7 @@ public class NonContributorTestResults {
      *
      * @param ninetyninePercent The value to set
      */
-    public void setNinetyninePercent(Number ninetyninePercent) {
+    public void setNinetyninePercent(final Number ninetyninePercent) {
         this._ninetyninePercent = Math.log10(ninetyninePercent.doubleValue());
     }
 
@@ -183,7 +181,7 @@ public class NonContributorTestResults {
      *
      * @param fiftyPercent the _fiftyPercent to set
      */
-    public void setFiftyPercent(Number fiftyPercent) {
+    public void setFiftyPercent(final Number fiftyPercent) {
         this._fiftyPercent = Math.log10(fiftyPercent.doubleValue());
     }
 
@@ -193,7 +191,7 @@ public class NonContributorTestResults {
      *
      * @param onePercent the _onePercent to set
      */
-    public void setOnePercent(Number onePercent) {
+    public void setOnePercent(final Number onePercent) {
         this._onePercent = Math.log10(onePercent.doubleValue());
     }
 
@@ -203,7 +201,7 @@ public class NonContributorTestResults {
      *
      * @param maximum the _maximum to set
      */
-    public void setMaximum(Number maximum) {
+    public void setMaximum(final Number maximum) {
         this._maximum = Math.log10(maximum.doubleValue());
     }
 
@@ -212,45 +210,77 @@ public class NonContributorTestResults {
         return "Original = " + _original + ", min = " + _minimum + ", 1% = " + _onePercent + ", 50% = " + _fiftyPercent + ", 99%  = " + _ninetyninePercent + ", max = " + _maximum;
     }
 
-    public void setPreview(BufferedImage bufferedImage) {
+    /**
+     * Associates a preview image with this analysis.
+     *
+     * @param bufferedImage the image to use as preview
+     */
+    public void setPreview(final BufferedImage bufferedImage) {
         _preview = bufferedImage;
     }
 
+    /**
+     * @return a {@link BufferedImage} containing the a preview version of the results graph
+     */
     public BufferedImage getPreview() {
         return _preview;
     }
 
-    public void setGraphImage(BufferedImage bufferedImage) {
+    /**
+     * Associates a graph image with this analysis
+     *
+     * @param bufferedImage the {@link BufferedImage} to set as graph for this analysis
+     */
+    public void setGraphImage(final BufferedImage bufferedImage) {
         _graphImage = bufferedImage;
     }
 
+    /**
+     * @return a {@link BufferedImage} containing the graph
+     */
     public BufferedImage getGraphImage() {
         return _graphImage;
     }
 
+    /**
+     * @return the number of iterations
+     */
     public long getIterations() {
         return _iterations;
     }
 
+    /**
+     * @return the percentage of LRs greater than LR(POI)
+     */
     public int getPercentageOverOriginalLR() {
         return _percentageOverOriginalLR;
     }
 
+    /**
+     * @return the percentage of LRs greater than 1
+     */
     public int getPercentageOver1() {
         return _percentageOver1;
     }
 
     /**
-     * @return the _overOriginalCount
+     * @return the number of LRs greater than LR(POI)
      */
     public int getOverOriginalCount() {
         return _overOriginalCount;
     }
 
     /**
-     * @return the _over1Count
+     * @return the number of LRs greater than 1
      */
     public int getOver1Count() {
         return _over1Count;
+    }
+
+    /**
+     * @return an array of doubles containing the original LRs
+     */
+    public double[] getSortedResults() {
+        return _rawResults;
     }
 }

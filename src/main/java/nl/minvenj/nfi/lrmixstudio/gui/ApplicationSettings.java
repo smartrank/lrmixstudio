@@ -64,6 +64,13 @@ public class ApplicationSettings {
     private static final long DEFAULT_LOSTTIMETHRESHOLD = 60000;
     private static final int DEFAULT_MAX_MRU_ENTRIES = 4;
     private static final String ADVANCED_MODE = "advancedMode";
+    private static final String LOGALLNONCONTRIBUTORLRS = "logAllNonContributorLRs";
+    private static final String LATEST_DROPIN = "latestDropin";
+    private static final Double DEFAULT_DROPIN = 0.05;
+    private static final String LATEST_THETA = "latestTheta";
+    private static final Double DEFAULT_THETA = 0.01;
+    private static final String FONT_SIZE = "fontSize";
+    private static final int DEFAULT_FONT_SIZE = 11;
 
     /**
      * Static properties sourced from LRmixStudio.properties in the resources
@@ -77,6 +84,8 @@ public class ApplicationSettings {
     private static final String SHOWGRID = "showGrid";
     private static final String SAMPLES_SHOWGRID = "samples." + SHOWGRID;
     private static final String OVERVIEW_SHOWGRID = "overview." + SHOWGRID;
+    private static final String MAXUNKNOWNS = "maxUnknowns";
+    private static final int DEFAULT_MAXUNKNOWNS = 4;
 
     private static void load() {
         final File f = new File(SETTINGS_FILENAME);
@@ -118,7 +127,7 @@ public class ApplicationSettings {
     }
 
     private static void removeByPrefix(final String prefix) {
-        final ArrayList<String> toRemove = new ArrayList<String>();
+        final ArrayList<String> toRemove = new ArrayList<>();
         for (final String key : properties.keySet()) {
             if (key.startsWith(prefix)) {
                 toRemove.add(key);
@@ -257,6 +266,25 @@ public class ApplicationSettings {
         set(ALLELEFREQUENCIES_PATH, path);
     }
 
+    public static void setLogAllNonConLRs(final boolean logNonConLRs) {
+        set(LOGALLNONCONTRIBUTORLRS, Boolean.toString(logNonConLRs));
+    }
+
+    public static boolean isLogAllNonConLRs() {
+        final String isLogged = get(LOGALLNONCONTRIBUTORLRS);
+        return Boolean.parseBoolean(isLogged);
+    }
+
+    public static int getMaxUnknowns() {
+        try {
+            return Integer.parseInt(get(MAXUNKNOWNS));
+        }
+        catch (final Exception e) {
+            set(MAXUNKNOWNS, "" + DEFAULT_MAXUNKNOWNS);
+            return DEFAULT_MAXUNKNOWNS;
+        }
+    }
+
     public static String getRareAlleleFrequency(final PopulationStatistics statistics) {
         final String rare = get(RARE_ALLELE_FREQUENCY + (statistics == null ? "" : statistics.getFileHash()));
         if (rare.isEmpty()) {
@@ -267,6 +295,17 @@ public class ApplicationSettings {
 
     public static void setRareAlleleFrequency(final PopulationStatistics statistics, final double freq) {
         set(RARE_ALLELE_FREQUENCY + (statistics == null ? "" : statistics.getFileHash()), "" + freq);
+    }
+
+    public static void setFontSize(final int fontSize) {
+        set(FONT_SIZE, "" + fontSize);
+    }
+
+    public static int getFontSize() {
+        final String size = get(FONT_SIZE);
+        if (size.isEmpty())
+            return DEFAULT_FONT_SIZE;
+        return Integer.parseInt(size);
     }
 
     public static void setThreadCount(final int threadCount) {
@@ -422,5 +461,35 @@ public class ApplicationSettings {
 
     public static boolean isAdvancedMode() {
         return "true".equalsIgnoreCase(get(ADVANCED_MODE));
+    }
+
+    public static Double getLatestDropIn() {
+
+        final String dropIn = get(LATEST_DROPIN);
+        try {
+            return Double.valueOf(dropIn);
+}
+        catch (final NumberFormatException nfe) {
+            return DEFAULT_DROPIN;
+        }
+    }
+
+    public static void setLatestDropIn(final Double dropIn) {
+        set(LATEST_DROPIN, dropIn.toString());
+    }
+
+    public static Double getLatestTheta() {
+
+        final String theta = get(LATEST_THETA);
+        try {
+            return Double.valueOf(theta);
+        }
+        catch (final NumberFormatException nfe) {
+            return DEFAULT_THETA;
+        }
+    }
+
+    public static void setLatestTheta(final Double theta) {
+        set(LATEST_THETA, theta.toString());
     }
 }

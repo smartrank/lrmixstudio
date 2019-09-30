@@ -16,6 +16,8 @@
  */
 package nl.minvenj.nfi.lrmixstudio.gui.tabs.analysis;
 
+import static nl.minvenj.nfi.lrmixstudio.utils.LogUtils.addPadding;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -39,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
 import nl.minvenj.nfi.lrmixstudio.domain.Contributor;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 import nl.minvenj.nfi.lrmixstudio.domain.Locus;
@@ -231,6 +234,19 @@ public class AnalysisProgressListenerImpl implements AnalysisProgressListener {
         LOG.info("=================");
         LOG.info("Enabled loci: {}", enabledLoci);
 
+        final Collection<DisabledLocus> disabledLoci = _session.getDisabledLoci();
+        if (disabledLoci.isEmpty()) {
+            LOG.info("Disabled loci: None");
+        }
+        else {
+            LOG.info("Disabled loci:");
+            LOG.info("   Name       |  Reason");
+            LOG.info("  ------------+------------------------------------");
+            for (final DisabledLocus locus : disabledLoci) {
+                LOG.info("   {} |  {}", addPadding(locus.getName(), 10), locus.getReason());
+            }
+        }
+
         final Collection<Allele> rareAlleles = _session.getRareAlleles();
         LOG.info("=================");
         if (!rareAlleles.isEmpty()) {
@@ -245,11 +261,6 @@ public class AnalysisProgressListenerImpl implements AnalysisProgressListener {
 
         logHypothesis(_session.getProsecution());
         logHypothesis(_session.getDefense());
-    }
-
-    private String addPadding(final String value, final int length) {
-        final String retval = value + "                                        ";
-        return retval.substring(value.startsWith("-") ? 1 : 0, length);
     }
 
     @Override

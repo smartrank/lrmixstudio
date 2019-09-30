@@ -24,11 +24,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.Locus;
 import nl.minvenj.nfi.lrmixstudio.domain.PopulationStatistics;
@@ -50,10 +52,10 @@ public class ConfigurationData implements Cloneable {
     private String caseNumber;
     private String programVersion;
     private String modelName;
-    private ArrayList<ConfigurationDataChangeListener> listeners = new ArrayList<>();
-    private LinkedHashMap<String, LocusEx> allLoci = new LinkedHashMap<>();
+    private final ArrayList<ConfigurationDataChangeListener> listeners = new ArrayList<>();
+    private final LinkedHashMap<String, LocusEx> allLoci = new LinkedHashMap<>();
     private boolean locusListDirty = false;
-    private HashMap<Integer, AnalysisReport> reports = new HashMap<>();
+    private final HashMap<Integer, AnalysisReport> reports = new HashMap<>();
     private int _threadCount = Runtime.getRuntime().availableProcessors();
     private Double _rareAlleleFrequency = PopulationStatistics.DEFAULT_FREQUENCY;
 
@@ -62,19 +64,19 @@ public class ConfigurationData implements Cloneable {
      */
     private class LocusEx implements Cloneable {
 
-        private String _id;
+        private final String _id;
         private boolean _enabled;
         private boolean _valid;
         private String _statusDesc;
 
-        public LocusEx(String id) {
+        public LocusEx(final String id) {
             _id = id;
             _enabled = true;
             _valid = true;
             _statusDesc = "";
         }
 
-        private LocusEx(String id, boolean enabled, boolean valid, String statusDesc) {
+        private LocusEx(final String id, final boolean enabled, final boolean valid, final String statusDesc) {
             _id = id;
             _enabled = enabled;
             _valid = valid;
@@ -102,7 +104,7 @@ public class ConfigurationData implements Cloneable {
             return _valid;
         }
 
-        private void setEnabled(boolean enabled) {
+        private void setEnabled(final boolean enabled) {
             LOG.debug("Locus {} setEnabled({})", _id, enabled);
             _enabled = enabled;
         }
@@ -117,7 +119,7 @@ public class ConfigurationData implements Cloneable {
             return new LocusEx(_id, _enabled, _valid, _statusDesc);
         }
 
-        private void setValid(boolean valid, String statusDesc) {
+        private void setValid(final boolean valid, final String statusDesc) {
             _valid = valid;
             _statusDesc = statusDesc;
         }
@@ -140,7 +142,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @param config The original configuration to copy
      */
-    public ConfigurationData(ConfigurationData config) {
+    public ConfigurationData(final ConfigurationData config) {
         if (config.getDefense() != null) {
             defense = config.getDefense().copy();
         }
@@ -153,7 +155,7 @@ public class ConfigurationData implements Cloneable {
         this.modelName = config.getMathematicalModelName();
         _statistics = config.getStatistics();
         this._threadCount = config._threadCount;
-        for (String le : config.allLoci.keySet()) {
+        for (final String le : config.allLoci.keySet()) {
             this.allLoci.put(le, config.allLoci.get(le).clone());
         }
         LOG.debug("Cloning configuration {} to {}", config.hashCode(), hashCode());
@@ -165,7 +167,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @param listener A ConfigurationDataChangeListener instance
      */
-    public void addDataChangeListener(ConfigurationDataChangeListener listener) {
+    public void addDataChangeListener(final ConfigurationDataChangeListener listener) {
         listeners.add(listener);
     }
 
@@ -182,7 +184,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @param defense the defense hypothesis to set
      */
-    public void setDefense(Hypothesis defense) {
+    public void setDefense(final Hypothesis defense) {
         this.defense = defense;
         notifyListeners(ConfigurationDataElement.DEFENSE);
     }
@@ -204,9 +206,9 @@ public class ConfigurationData implements Cloneable {
      *         time.
      */
     public Collection<Sample> getActiveProfiles() {
-        ArrayList<Sample> returnValue = new ArrayList();
+        final ArrayList<Sample> returnValue = new ArrayList();
 
-        for (Sample sample : profiles) {
+        for (final Sample sample : profiles) {
             if (sample.isEnabled()) {
                 returnValue.add(sample);
             }
@@ -220,7 +222,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @param profiles A collection of Sample classes representing profiles.
      */
-    public void addProfiles(Collection<Sample> profiles) {
+    public void addProfiles(final Collection<Sample> profiles) {
         this.profiles.addAll(profiles);
         locusListDirty = true;
         notifyListeners(ConfigurationDataElement.PROFILES);
@@ -236,12 +238,12 @@ public class ConfigurationData implements Cloneable {
     /**
      * @param prosecution the prosecution hypothesis to set
      */
-    public void setProsecution(Hypothesis prosecution) {
+    public void setProsecution(final Hypothesis prosecution) {
         this.prosecution = prosecution;
         if (this.prosecution.getPopulationStatistics() != null) {
             this.prosecution.getPopulationStatistics().setRareAlleleFrequency(_rareAlleleFrequency);
         }
-        
+
         notifyListeners(ConfigurationDataElement.PROSECUTION);
     }
 
@@ -250,9 +252,9 @@ public class ConfigurationData implements Cloneable {
      *         replicates
      */
     public Collection<Sample> getActiveReplicates() {
-        ArrayList<Sample> returnValue = new ArrayList();
+        final ArrayList<Sample> returnValue = new ArrayList();
 
-        for (Sample sample : replicates) {
+        for (final Sample sample : replicates) {
             if (sample.isEnabled()) {
                 returnValue.add(sample);
             }
@@ -272,7 +274,7 @@ public class ConfigurationData implements Cloneable {
     /**
      * Adds the samples in the supplied collection to the list of replicates
      */
-    public void addReplicates(Collection<Sample> replicates) {
+    public void addReplicates(final Collection<Sample> replicates) {
         this.replicates.addAll(replicates);
         locusListDirty = true;
         notifyListeners(ConfigurationDataElement.REPLICATES);
@@ -289,7 +291,7 @@ public class ConfigurationData implements Cloneable {
      * @param statistics Sets the PopulationStatistics object used for getting
      *                   allele probabilities
      */
-    public void setStatistics(PopulationStatistics statistics) {
+    public void setStatistics(final PopulationStatistics statistics) {
         LOG.debug("Statistics set to {}", statistics);
         _statistics = statistics;
         if (statistics != null) {
@@ -317,7 +319,7 @@ public class ConfigurationData implements Cloneable {
     /**
      * @param caseNumber the caseNumber to set
      */
-    public void setCaseNumber(String caseNumber) {
+    public void setCaseNumber(final String caseNumber) {
         if (caseNumber == null) {
             this.caseNumber = "";
         }
@@ -330,7 +332,7 @@ public class ConfigurationData implements Cloneable {
     /**
      * @param programVersion the programVersion to set
      */
-    public void setProgramVersion(String programVersion) {
+    public void setProgramVersion(final String programVersion) {
         this.programVersion = programVersion;
     }
 
@@ -367,7 +369,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @param modelName The getName of the model.
      */
-    public void setMathematicalModelName(String modelName) {
+    public void setMathematicalModelName(final String modelName) {
         this.modelName = modelName;
         notifyListeners(ConfigurationDataElement.MODELNAME);
     }
@@ -377,12 +379,12 @@ public class ConfigurationData implements Cloneable {
      * Notifies all registered {@link ConfigurationDataChangeListener} classes
      * of a change in the settings
      */
-    private void notifyListeners(ConfigurationDataElement element) {
+    private void notifyListeners(final ConfigurationDataElement element) {
         if (notifying) {
             return;
         }
         notifying = true;
-        for (ConfigurationDataChangeListener listener : listeners) {
+        for (final ConfigurationDataChangeListener listener : listeners) {
             listener.dataChanged(element);
         }
         notifying = false;
@@ -396,7 +398,7 @@ public class ConfigurationData implements Cloneable {
      * @param configurationDataElement The element to be passed on to the
      *                                 configured listeners.
      */
-    public void fireUpdated(ConfigurationDataElement configurationDataElement) {
+    public void fireUpdated(final ConfigurationDataElement configurationDataElement) {
         if (configurationDataElement == ACTIVEPROFILES || configurationDataElement == ACTIVEREPLICATES) {
             locusListDirty = true;
         }
@@ -409,8 +411,8 @@ public class ConfigurationData implements Cloneable {
      */
     public Collection<String> getEnabledLoci() {
         initLocusList();
-        ArrayList<String> enabledLoci = new ArrayList<>();
-        for (LocusEx locus : allLoci.values()) {
+        final ArrayList<String> enabledLoci = new ArrayList<>();
+        for (final LocusEx locus : allLoci.values()) {
             if (locus.isValid() && locus.isEnabled()) {
                 enabledLoci.add(locus.getId());
             }
@@ -420,13 +422,33 @@ public class ConfigurationData implements Cloneable {
     }
 
     /**
+     * @return a list of {@link DisabledLocus} classes describing the disabled loci, or an empty list if no loci were disabled
+     */
+    public List<DisabledLocus> getDisabledLoci() {
+        initLocusList();
+        final List<DisabledLocus> disabledLoci = new ArrayList<>();
+        for (final LocusEx locus : allLoci.values()) {
+            if (locus.isValid()) {
+                if (!locus.isEnabled())
+                    disabledLoci.add(new DisabledLocus(locus.getId(), "Manually disabled"));
+            }
+            else {
+                final String msg = locus.getStatusDesc().replaceAll("Locus '.+' is ", "");
+                disabledLoci.add(new DisabledLocus(locus.getId(), msg.substring(0, 1).toUpperCase() + msg.substring(1)));
+            }
+        }
+
+        return disabledLoci;
+    }
+
+    /**
      * @return A collection of Strings containing all loci (_enabled and
      *         disabled)
      */
     public Collection<String> getAllLoci() {
         initLocusList();
-        ArrayList<String> retval = new ArrayList<>();
-        for (String locus : allLoci.keySet()) {
+        final ArrayList<String> retval = new ArrayList<>();
+        for (final String locus : allLoci.keySet()) {
             retval.add(locus);
         }
         return Collections.unmodifiableCollection(retval);
@@ -438,7 +460,7 @@ public class ConfigurationData implements Cloneable {
      * @param name    The getName of the target locus
      * @param enabled true if the locus is to be _enabled
      */
-    public void setLocusEnabled(String name, boolean enabled) {
+    public void setLocusEnabled(final String name, final boolean enabled) {
         LOG.debug("Locus {} setLocusEnabled {}", name, enabled);
         if (isLocusValid(name)) {
             final LocusEx locus = allLoci.get(name);
@@ -459,7 +481,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @return true if the getNamed locus is _enabled
      */
-    public boolean isLocusEnabled(String name) {
+    public boolean isLocusEnabled(final String name) {
         initLocusList();
         return isLocusValid(name) && allLoci.get(name).isEnabled();
     }
@@ -473,8 +495,8 @@ public class ConfigurationData implements Cloneable {
      * @return a String containing the reason why a locus is not valid, or an
      *         empty string if the locus is not invalid.
      */
-    public String getLocusStatus(String name) {
-        LocusEx locusEx = allLoci.get(name);
+    public String getLocusStatus(final String name) {
+        final LocusEx locusEx = allLoci.get(name);
         if (locusEx == null) {
             return "Locus " + name + " is not known.";
         }
@@ -489,7 +511,7 @@ public class ConfigurationData implements Cloneable {
      *
      * @return
      */
-    public boolean isLocusValid(String name) {
+    public boolean isLocusValid(final String name) {
         initLocusList();
         return allLoci.containsKey(name) && allLoci.get(name).isValid();
     }
@@ -502,11 +524,11 @@ public class ConfigurationData implements Cloneable {
     public int getObservedAlleleCount() {
         // Count the unique alleles in the samples, take the average over all replicates
         int observedAlleleCount = 0;
-        Collection<Sample> activeReplicates = getActiveReplicates();
-        for (Sample replicate : activeReplicates) {
+        final Collection<Sample> activeReplicates = getActiveReplicates();
+        for (final Sample replicate : activeReplicates) {
             int alleleCount = 0;
-            for (String locusName : getEnabledLoci()) {
-                Locus locus = replicate.getLocus(locusName);
+            for (final String locusName : getEnabledLoci()) {
+                final Locus locus = replicate.getLocus(locusName);
                 if (locus != null) {
                     alleleCount += locus.getAlleles().size();
                 }
@@ -541,21 +563,23 @@ public class ConfigurationData implements Cloneable {
      */
     private synchronized void initLocusList() {
         if (locusListDirty) {
-            LinkedHashMap<String, LocusEx> oldList = new LinkedHashMap<>(allLoci);
+            final LinkedHashMap<String, LocusEx> oldList = new LinkedHashMap<>(allLoci);
 
-            ArrayList<String> inOrderList = new ArrayList<>();
-            for (Sample s : getActiveReplicates()) {
+            final ArrayList<String> inOrderList = new ArrayList<>();
+            for (final Sample s : getActiveReplicates()) {
                 placeInOrder(s.getLoci(), inOrderList);
             }
 
-            ArrayList<String> replicateLoci = new ArrayList<>(inOrderList);
+            final ArrayList<String> replicateLoci = new ArrayList<>(inOrderList);
 
-            for (Sample s : getActiveProfiles()) {
+            final ArrayList<String> profileLoci = new ArrayList<>();
+
+            for (final Sample s : getActiveProfiles()) {
                 placeInOrder(s.getLoci(), inOrderList);
             }
 
             allLoci.clear();
-            for (String locusName : inOrderList) {
+            for (final String locusName : inOrderList) {
                 LocusEx locusEx = oldList.get(locusName);
                 String msg = "";
                 boolean isValid = true;
@@ -565,6 +589,24 @@ public class ConfigurationData implements Cloneable {
                     msg = "Locus '" + locusName + "' is not present in any of the replicates";
                 }
                 else {
+                    for (final Sample s : getActiveProfiles()) {
+                        final Locus referenceLocus = s.getLocus(locusName);
+                        if (referenceLocus == null) {
+                            isValid = false;
+                            msg = "Locus '" + locusName + "' is not present in '" + s.getId() + "'";
+                        }
+                        else {
+                            if (referenceLocus.size() == 0) {
+                                isValid = false;
+                                if (msg.isEmpty())
+                                    msg = "Locus '" + locusName + "' is empty in '" + s.getId() + "'";
+                                else
+                                    msg += ", '" + s.getId() + "'";
+                            }
+                        }
+                    }
+                    msg = msg.replaceFirst(",([^,]+)$", " and$1");
+
                     if (getStatistics() != null && !getStatistics().isPresent(locusName)) {
                         isValid = false;
                         msg = "Locus '" + locusName + "' is not present in the population statistics";
@@ -593,8 +635,8 @@ public class ConfigurationData implements Cloneable {
      *
      * @param report the report to add
      */
-    public void addReport(AnalysisReport report) {
-        for (AnalysisReport eq : getEquivalentReportsForSensitivityAnalysis(report)) {
+    public void addReport(final AnalysisReport report) {
+        for (final AnalysisReport eq : getEquivalentReportsForSensitivityAnalysis(report)) {
             if (!eq.getSensitivityAnalysisResults().getRanges().isEmpty()) {
                 report.setSensitivityAnalysisResults(eq.getSensitivityAnalysisResults());
                 break;
@@ -620,8 +662,8 @@ public class ConfigurationData implements Cloneable {
         if (getProsecution() == null || getDefense() == null) {
             return null;
         }
-        AnalysisReportImpl report = new AnalysisReportImpl(this);
-        AnalysisReport retval = reports.get(report.getGuid());
+        final AnalysisReportImpl report = new AnalysisReportImpl(this);
+        final AnalysisReport retval = reports.get(report.getGuid());
         if (retval == null) {
             addReport(report);
             return report;
@@ -640,7 +682,7 @@ public class ConfigurationData implements Cloneable {
         return ApplicationSettings.isValidationMode() ? 1 : _threadCount;
     }
 
-    public void setThreadCount(int threadCount) {
+    public void setThreadCount(final int threadCount) {
         if (!ApplicationSettings.isValidationMode()) {
             _threadCount = threadCount;
         }
@@ -650,7 +692,7 @@ public class ConfigurationData implements Cloneable {
         return _rareAlleleFrequency;
     }
 
-    public void setRareAlleleFrequency(Double freq) {
+    public void setRareAlleleFrequency(final Double freq) {
         _rareAlleleFrequency = freq;
         if (_statistics != null) {
             _statistics.setRareAlleleFrequency(_rareAlleleFrequency);
@@ -664,11 +706,11 @@ public class ConfigurationData implements Cloneable {
      */
     public Collection<Allele> getRareAlleles() {
         final Collection<Allele> rareAlleles = new ArrayList<>();
-        for (Sample sample : replicates) {
+        for (final Sample sample : replicates) {
             if (sample.isEnabled()) {
-                for (Locus locus : sample.getLoci()) {
+                for (final Locus locus : sample.getLoci()) {
                     if (isLocusEnabled(locus.getName())) {
-                        for (Allele allele : locus.getAlleles()) {
+                        for (final Allele allele : locus.getAlleles()) {
                             if (_statistics.isRareAllele(allele)) {
                                 rareAlleles.add(allele);
                             }
@@ -678,11 +720,11 @@ public class ConfigurationData implements Cloneable {
             }
         }
 
-        for (Sample sample : profiles) {
+        for (final Sample sample : profiles) {
             if (sample.isEnabled()) {
-                for (Locus locus : sample.getLoci()) {
+                for (final Locus locus : sample.getLoci()) {
                     if (isLocusEnabled(locus.getName())) {
-                        for (Allele allele : locus.getAlleles()) {
+                        for (final Allele allele : locus.getAlleles()) {
                             if (_statistics.isRareAllele(allele)) {
                                 rareAlleles.add(allele);
                             }
@@ -694,9 +736,9 @@ public class ConfigurationData implements Cloneable {
         return rareAlleles;
     }
 
-    public Iterable<AnalysisReport> getEquivalentReportsForSensitivityAnalysis(AnalysisReport currentReport) {
-        ArrayList<AnalysisReport> equivalentReports = new ArrayList<>();
-        for (AnalysisReport report : reports.values()) {
+    public Iterable<AnalysisReport> getEquivalentReportsForSensitivityAnalysis(final AnalysisReport currentReport) {
+        final ArrayList<AnalysisReport> equivalentReports = new ArrayList<>();
+        for (final AnalysisReport report : reports.values()) {
             if (report.isSensitivityCompatible(currentReport)) {
                 equivalentReports.add(report);
             }
@@ -704,9 +746,9 @@ public class ConfigurationData implements Cloneable {
         return equivalentReports;
     }
 
-    public Iterable<AnalysisReport> getEquivalentReportsForDropoutEstimate(AnalysisReport currentReport) {
-        ArrayList<AnalysisReport> equivalentReports = new ArrayList<>();
-        for (AnalysisReport report : reports.values()) {
+    public Iterable<AnalysisReport> getEquivalentReportsForDropoutEstimate(final AnalysisReport currentReport) {
+        final ArrayList<AnalysisReport> equivalentReports = new ArrayList<>();
+        for (final AnalysisReport report : reports.values()) {
             if (report.isDropoutCompatible(currentReport)) {
                 equivalentReports.add(report);
             }

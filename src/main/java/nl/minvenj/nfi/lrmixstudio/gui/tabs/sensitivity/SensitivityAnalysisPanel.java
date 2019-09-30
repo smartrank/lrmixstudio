@@ -19,8 +19,11 @@ package nl.minvenj.nfi.lrmixstudio.gui.tabs.sensitivity;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Paint;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,16 +35,18 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.jfree.chart.ChartColor;
@@ -61,6 +66,7 @@ import org.jfree.data.xy.DefaultXYDataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.miginfocom.swing.MigLayout;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.Sample;
 import nl.minvenj.nfi.lrmixstudio.gui.ApplicationStateChangeListener;
@@ -72,6 +78,9 @@ import nl.minvenj.nfi.lrmixstudio.model.ConfigurationDataElement;
 import nl.minvenj.nfi.lrmixstudio.model.DropoutEstimation;
 import nl.minvenj.nfi.lrmixstudio.model.SensitivityAnalysisResults;
 import nl.minvenj.nfi.lrmixstudio.model.SensitivityAnalysisResults.Range;
+import nl.minvenj.nfi.lrmixstudio.model.SensitivityAnalysisResults.RangeType;
+import javax.swing.JTabbedPane;
+import javax.swing.JSplitPane;
 
 public class SensitivityAnalysisPanel extends javax.swing.JPanel implements ConfigurationDataChangeListener, SensitivityAnalysisProgressGui, ApplicationStateChangeListener {
 
@@ -120,7 +129,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         for (final String subtitleComponent : subTitle) {
             retval = retval.replace(subtitleComponent, "");
         }
-        return capitalize(retval.replaceAll("\\.(\\D)", "\\. $1"));
+        return capitalize(retval.replaceAll("\\.(\\D)", "\\. $1").replaceAll("\\s+", " "));
     }
 
     private String buildSubTitleString(final List<String> subTitle) {
@@ -214,20 +223,19 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         catch (final IllegalArgumentException iae) {
             LOG.warn("Could not read icon!", iae);
         }
+        setLayout(new MigLayout("", "[701px,grow]", "[210px:210px][grow]"));
 
         dropoutFrom.addChangeListener(new SensitivityAnalysisRangeChangeListener(dropoutFrom, dropoutTo, dropoutSteps));
         dropoutTo.addChangeListener(new SensitivityAnalysisRangeChangeListener(dropoutFrom, dropoutTo, dropoutSteps));
         dropoutEstimationFrom.addChangeListener(new SensitivityAnalysisRangeChangeListener(dropoutEstimationFrom, dropoutEstimationTo, dropoutEstimationSteps));
         dropoutEstimationTo.addChangeListener(new SensitivityAnalysisRangeChangeListener(dropoutEstimationFrom, dropoutEstimationTo, dropoutEstimationSteps));
-
-        rangeList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(final ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    ((ChartPanel) plotPanel).getChart().fireChartChanged();
-                }
-            }
-        });
+        add(topPanel, "cell 0 0,grow");
+        
+        splitPane = new JSplitPane();
+        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        add(splitPane, "cell 0 1,grow");
+        splitPane.setLeftComponent(settingsTabbedPane);
+        splitPane.setRightComponent(chartSplitPane);
     }
 
     public void setContext(final SessionData sessionData) {
@@ -239,7 +247,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         for (final String locusName : session.getAllLoci()) {
             locusComboBox.addItem(locusName);
         }
-        jSplitPane1.setDividerLocation(0.8);
+        chartSplitPane.setDividerLocation(0.8);
     }
 
     /**
@@ -253,25 +261,25 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        final javax.swing.JTabbedPane jTabbedPane1 = new javax.swing.JTabbedPane();
-        final javax.swing.JPanel jPanel1 = new javax.swing.JPanel();
-        final javax.swing.JLabel jLabel5 = new javax.swing.JLabel();
+        settingsTabbedPane = new javax.swing.JTabbedPane();
+        final javax.swing.JPanel sensitivitySettingsPanel = new javax.swing.JPanel();
+        final javax.swing.JLabel dropoutVariationLabel = new javax.swing.JLabel();
         dropoutFrom = new javax.swing.JSpinner();
-        final javax.swing.JLabel jLabel12 = new javax.swing.JLabel();
+        final javax.swing.JLabel toLabel = new javax.swing.JLabel();
         dropoutTo = new javax.swing.JSpinner();
-        final javax.swing.JLabel jLabel9 = new javax.swing.JLabel();
+        final javax.swing.JLabel inLabel = new javax.swing.JLabel();
         dropoutSteps = new javax.swing.JSpinner();
-        final javax.swing.JLabel jLabel15 = new javax.swing.JLabel();
+        final javax.swing.JLabel dropinLabel = new javax.swing.JLabel();
         sensitivityAnalysisDropin = new javax.swing.JSpinner();
-        final javax.swing.JLabel jLabel14 = new javax.swing.JLabel();
+        final javax.swing.JLabel thetaLabel = new javax.swing.JLabel();
         theta = new javax.swing.JSpinner();
         sensitivityAnalysisButton = new javax.swing.JButton();
         locusComboBox = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
+        stepsAtLabel = new javax.swing.JLabel();
         sensitivityStopButton = new javax.swing.JButton();
         sensitivityProgressBar = new javax.swing.JProgressBar();
         sensitivityTimeLeft = new javax.swing.JLabel();
-        final javax.swing.JPanel jPanel2 = new javax.swing.JPanel();
+        final javax.swing.JPanel estimationSettingsPanel = new javax.swing.JPanel();
         dropoutEstimationButton = new javax.swing.JButton();
         final javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
         dropoutEstimationIterations = new javax.swing.JSpinner();
@@ -287,13 +295,12 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         dropoutEstimationProgressBar = new javax.swing.JProgressBar();
         dropoutStopButton = new javax.swing.JButton();
         dropoutEstimationTimeLeft = new javax.swing.JLabel();
-        jSplitPane1 = new javax.swing.JSplitPane();
+        chartSplitPane = new javax.swing.JSplitPane();
+        chartSplitPane.setContinuousLayout(true);
+        chartSplitPane.setResizeWeight(1.0);
         plotPanel = new ChartPanel(ChartFactory.createXYAreaChart("Sensitivity Analysis", "Dropout Probability", "Likelihood Ratio (Log10)", new DefaultXYDataset()));
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        rangeList = new javax.swing.JList();
-        deleteButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
+        graphControlPanel = new javax.swing.JPanel();
+        topPanel = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         sensitivityAnalysisTable = new ZebraTable();
         iconLabel = new javax.swing.JLabel();
@@ -316,26 +323,26 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
         ));
         jScrollPane2.setViewportView(jTable2);
 
-        jLabel5.setText("Drop-Out variation");
+        dropoutVariationLabel.setText("Drop-Out variation");
 
         dropoutFrom.setModel(new javax.swing.SpinnerNumberModel(DEFAULT_DROPOUT_FROM, 0.0d, 0.99d, 0.01d));
 
-        jLabel12.setText("to");
+        toLabel.setText("to");
 
         dropoutTo.setModel(new javax.swing.SpinnerNumberModel(DEFAULT_DROPOUT_TO, 0.01d, 0.99d, 0.01d));
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("in");
-        jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        inLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        inLabel.setText("in");
+        inLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         dropoutSteps.setModel(new javax.swing.SpinnerNumberModel(DEFAULT_DROPOUT_STEPS, 1, 99, 1));
 
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel15.setText("Drop In");
+        dropinLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        dropinLabel.setText("Drop In");
 
         sensitivityAnalysisDropin.setModel(new javax.swing.SpinnerNumberModel(0.05d, 0.0d, 1.0d, 0.01d));
 
-        jLabel14.setText("Theta");
+        thetaLabel.setText("Theta");
 
         theta.setModel(new javax.swing.SpinnerNumberModel(0.01d, 0.0d, 1.0d, 0.01d));
 
@@ -348,7 +355,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
             }
         });
 
-        jLabel2.setText("steps at locus");
+        stepsAtLabel.setText("steps at locus");
 
         sensitivityStopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/stop16.png"))); // NOI18N
         sensitivityStopButton.setText("Stop");
@@ -364,69 +371,69 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
 
         sensitivityTimeLeft.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
-        final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        final javax.swing.GroupLayout gl_sensitivitySettingsPanel = new javax.swing.GroupLayout(sensitivitySettingsPanel);
+        sensitivitySettingsPanel.setLayout(gl_sensitivitySettingsPanel);
+        gl_sensitivitySettingsPanel.setHorizontalGroup(
+            gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gl_sensitivitySettingsPanel.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dropoutVariationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dropinLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gl_sensitivitySettingsPanel.createSequentialGroup()
                         .addComponent(sensitivityAnalysisDropin, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel14))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(thetaLabel))
+                    .addGroup(gl_sensitivitySettingsPanel.createSequentialGroup()
                         .addComponent(dropoutFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12)
+                        .addComponent(toLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dropoutTo, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(theta, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dropoutSteps, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gl_sensitivitySettingsPanel.createSequentialGroup()
+                        .addComponent(stepsAtLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(locusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                         .addComponent(sensitivityStopButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sensitivityAnalysisButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(gl_sensitivitySettingsPanel.createSequentialGroup()
                         .addComponent(sensitivityProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sensitivityTimeLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        gl_sensitivitySettingsPanel.setVerticalGroup(
+            gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gl_sensitivitySettingsPanel.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dropoutVariationLabel)
                     .addComponent(dropoutFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dropoutTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel9)
+                    .addComponent(toLabel)
+                    .addComponent(inLabel)
                     .addComponent(dropoutSteps, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
+                    .addComponent(stepsAtLabel)
                     .addComponent(locusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sensitivityStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sensitivityAnalysisButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel15)
-                        .addComponent(jLabel14)
+                .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(gl_sensitivitySettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(dropinLabel)
+                        .addComponent(thetaLabel)
                         .addComponent(theta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(sensitivityTimeLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(sensitivityAnalysisDropin)
@@ -434,7 +441,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Sensitivity Analysis Settings", jPanel1);
+        settingsTabbedPane.addTab("Sensitivity Analysis Settings", sensitivitySettingsPanel);
 
         dropoutEstimationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/play16.png"))); // NOI18N
         dropoutEstimationButton.setText("Run");
@@ -483,22 +490,22 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
 
         dropoutEstimationTimeLeft.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
-        final javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        final javax.swing.GroupLayout gl_estimationSettingsPanel = new javax.swing.GroupLayout(estimationSettingsPanel);
+        estimationSettingsPanel.setLayout(gl_estimationSettingsPanel);
+        gl_estimationSettingsPanel.setHorizontalGroup(
+            gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
                     .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dropoutEstimationFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dropoutEstimationDropin, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dropoutEstimationTo, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -506,30 +513,30 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                         .addComponent(jLabel17))
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dropoutEstimationIterations)
                     .addComponent(dropoutEstimationSteps, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(dropoutStopButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dropoutEstimationButton))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
                         .addComponent(dropoutEstimationProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dropoutEstimationTimeLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        gl_estimationSettingsPanel.setVerticalGroup(
+            gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gl_estimationSettingsPanel.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
+                        .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dropoutEstimationFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dropoutEstimationTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13)
@@ -538,28 +545,26 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                             .addComponent(jLabel4)
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dropoutEstimationDropin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16)
                             .addComponent(jLabel1)
                             .addComponent(dropoutEstimationIterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
+                        .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dropoutEstimationButton)
                             .addComponent(dropoutStopButton))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(gl_estimationSettingsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(dropoutEstimationTimeLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(gl_estimationSettingsPanel.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addComponent(dropoutEstimationProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Dropout Estimation Settings", jPanel2);
-
-        jSplitPane1.setDividerLocation(50);
+        settingsTabbedPane.addTab("Dropout Estimation Settings", estimationSettingsPanel);
 
         plotPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         plotPanel.setMinimumSize(new java.awt.Dimension(100, 100));
@@ -576,42 +581,79 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
             .addGap(0, 264, Short.MAX_VALUE)
         );
 
-        jSplitPane1.setLeftComponent(plotPanel);
+        chartSplitPane.setLeftComponent(plotPanel);
 
-        jPanel3.setMaximumSize(new java.awt.Dimension(200, 200));
+        chartSplitPane.setRightComponent(graphControlPanel);
+        graphControlPanel.setLayout(new MigLayout("", "[649px,grow]", "[grow][]"));
 
-        jScrollPane1.setViewportView(rangeList);
+        _rangeTableScrollPane = new JScrollPane();
+        graphControlPanel.add(_rangeTableScrollPane, "cell 0 0,grow");
 
-        deleteButton.setText("Delete Range");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+        _rangeTable = new JTable();
+        _rangeTableScrollPane.setViewportView(_rangeTable);
+        _rangeTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        _rangeTable.setFillsViewportHeight(true);
+        _rangeTable.setModel(new DefaultTableModel(
+                                                   new Object[][]{
+                                                       {null, null},
+                                                   },
+                                                   new String[]{
+                                                       "Show", "Range Title"
+                                                   }) {
+            Class[] columnTypes = new Class[]{
+                Boolean.class, Object.class
+            };
+
             @Override
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
+            public Class getColumnClass(final int columnIndex) {
+                return columnTypes[columnIndex];
             }
+
+            boolean[] columnEditables = new boolean[]{
+                true, false
+            };
+
+            @Override
+            public boolean isCellEditable(final int row, final int column) {
+                return columnEditables[column];
+            }
+
+            @Override
+            public void setValueAt(final Object aValue, final int row, final int column) {
+                super.setValueAt(aValue, row, column);
+                if (column == 0) {
+                    updateGraph();
+                }
+            }
+
         });
 
-        final javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
-                    .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteButton)
-                .addContainerGap())
-        );
+        final JPanel buttonPanel = new JPanel();
+        graphControlPanel.add(buttonPanel, "cell 0 1,grow");
+        buttonPanel.setLayout(new MigLayout("", "[][]", "[][]"));
 
-        jSplitPane1.setRightComponent(jPanel3);
+        final JButton selectLRsButton = new JButton("Select LRs Only");
+        selectLRsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                selectOnlyLRs();
+            }
+        });
+        buttonPanel.add(selectLRsButton, "flowx,cell 0 0");
+
+        final JButton deleteButton = new JButton("Select All");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                selectAllRanges();
+            }
+        });
+        deleteButton.setActionCommand("");
+        buttonPanel.add(deleteButton, "cell 0 0");
+        _rangeTable.getColumnModel().getColumn(0).setResizable(false);
+        _rangeTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+        _rangeTable.getColumnModel().getColumn(0).setMinWidth(40);
+        _rangeTable.getColumnModel().getColumn(0).setMaxWidth(40);
 
         sensitivityAnalysisTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -696,56 +738,177 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        final javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        final javax.swing.GroupLayout gl_topPanel = new javax.swing.GroupLayout(topPanel);
+        topPanel.setLayout(gl_topPanel);
+        gl_topPanel.setHorizontalGroup(
+            gl_topPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gl_topPanel.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(iconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(gl_topPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
                     .addComponent(setDropoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        gl_topPanel.setVerticalGroup(
+            gl_topPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gl_topPanel.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(gl_topPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gl_topPanel.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(setDropoutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(iconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+        chartSplitPane.setDividerLocation(0.5);
 
-        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        EventQueue.invokeLater(new Runnable() {/* (non-Javadoc)
+                                               * @see java.lang.Runnable#run()
+                                               */
+            @Override
+            public void run() {
+                chartSplitPane.setDividerLocation(0.5);
+
+            }
+        });
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     *
+     */
+    protected void selectAllRanges() {
+        final DefaultTableModel tmodel = (DefaultTableModel) _rangeTable.getModel();
+        for (int row = 0; row < tmodel.getRowCount(); row++) {
+            tmodel.setValueAt(true, row, 0);
+        }
+        updateGraph();
+    }
+
+    /**
+     *
+     */
+    protected void selectOnlyLRs() {
+        final DefaultTableModel tmodel = (DefaultTableModel) _rangeTable.getModel();
+        for (int row = 0; row < tmodel.getRowCount(); row++) {
+            final SensitivityAnalysisResults.Range range = (Range) tmodel.getValueAt(row, 1);
+            tmodel.setValueAt(range.getRangeType() == RangeType.LR, row, 0);
+        }
+        updateGraph();
+    }
+
+    /**
+     *
+     */
+    protected void updateGraph() {
+        try {
+            final AnalysisReport currentReport = session.getCurrentReport();
+            if (currentReport != null) {
+                final SensitivityAnalysisResults sar = session.getCurrentReport().getSensitivityAnalysisResults();
+                List<String> subTitle = null;
+
+                final ChartPanel panel = (ChartPanel) plotPanel;
+                final ArrayList<IntervalMarker> intervalMarkers = new ArrayList<>();
+
+                final LegendItemCollection legendItemCollection = new LegendItemCollection();
+
+                final DefaultXYDataset dataSet = new DefaultXYDataset();
+                for (final SensitivityAnalysisResults.Range range : sar.getRanges()) {
+                    subTitle = extractSubTitle(subTitle, range.getDescription());
+                }
+
+                final DefaultTableModel tmodel = (DefaultTableModel) _rangeTable.getModel();
+                final int[] seriesIdxToRow = new int[tmodel.getRowCount()];
+                int seriesCount = 0;
+                for (int row = 0; row < tmodel.getRowCount(); row++) {
+                    if ((boolean) tmodel.getValueAt(row, 0)) {
+                        final SensitivityAnalysisResults.Range range = (Range) tmodel.getValueAt(row, 1);
+                        final double[][] series = new double[2][range.getPoints().size()];
+                        int idx = 0;
+                        for (final SensitivityAnalysisResults.Point point : range.getPoints()) {
+                            series[0][idx] = point.getX().doubleValue();
+                            series[1][idx++] = point.getY().doubleValue();
+                        }
+                        dataSet.addSeries(range.getId(), series);
+                        seriesIdxToRow[seriesCount++] = row;
+                    }
+                }
+
+                final DropoutEstimation dropoutEstimation = sar.getDropoutEstimation();
+                if (dropoutEstimation != null) {
+                    intervalMarkers.add(new IntervalMarker(dropoutEstimation.getMinimum().doubleValue(), dropoutEstimation.getMaximum().doubleValue(), Color.BLUE, new BasicStroke(0.1f), Color.BLUE, new BasicStroke(0.5f), 0.1f));
+                    legendItemCollection.add(new LegendItem("Dropout Estimation " + dropoutEstimation.getMinimum() + " ~ " + dropoutEstimation.getMaximum(), Color.BLUE));
+                }
+
+                panel.setChart(ChartFactory.createXYLineChart("Sensitivity Analysis", "Dropout Probability", "Log 10", dataSet));
+                panel.getChart().getXYPlot().setRenderer(new DefaultXYItemRenderer() {
+                    @Override
+                    public boolean getItemShapeVisible(final int series, final int item) {
+                        return item == 0 || item == dataSet.getItemCount(series) - 1 || item == dataSet.getItemCount(series) / 2 ? super.getItemShapeVisible(series, item) : false;
+                    }
+
+                    @Override
+                    public Paint getSeriesPaint(final int seriesIdx) {
+                        switch (((Range) tmodel.getValueAt(seriesIdxToRow[seriesIdx], 1)).getRangeType()) {
+                            case LR:
+                                return Color.RED;
+                            case P_DEFENSE:
+                                return Color.BLUE;
+                            case P_PROSECUTION:
+                                return new Color(0, 200, 0);
+                            default:
+                                return super.getSeriesPaint(seriesIdx);
+                        }
+                    }
+                });
+
+                final LegendItemSource lis = new LegendItemSource() {
+                    @Override
+                    public LegendItemCollection getLegendItems() {
+                        return legendItemCollection;
+                    }
+                };
+
+                for (final IntervalMarker marker : intervalMarkers) {
+                    panel.getChart().getXYPlot().addDomainMarker(marker);
+                }
+
+                panel.getChart().addSubtitle(0, new TextTitle(buildSubTitleString(subTitle)));
+
+                if (panel.getChart().getXYPlot().getDataset().getSeriesCount() == 1) {
+                    panel.getChart().removeLegend();
+                }
+                panel.getChart().addLegend(new LegendTitle(lis));
+                panel.getChart().setBorderVisible(false);
+                panel.getChart().getXYPlot().setDomainPannable(true);
+                panel.getChart().getXYPlot().setRangePannable(true);
+
+                panel.getChart().getXYPlot().setRangeCrosshairVisible(true);
+                panel.getChart().getXYPlot().setDomainCrosshairVisible(true);
+
+                panel.getChart().getXYPlot().setDomainGridlinesVisible(true);
+                panel.getChart().getXYPlot().setRangeGridlinesVisible(true);
+                panel.getChart().getXYPlot().setRangeGridlinePaint(Color.BLACK);
+                panel.getChart().getXYPlot().setDomainGridlinePaint(Color.BLACK);
+                panel.getChart().getXYPlot().getDomainAxis().setRange(0, 1);
+                panel.getChart().getPlot().setBackgroundPaint(ChartColor.WHITE);
+                panel.getChart().fireChartChanged();
+
+                if (panel.getChart().getXYPlot().getDataset().getSeriesCount() > 0) {
+                    final JFreeChart clone = (JFreeChart) panel.getChart().clone();
+                    clone.removeLegend();
+                    clone.setSubtitles(new ArrayList());
+                    sar.setPreview(clone.createBufferedImage(400, 400, 300, 300, null));
+                    sar.setGraphImage(panel.getChart().createBufferedImage(1500, 1500, 500, 500, null));
+                }
+            }
+        }
+        catch (final Exception e) {
+            LOG.error("Error updating sensitivity plot", e);
+        }
+    }
 
     private void sensitivityAnalysisButtonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sensitivityAnalysisButtonActionPerformed
 
@@ -802,14 +965,6 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
             session.setApplicationState(APP_STATE.READY_FOR_ANALYSIS);
         }
     }//GEN-LAST:event_sensitivityStopButtonActionPerformed
-
-    private void deleteButtonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        for (final Object selected : rangeList.getSelectedValuesList()) {
-            session.getCurrentReport().getSensitivityAnalysisResults().deleteRangeById(selected.toString());
-        }
-        plotResults();
-        session.fireUpdated(ConfigurationDataElement.SENSITIVITYANALYSISRESULTS);
-    }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void dropoutStopButtonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropoutStopButtonActionPerformed
         if (analysisThread != null && analysisThread.isAlive()) {
@@ -921,9 +1076,6 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
             }).start();
         }
     }//GEN-LAST:event_setDropoutButtonActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton deleteButton;
     private javax.swing.JButton dropoutEstimationButton;
     private javax.swing.JSpinner dropoutEstimationDropin;
     private javax.swing.JSpinner dropoutEstimationFrom;
@@ -937,18 +1089,16 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
     private javax.swing.JButton dropoutStopButton;
     private javax.swing.JSpinner dropoutTo;
     private javax.swing.JLabel iconLabel;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel stepsAtLabel;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel graphControlPanel;
+    private javax.swing.JPanel topPanel;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane chartSplitPane;
     private javax.swing.JTable jTable2;
     private javax.swing.JComboBox locusComboBox;
     private javax.swing.JPanel plotPanel;
-    private javax.swing.JList rangeList;
     private javax.swing.JButton sensitivityAnalysisButton;
     private javax.swing.JSpinner sensitivityAnalysisDropin;
     private javax.swing.JTable sensitivityAnalysisTable;
@@ -958,6 +1108,12 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
     private javax.swing.JSpinner setDropoutSpinner;
     private javax.swing.JLabel setDropoutStatusLabel;
     private javax.swing.JSpinner theta;
+    private JTable _rangeTable;
+    private JScrollPane _rangeTableScrollPane;
+    private boolean _triggerGraphUpdate;
+    private boolean _triggerDropoutUpdate;
+    private JTabbedPane settingsTabbedPane;
+    private JSplitPane splitPane;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -986,50 +1142,52 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
 
     @Override
     public synchronized void updateGraph(final Collection<SensitivityAnalysisResults.Point> points) {
-        final ChartPanel panel = (ChartPanel) plotPanel;
-        final DefaultXYDataset dataSet = (DefaultXYDataset) panel.getChart().getXYPlot().getDataset();
-        int idx = 0;
-        final double[][] series = new double[2][points.size()];
-        for (final SensitivityAnalysisResults.Point point : points) {
-            series[0][idx] = point.getX().doubleValue();
-            series[1][idx++] = point.getY().doubleValue();
-        }
-        synchronized (dataSet) {
-            dataSet.removeSeries("Current Analysis");
-            dataSet.addSeries("Current Analysis", series);
-        }
-        panel.setChart(ChartFactory.createXYLineChart("Sensitivity Analysis", "Dropout Probability", "Log 10", dataSet));
-        panel.getChart().getXYPlot().setRenderer(new DefaultXYItemRenderer() {
-            @Override
-            public Paint getSeriesPaint(final int series) {
-                synchronized (dataSet) {
-                    return getPlot().getDataset().getSeriesKey(series).equals("Current Analysis") ? Color.RED : Color.LIGHT_GRAY;
-                }
+        if (session.getApplicationState() != APP_STATE.READY_FOR_ANALYSIS) {
+            final ChartPanel panel = (ChartPanel) plotPanel;
+            final DefaultXYDataset dataSet = (DefaultXYDataset) panel.getChart().getXYPlot().getDataset();
+            int idx = 0;
+            final double[][] series = new double[2][points.size()];
+            for (final SensitivityAnalysisResults.Point point : points) {
+                series[0][idx] = point.getX().doubleValue();
+                series[1][idx++] = point.getY().doubleValue();
             }
-
-            @Override
-            public boolean getItemShapeVisible(final int series, final int item) {
-                synchronized (dataSet) {
-                    return item == 0 || item == dataSet.getItemCount(series) - 1 ? super.getItemShapeVisible(series, item) : false;
-                }
+            synchronized (dataSet) {
+                dataSet.removeSeries("Current Analysis");
+                dataSet.addSeries("Current Analysis", series);
             }
-        });
+            panel.setChart(ChartFactory.createXYLineChart("Sensitivity Analysis", "Dropout Probability", "Log 10", dataSet));
+            panel.getChart().getXYPlot().setRenderer(new DefaultXYItemRenderer() {
+                @Override
+                public Paint getSeriesPaint(final int series) {
+                    synchronized (dataSet) {
+                        return getPlot().getDataset().getSeriesKey(series).equals("Current Analysis") ? Color.RED : Color.LIGHT_GRAY;
+                    }
+                }
 
-        panel.getChart().setBorderVisible(false);
+                @Override
+                public boolean getItemShapeVisible(final int series, final int item) {
+                    synchronized (dataSet) {
+                        return item == 0 || item == dataSet.getItemCount(series) - 1 ? super.getItemShapeVisible(series, item) : false;
+                    }
+                }
+            });
 
-        final NumberAxis domain = (NumberAxis) panel.getChart().getXYPlot().getDomainAxis();
-        domain.setRange(0.00, 1.00);
-        domain.setTickUnit(new NumberTickUnit(0.1));
-        domain.setVerticalTickLabels(true);
+            panel.getChart().setBorderVisible(false);
 
-        panel.getChart().getXYPlot().setDomainGridlinesVisible(true);
-        panel.getChart().getXYPlot().setRangeGridlinesVisible(true);
-        panel.getChart().getXYPlot().setRangeGridlinePaint(Color.BLACK);
-        panel.getChart().getXYPlot().setDomainGridlinePaint(Color.BLACK);
-        panel.getChart().getXYPlot().getDomainAxis().setRange(0, 1);
+            final NumberAxis domain = (NumberAxis) panel.getChart().getXYPlot().getDomainAxis();
+            domain.setRange(0.00, 1.00);
+            domain.setTickUnit(new NumberTickUnit(0.1));
+            domain.setVerticalTickLabels(true);
 
-        panel.getChart().getPlot().setBackgroundPaint(ChartColor.WHITE);
-        panel.getChart().fireChartChanged();
+            panel.getChart().getXYPlot().setDomainGridlinesVisible(true);
+            panel.getChart().getXYPlot().setRangeGridlinesVisible(true);
+            panel.getChart().getXYPlot().setRangeGridlinePaint(Color.BLACK);
+            panel.getChart().getXYPlot().setDomainGridlinePaint(Color.BLACK);
+            panel.getChart().getXYPlot().getDomainAxis().setRange(0, 1);
+
+            panel.getChart().getPlot().setBackgroundPaint(ChartColor.WHITE);
+            panel.getChart().fireChartChanged();
+        }
     }
 
     public void plotResults() {
@@ -1041,17 +1199,13 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
             if (currentReport != null) {
                 final SensitivityAnalysisResults sar = session.getCurrentReport().getSensitivityAnalysisResults();
                 List<String> subTitle = null;
-
-                final ChartPanel panel = (ChartPanel) plotPanel;
-                final ArrayList<IntervalMarker> intervalMarkers = new ArrayList<>();
-
-                final LegendItemCollection legendItemCollection = new LegendItemCollection();
-
-                final DefaultXYDataset dataSet = new DefaultXYDataset();
                 for (final SensitivityAnalysisResults.Range range : sar.getRanges()) {
                     subTitle = extractSubTitle(subTitle, range.getDescription());
                 }
-                final DefaultListModel model = new DefaultListModel();
+
+                final DefaultTableModel tmodel = (DefaultTableModel) _rangeTable.getModel();
+                tmodel.setRowCount(0);
+
                 for (final SensitivityAnalysisResults.Range range : sar.getRanges()) {
                     int idx = 0;
                     final double[][] series = new double[2][range.getPoints().size()];
@@ -1060,84 +1214,17 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                         series[1][idx++] = point.getY().doubleValue();
                     }
                     final String seriesName = extractSeriesName(subTitle, range.getDescription());
-                    dataSet.addSeries(seriesName, series);
+                    if (range.getRangeType() == RangeType.LR) {
+                        tmodel.addRow(new Object[]{true, range});
+                    }
+                    else {
+                        tmodel.addRow(new Object[]{false, range});
+                    }
                     range.setId(seriesName);
-                    model.addElement(range);
-
                 }
-                rangeList.setModel(model);
-                deleteButton.setEnabled(model.size() > 0);
+                _rangeTable.setModel(tmodel);
 
-                final DropoutEstimation dropoutEstimation = sar.getDropoutEstimation();
-                if (dropoutEstimation != null) {
-                    intervalMarkers.add(new IntervalMarker(dropoutEstimation.getMinimum().doubleValue(), dropoutEstimation.getMaximum().doubleValue(), Color.BLUE, new BasicStroke(0.1f), Color.BLUE, new BasicStroke(0.5f), 0.1f));
-                    legendItemCollection.add(new LegendItem("Dropout Estimation " + dropoutEstimation.getMinimum() + " ~ " + dropoutEstimation.getMaximum(), Color.BLUE));
-                }
-
-                panel.setChart(ChartFactory.createXYLineChart("Sensitivity Analysis", "Dropout Probability", "Log 10", dataSet));
-                panel.getChart().getXYPlot().setRenderer(new DefaultXYItemRenderer() {
-                    @Override
-                    public boolean getItemShapeVisible(final int series, final int item) {
-                        return item == 0 || item == dataSet.getItemCount(series) - 1 || item == dataSet.getItemCount(series) / 2 ? super.getItemShapeVisible(series, item) : false;
-                    }
-
-                    @Override
-                    public Paint getSeriesPaint(final int series) {
-                        if (rangeList.getSelectedIndices().length != 0 && !rangeList.isSelectedIndex(series)) {
-                            return Color.LIGHT_GRAY;
-                        }
-                        switch (((Range) rangeList.getModel().getElementAt(series)).getRangeType()) {
-                            case LR:
-                                return Color.RED;
-                            case P_DEFENSE:
-                                return Color.BLUE;
-                            case P_PROSECUTION:
-                                return new Color(0, 200, 0);
-                            default:
-                                return super.getSeriesPaint(series);
-                        }
-                    }
-                });
-
-                final LegendItemSource lis = new LegendItemSource() {
-                    @Override
-                    public LegendItemCollection getLegendItems() {
-                        return legendItemCollection;
-                    }
-                };
-
-                for (final IntervalMarker marker : intervalMarkers) {
-                    panel.getChart().getXYPlot().addDomainMarker(marker);
-                }
-
-                panel.getChart().addSubtitle(0, new TextTitle(buildSubTitleString(subTitle)));
-
-                if (panel.getChart().getXYPlot().getDataset().getSeriesCount() == 1) {
-                    panel.getChart().removeLegend();
-                }
-                panel.getChart().addLegend(new LegendTitle(lis));
-                panel.getChart().setBorderVisible(false);
-                panel.getChart().getXYPlot().setDomainPannable(true);
-                panel.getChart().getXYPlot().setRangePannable(true);
-
-                panel.getChart().getXYPlot().setRangeCrosshairVisible(true);
-                panel.getChart().getXYPlot().setDomainCrosshairVisible(true);
-
-                panel.getChart().getXYPlot().setDomainGridlinesVisible(true);
-                panel.getChart().getXYPlot().setRangeGridlinesVisible(true);
-                panel.getChart().getXYPlot().setRangeGridlinePaint(Color.BLACK);
-                panel.getChart().getXYPlot().setDomainGridlinePaint(Color.BLACK);
-                panel.getChart().getXYPlot().getDomainAxis().setRange(0, 1);
-                panel.getChart().getPlot().setBackgroundPaint(ChartColor.WHITE);
-                panel.getChart().fireChartChanged();
-
-                if (panel.getChart().getXYPlot().getDataset().getSeriesCount() > 0) {
-                    final JFreeChart clone = (JFreeChart) panel.getChart().clone();
-                    clone.removeLegend();
-                    clone.setSubtitles(new ArrayList());
-                    sar.setPreview(clone.createBufferedImage(400, 400, 300, 300, null));
-                    sar.setGraphImage(panel.getChart().createBufferedImage(1500, 1500, 500, 500, null));
-                }
+                updateGraph();
             }
         }
         catch (final Exception e) {
@@ -1158,7 +1245,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                 sensitivityTimeLeft.setVisible(true);
                 sensitivityStopButton.setEnabled(true);
                 sensitivityAnalysisButton.setEnabled(false);
-                deleteButton.setEnabled(false);
+                _triggerGraphUpdate = true;
                 break;
             case DROPOUT_ESTIMATION_RUNNING:
                 setEnabled(false);
@@ -1166,7 +1253,7 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                 dropoutEstimationProgressBar.setVisible(true);
                 dropoutEstimationTimeLeft.setVisible(true);
                 dropoutStopButton.setEnabled(true);
-                deleteButton.setEnabled(false);
+                _triggerDropoutUpdate = true;
                 break;
             case READY_FOR_ANALYSIS:
                 if (session.getStatistics() != null) {
@@ -1181,13 +1268,59 @@ public class SensitivityAnalysisPanel extends javax.swing.JPanel implements Conf
                     dropoutEstimationButton.setEnabled(true);
                     dropoutStopButton.setEnabled(false);
                     dropoutEstimationButton.setText("Run Dropout Estimation for " + session.getObservedAlleleCount() + " alleles");
-                    deleteButton.setEnabled(true);
-                    plotResults();
+                    if (_triggerGraphUpdate) {
+                        _triggerGraphUpdate = false;
+                        plotResults();
+                    }
+                    if (_triggerDropoutUpdate) {
+                        _triggerDropoutUpdate = false;
+                        updateDropoutRange();
+                    }
                 }
                 break;
             default:
                 setEnabled(false);
                 break;
+        }
+    }
+
+    private void updateDropoutRange() {
+        try {
+            final AnalysisReport currentReport = session.getCurrentReport();
+            if (currentReport != null) {
+                final SensitivityAnalysisResults sar = session.getCurrentReport().getSensitivityAnalysisResults();
+                final ChartPanel panel = (ChartPanel) plotPanel;
+                final LegendItemCollection legendItemCollection = new LegendItemCollection();
+                final DropoutEstimation dropoutEstimation = sar.getDropoutEstimation();
+
+                if (dropoutEstimation != null) {
+                    panel.getChart().getXYPlot().clearDomainMarkers();
+                    panel.getChart().getXYPlot().addDomainMarker(new IntervalMarker(dropoutEstimation.getMinimum().doubleValue(), dropoutEstimation.getMaximum().doubleValue(), Color.BLUE, new BasicStroke(0.1f), Color.BLUE, new BasicStroke(0.5f), 0.1f));
+                    legendItemCollection.add(new LegendItem("Dropout Estimation " + dropoutEstimation.getMinimum() + " ~ " + dropoutEstimation.getMaximum(), Color.BLUE));
+                }
+
+                final LegendItemSource lis = new LegendItemSource() {
+                    @Override
+                    public LegendItemCollection getLegendItems() {
+                        return legendItemCollection;
+                    }
+                };
+
+                panel.getChart().removeLegend();
+                panel.getChart().addLegend(new LegendTitle(lis));
+                panel.getChart().fireChartChanged();
+
+                if (panel.getChart().getXYPlot().getDataset().getSeriesCount() > 0) {
+                    final JFreeChart clone = (JFreeChart) panel.getChart().clone();
+                    clone.removeLegend();
+                    clone.setSubtitles(new ArrayList());
+                    sar.setPreview(clone.createBufferedImage(400, 400, 300, 300, null));
+                    sar.setGraphImage(panel.getChart().createBufferedImage(1500, 1500, 500, 500, null));
+                }
+            }
+        }
+        catch (final Exception e) {
+            LOG.error("Error updating sensitivity plot", e);
         }
     }
 

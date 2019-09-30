@@ -16,6 +16,8 @@
  */
 package nl.minvenj.nfi.lrmixstudio.gui.tabs.sensitivity;
 
+import static nl.minvenj.nfi.lrmixstudio.utils.LogUtils.addPadding;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +30,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Priority;
@@ -36,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
 import nl.minvenj.nfi.lrmixstudio.domain.Contributor;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 import nl.minvenj.nfi.lrmixstudio.domain.Locus;
@@ -157,6 +162,7 @@ public class DropoutEstimationProgressListener implements AnalysisProgressListen
     public void analysisFinished(final Throwable e) {
         if (!(e instanceof InterruptedException)) {
             LOG.info("Analysis encountered exception:", e);
+            _session.setErrorMessage(e.getMessage());
         }
         else {
             _interrupted = true;
@@ -233,6 +239,19 @@ public class DropoutEstimationProgressListener implements AnalysisProgressListen
         }
         LOG.info("=================");
         LOG.info("Enabled loci: {}", enabledLoci);
+
+        final Collection<DisabledLocus> disabledLoci = _session.getDisabledLoci();
+        if (disabledLoci.isEmpty()) {
+            LOG.info("Disabled loci: None");
+        }
+        else {
+            LOG.info("Disabled loci:");
+            LOG.info("   Name       |  Reason");
+            LOG.info("  ------------+------------------------------------");
+            for (final DisabledLocus locus : disabledLoci) {
+                LOG.info("   {} |  {}", addPadding(locus.getName(), 10), locus.getReason());
+            }
+        }
 
         final Collection<Allele> rareAlleles = _session.getRareAlleles();
         LOG.info("=================");
@@ -348,13 +367,6 @@ public class DropoutEstimationProgressListener implements AnalysisProgressListen
         catch (final UnknownHostException ex) {
             return ex.getClass().getName() + " - " + ex.getMessage();
         }
-    }
-
-    private String addPadding(final String value, final int length) {
-        if (length < 0) {
-            return ("                                        " + value).substring(value.length() + 40 + length);
-        }
-        return (value + "                                        ").substring(0, length);
     }
 
     private String formatCounts(final int[] values) {

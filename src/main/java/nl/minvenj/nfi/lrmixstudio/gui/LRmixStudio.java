@@ -16,9 +16,6 @@
  */
 package nl.minvenj.nfi.lrmixstudio.gui;
 
-import static nl.minvenj.nfi.lrmixstudio.model.ConfigurationDataElement.CASENUMBER;
-import static nl.minvenj.nfi.lrmixstudio.model.ConfigurationDataElement.ERROR_MESSAGE;
-
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -30,6 +27,7 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -41,6 +39,7 @@ import java.util.Collection;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
@@ -56,19 +55,25 @@ import nl.minvenj.nfi.lrmixstudio.model.ConfigurationDataElement;
 public class LRmixStudio extends javax.swing.JFrame implements ConfigurationDataChangeListener, ApplicationStateChangeListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(LRmixStudio.class);
-    private SessionData _session = new SessionData();
+    private static ArrayList<Component> _fontListeners = new ArrayList<>();
+    private static int _fontSize = ApplicationSettings.getFontSize();
+    private final SessionData _session = new SessionData();
     private final ArrayList<Image> _icons = new ArrayList();
     private final TrayIconHandler _trayIconHandler;
     private final int _fileMenuSize;
+    private JMenu _viewMenu;
+    private JMenuItem _fontsLargerMenuItem;
+    private JMenuItem _fontsSmallerMenuItem;
+
 
     /**
      * Creates new form LRmix Studio
      */
     public LRmixStudio() {
         try {
-            FileInputStream fis = new FileInputStream("log4j.properties");
+            final FileInputStream fis = new FileInputStream("log4j.properties");
             PropertyConfigurator.configure(fis);
-        } catch (FileNotFoundException ex) {
+        } catch (final FileNotFoundException ex) {
             PropertyConfigurator.configure(getClass().getResourceAsStream("/log4j.properties"));
         }
         LOG.info("Starting LRmix Studio v {}", ApplicationSettings.getProgramVersion());
@@ -80,12 +85,12 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         _trayIconHandler = new TrayIconHandler(this, _session);
 
-        DropTarget dropTarget = new DropTarget(this, new DropTargetAdapter() {
+        final DropTarget dropTarget = new DropTarget(this, new DropTargetAdapter() {
             @Override
-            public void drop(DropTargetDropEvent dtde) {
+            public void drop(final DropTargetDropEvent dtde) {
                 try {
                     dtde.acceptDrop(dtde.getDropAction());
-                    Collection<File> droppedFiles = (Collection<File>) dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    final Collection<File> droppedFiles = (Collection<File>) dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     if (droppedFiles.size() > 1) {
                         _session.setErrorMessage("Please only drop a single file!");
                     } else {
@@ -113,11 +118,11 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
             String iconName;
             while ((iconName = ApplicationSettings.getIcon(idx++)) != null) {
                 LOG.debug("Loading application icon {}", iconName);
-                Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource(iconName));
+                final Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource(iconName));
                 _icons.add(icon);
             }
             setIconImages(_icons);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             LOG.error("Error initializing the application:", t);
         }
 
@@ -129,14 +134,14 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(final WindowEvent e) {
                 if (JOptionPane.OK_OPTION == LostTimeCheck.performExitCheck(_session, (Component) e.getSource())) {
                     System.exit(0);
                 }
             }
         });
 
-        // This to allow the WindowStateListener to actually block the window from 
+        // This to allow the WindowStateListener to actually block the window from
         // closing if more than a configurable amount of processing time remains unexported.
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -154,7 +159,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         for (final String mruSession : ApplicationSettings.getMostRecentlyUsed()) {
             fileMenu.add(new JMenuItem(mruSession)).addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(final ActionEvent e) {
                     if (_session.restore(new PathResolver(((JComponent) e.getSource()).getParent()), new File(mruSession))) {
                         ApplicationSettings.addMostRecentlyUsed(mruSession);
                     } else {
@@ -167,7 +172,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         }
     }
 
-    private boolean loadLog(File logFile) {
+    private boolean loadLog(final File logFile) {
         return _session.restore(new PathResolver(this), logFile);
     }
 
@@ -197,6 +202,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         settingsMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
+        _viewMenu = new javax.swing.JMenu();
         helpMenu = new javax.swing.JMenu();
         manualMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -217,7 +223,8 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         newSessionMenuItem.setText("New session");
         newSessionMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 newSessionMenuItemActionPerformed(evt);
             }
         });
@@ -225,7 +232,8 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         openSessionMenuItem.setText("Load session...");
         openSessionMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 openSessionMenuItemActionPerformed(evt);
             }
         });
@@ -233,7 +241,8 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         saveSessionMenuItem.setText("Save session...");
         saveSessionMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 saveSessionMenuItemActionPerformed(evt);
             }
         });
@@ -246,7 +255,8 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         settingsMenuItem.setText("Application settings...");
         settingsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 settingsMenuItemActionPerformed(evt);
             }
         });
@@ -254,11 +264,37 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         mainMenuBar.add(settingsMenu);
 
+        _viewMenu.setText("View");
+        _viewMenu.setMnemonic(KeyEvent.VK_V);
+
+        _fontsLargerMenuItem = new JMenuItem("Fonts larger");
+        _fontsLargerMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                _fontSize++;
+                updateFontSize();
+            }
+        });
+        _viewMenu.add(_fontsLargerMenuItem);
+
+        _fontsSmallerMenuItem = new JMenuItem("Fonts smaller");
+        _fontsSmallerMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (_fontSize > 1)
+                    _fontSize--;
+                updateFontSize();
+            }
+        });
+        _viewMenu.add(_fontsSmallerMenuItem);
+        mainMenuBar.add(_viewMenu);
+
         helpMenu.setText("Help");
 
         manualMenuItem.setText("View Manual");
         manualMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 manualMenuItemActionPerformed(evt);
             }
         });
@@ -266,7 +302,8 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         aboutMenuItem.setText("About LRmix Studio");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -276,7 +313,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
 
         setJMenuBar(mainMenuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,13 +330,13 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+    private void aboutMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount() - 1);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
-    private void manualMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualMenuItemActionPerformed
+    private void manualMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualMenuItemActionPerformed
         if (Desktop.isDesktopSupported()) {
-            File file = new File("manual.pdf");
+            final File file = new File("manual.pdf");
             if (!file.exists()) {
                 LOG.error("Manual file 'manual.pdf' could not be found in the application folder!");
                 JOptionPane.showMessageDialog(this, "<html>Error displaying the manual:<br><i>The manual file could not be found!", "LRmix Studio Error", JOptionPane.ERROR_MESSAGE);
@@ -307,7 +344,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
             }
             try {
                 Desktop.getDesktop().open(file);
-            } catch (IOException ioe) {
+            } catch (final IOException ioe) {
                 LOG.error("Error showing manual!", ioe);
                 // No configured viewer for PDF files.
                 JOptionPane.showMessageDialog(this, "<html>Your system cannot display <b>PDF</b> files!<br><i>Please install a PDF viewer to view the manual.", "LRmix Studio Error", JOptionPane.ERROR_MESSAGE);
@@ -315,13 +352,13 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         }
     }//GEN-LAST:event_manualMenuItemActionPerformed
 
-    private void openSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openSessionMenuItemActionPerformed
+    private void openSessionMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openSessionMenuItemActionPerformed
         if (JOptionPane.OK_OPTION == LostTimeCheck.performRestartCheck(_session, this)) {
-            JFileChooser chooser = new JFileChooser(ApplicationSettings.getCaseFilesPath());
+            final JFileChooser chooser = new JFileChooser(ApplicationSettings.getCaseFilesPath());
             chooser.setAcceptAllFileFilterUsed(true);
             chooser.setFileFilter(new FileFilter() {
                 @Override
-                public boolean accept(File f) {
+                public boolean accept(final File f) {
                     return f.isDirectory() || f.getName().matches(".*\\.LRmixStudioSession");
                 }
 
@@ -332,7 +369,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
             });
             chooser.addChoosableFileFilter(new FileFilter() {
                 @Override
-                public boolean accept(File f) {
+                public boolean accept(final File f) {
                     return f.isDirectory() || f.getName().matches("LRmixStudio.*\\.log");
                 }
 
@@ -351,12 +388,12 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         }
     }//GEN-LAST:event_openSessionMenuItemActionPerformed
 
-    private void saveSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSessionMenuItemActionPerformed
-        JFileChooser chooser = new JFileChooser(ApplicationSettings.getCaseFilesPath());
+    private void saveSessionMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSessionMenuItemActionPerformed
+        final JFileChooser chooser = new JFileChooser(ApplicationSettings.getCaseFilesPath());
         chooser.setAcceptAllFileFilterUsed(true);
         chooser.setFileFilter(new FileFilter() {
             @Override
-            public boolean accept(File f) {
+            public boolean accept(final File f) {
                 return f.isDirectory() || f.getName().matches(".*\\.LRmixStudioSession");
             }
 
@@ -379,14 +416,14 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
         }
     }//GEN-LAST:event_saveSessionMenuItemActionPerformed
 
-    private void newSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSessionMenuItemActionPerformed
+    private void newSessionMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSessionMenuItemActionPerformed
         if (JOptionPane.OK_OPTION == LostTimeCheck.performRestartCheck(_session, this)) {
             _session.clear();
         }
     }//GEN-LAST:event_newSessionMenuItemActionPerformed
 
-    private void settingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsMenuItemActionPerformed
-        SettingsDialog dlg = new SettingsDialog(this, true);
+    private void settingsMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsMenuItemActionPerformed
+        final SettingsDialog dlg = new SettingsDialog(this, true);
         dlg.setVisible(true);
         updateMRUList();
     }//GEN-LAST:event_settingsMenuItemActionPerformed
@@ -445,7 +482,7 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void dataChanged(ConfigurationDataElement element) {
+    public void dataChanged(final ConfigurationDataElement element) {
         switch (element) {
             case CASENUMBER:
                 if (_session.getCaseNumber().isEmpty()) {
@@ -456,13 +493,14 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
                 LOG.debug("Window title set to '{}'", getTitle());
                 break;
             case ERROR_MESSAGE:
+                LOG.error("Showing error message: {}", _session.getErrorMessage());
                 JOptionPane.showMessageDialog(rootPane, _session.getErrorMessage(), "LRmixStudio v" + ApplicationSettings.getProgramVersion(), JOptionPane.ERROR_MESSAGE);
                 break;
         }
     }
 
     @Override
-    public void applicationStateChanged(APP_STATE newState) {
+    public void applicationStateChanged(final APP_STATE newState) {
         LOG.debug("Application state: {}", newState);
 
         switch (newState) {
@@ -481,4 +519,20 @@ public class LRmixStudio extends javax.swing.JFrame implements ConfigurationData
             mainMenuBar.getComponent(idx).setEnabled(mainMenuBar.isEnabled());
         }
     }
+
+    /**
+     * @param zebraTable
+     */
+    public static void addFontChangeListener(final ZebraTable zebraTable) {
+        _fontListeners.add(zebraTable);
+        zebraTable.setFont(zebraTable.getFont().deriveFont(new Float(_fontSize)));
+    }
+
+    private void updateFontSize() {
+        ApplicationSettings.setFontSize(_fontSize);
+        for (final Component listener : _fontListeners) {
+            listener.setFont(listener.getFont().deriveFont(new Float(_fontSize)));
+        }
+    }
+
 }

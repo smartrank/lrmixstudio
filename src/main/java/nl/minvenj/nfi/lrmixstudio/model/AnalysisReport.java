@@ -19,6 +19,7 @@ package nl.minvenj.nfi.lrmixstudio.model;
 import java.util.Collection;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 import nl.minvenj.nfi.lrmixstudio.domain.PopulationStatistics;
@@ -78,7 +79,7 @@ public interface AnalysisReport {
 
     public Collection<String> getEnabledLoci();
 
-    public Collection<String> getDisabledLoci();
+    public Collection<DisabledLocus> getDisabledLoci();
 
     public boolean isDropoutCompatible(AnalysisReport currentReport);
 

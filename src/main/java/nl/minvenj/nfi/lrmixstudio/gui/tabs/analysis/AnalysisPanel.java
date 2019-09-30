@@ -76,6 +76,9 @@ import nl.minvenj.nfi.lrmixstudio.model.ConfigurationDataChangeListener;
 import nl.minvenj.nfi.lrmixstudio.model.ConfigurationDataElement;
 import nl.minvenj.nfi.lrmixstudio.model.LRMathModel;
 import nl.minvenj.nfi.lrmixstudio.model.LRMathModelFactory;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.UIManager;
+import javax.swing.JSplitPane;
 
 /**
  *
@@ -163,6 +166,37 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
         // This ensures that when we start/stop the analysis, the fact that the progress bar and information lines become
         // (in)visible does not cause the containing box to resize.
         ((GroupLayout) analysisProgressPanel.getLayout()).setHonorsVisibility(false);
+        setLayout(new MigLayout("", "[290px,grow][2px][295px,grow]", "[260px:260px][grow]"));
+        add(prosecutionGroup, "cell 0 0,grow");
+        add(defenseGroup, "cell 2 0,grow");
+        parametersGroup.setLayout(new MigLayout("", "[102px][71px][10px][79px][4px][71px][4px][234px,grow][4px][53px][2px][50px][6px][45px]", "[23px][20px][23px]"));
+        parametersGroup.add(_rareAlleleFrequencyLabel, "cell 0 1,alignx left,aligny center");
+        parametersGroup.add(_rareAlleleFrequency, "cell 1 1 5 1,growx,aligny top");
+        parametersGroup.add(_rareAlleleFrequencyErrorMessage, "cell 7 1 7 1,grow");
+        parametersGroup.add(dropInProbabilityLabel, "cell 0 2,alignx left,aligny center");
+        parametersGroup.add(alleleFrequenciesLabel, "cell 0 0,alignx left,aligny center");
+        parametersGroup.add(alleleFrequenciesFileName, "cell 1 0 11 1,growx,aligny center");
+        parametersGroup.add(browseAlleleFrequencies, "cell 13 0,alignx left,aligny top");
+        parametersGroup.add(_dropInProbability, "cell 1 2,growx,aligny top");
+        parametersGroup.add(thetaCorrectionLabel, "cell 3 2,alignx left,aligny center");
+        parametersGroup.add(_thetaCorrection, "cell 5 2,growx,aligny center");
+        parametersGroup.add(_maxThreadsLabel, "cell 7 2,alignx right,aligny center");
+        parametersGroup.add(threadSpinner, "cell 9 2,growx,aligny center");
+        parametersGroup.add(_validationModeCheckBox, "cell 11 2 3 1,alignx left,aligny top");
+        
+        JSplitPane splitPane = new JSplitPane();
+        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        splitPane.setLeftComponent(parametersGroup);
+        splitPane.setRightComponent(resultsGroup);
+        add(splitPane, "cell 0 1 3 1,grow");
+        resultsGroup.setLayout(new MigLayout("", "[318px,grow][6px][119px][6px][45px][6px][75px]", "[25px][6px][14px][6px][25px][6px][82px,grow]"));
+        resultsGroup.add(jScrollPane9, "cell 0 0 1 7,grow");
+        resultsGroup.add(overallLikelyhoodRatio, "cell 2 4 3 1,growx,aligny top");
+        resultsGroup.add(showLogButton, "cell 6 4,alignx left,aligny center");
+        resultsGroup.add(analysisProgressPanel, "cell 2 6 5 1,grow");
+        resultsGroup.add(jLabel11, "cell 2 2,alignx left,aligny top");
+        resultsGroup.add(stopAnalysis, "cell 2 0,growx,aligny top");
+        resultsGroup.add(startAnalysisButton, "cell 4 0 3 1,growx,aligny top");
 
         relationCombo.addItem(Relation.PARENT_CHILD);
         relationCombo.addItem(Relation.SIBLING);
@@ -338,8 +372,8 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
      */
     private void resetHypotheses() {
         _listener.suspend();
-        _dropInProbability.setValue(0.05);
-        _thetaCorrection.setValue(0.01);
+        _dropInProbability.setValue(ApplicationSettings.getLatestDropIn());
+        _thetaCorrection.setValue(ApplicationSettings.getLatestTheta());
         ((DefaultTableModel) prosecutionContributors.getModel()).setRowCount(0);
         _prosecutionUnknowns.setValue(0);
         prosecutionUnknownDropoutProbability.setValue(0.1);
@@ -366,9 +400,9 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
         defenseUnknownDropoutLabel = new javax.swing.JLabel();
         defenseUnknownDropoutProbability = new javax.swing.JSpinner();
         relatedUnknownCheckBox = new javax.swing.JCheckBox();
-        relationCombo = new javax.swing.JComboBox<Relation>();
+        relationCombo = new javax.swing.JComboBox<>();
         relatedToLabel = new javax.swing.JLabel();
-        relatedToCombo = new javax.swing.JComboBox<Sample>();
+        relatedToCombo = new javax.swing.JComboBox<>();
         resultsGroup = new javax.swing.JPanel();
         jScrollPane9 = new javax.swing.JScrollPane();
         resultsTable = new ZebraTable();
@@ -405,7 +439,7 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
         _rareAlleleFrequency = new javax.swing.JTextField();
         _rareAlleleFrequencyErrorMessage = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(0, 0, 153));
+        setBackground(UIManager.getColor("Button.light"));
 
         defenseGroup.setBackground(new java.awt.Color(249, 249, 249));
         defenseGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Defense Hypothesis", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Vijaya", 0, 18))); // NOI18N
@@ -447,7 +481,7 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
 
         defenseUnknownsLabel.setText("Unknown Contributors");
 
-        _defenseUnknowns.setModel(new javax.swing.SpinnerNumberModel(0, 0, 4, 1));
+        _defenseUnknowns.setModel(new javax.swing.SpinnerNumberModel(0, 0, ApplicationSettings.getMaxUnknowns(), 1));
         _defenseUnknowns.setToolTipText("The number of unknown contributors to the sample according to the defense hypothesis");
 
         defenseUnknownDropoutLabel.setText("Dropout Probability for unknowns");
@@ -647,51 +681,6 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
             }
         });
 
-        final javax.swing.GroupLayout resultsGroupLayout = new javax.swing.GroupLayout(resultsGroup);
-        resultsGroup.setLayout(resultsGroupLayout);
-        resultsGroupLayout.setHorizontalGroup(
-            resultsGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(resultsGroupLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(resultsGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, resultsGroupLayout.createSequentialGroup()
-                        .addComponent(overallLikelyhoodRatio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(showLogButton))
-                    .addComponent(analysisProgressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(resultsGroupLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(resultsGroupLayout.createSequentialGroup()
-                        .addGap(0, 28, Short.MAX_VALUE)
-                        .addComponent(stopAnalysis, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(startAnalysisButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        resultsGroupLayout.setVerticalGroup(
-            resultsGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(resultsGroupLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(resultsGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(resultsGroupLayout.createSequentialGroup()
-                        .addGroup(resultsGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(startAnalysisButton)
-                            .addComponent(stopAnalysis))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(resultsGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(overallLikelyhoodRatio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(showLogButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analysisProgressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
         prosecutionGroup.setBackground(new java.awt.Color(249, 249, 249));
         prosecutionGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Prosecution Hypothesis", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Vijaya", 0, 18))); // NOI18N
 
@@ -732,7 +721,7 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
 
         prosecutionUnknownsLabel.setText("Unknown Contributors");
 
-        _prosecutionUnknowns.setModel(new javax.swing.SpinnerNumberModel(0, 0, 4, 1));
+        _prosecutionUnknowns.setModel(new javax.swing.SpinnerNumberModel(0, 0, ApplicationSettings.getMaxUnknowns(), 1));
         _prosecutionUnknowns.setToolTipText("The number of unknown contributors to the sample according to the prosecution hypothesis");
 
         prosecutionUnknownDropoutLabel.setText("Dropout Probability for unknowns");
@@ -790,11 +779,11 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
 
         dropInProbabilityLabel.setText("Drop-in probability");
 
-        _dropInProbability.setModel(new javax.swing.SpinnerNumberModel(0.05d, 0.0d, 1.0d, 0.01d));
+        _dropInProbability.setModel(new javax.swing.SpinnerNumberModel(ApplicationSettings.getLatestDropIn().doubleValue(), 0.0d, 1.0d, 0.01d));
 
         thetaCorrectionLabel.setText("Theta correction");
 
-        _thetaCorrection.setModel(new javax.swing.SpinnerNumberModel(0.01d, 0.0d, 1.0d, 0.01d));
+        _thetaCorrection.setModel(new javax.swing.SpinnerNumberModel(ApplicationSettings.getLatestTheta().doubleValue(), 0.0d, 1.0d, 0.01d));
 
         _validationModeCheckBox.setText("Validation Mode");
         _validationModeCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -812,93 +801,6 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
         _rareAlleleFrequencyLabel.setText("Rare allele frequency");
 
         _rareAlleleFrequency.setInheritsPopupMenu(true);
-
-        final javax.swing.GroupLayout parametersGroupLayout = new javax.swing.GroupLayout(parametersGroup);
-        parametersGroup.setLayout(parametersGroupLayout);
-        parametersGroupLayout.setHorizontalGroup(
-            parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(parametersGroupLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(parametersGroupLayout.createSequentialGroup()
-                        .addComponent(_rareAlleleFrequencyLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(_rareAlleleFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(_rareAlleleFrequencyErrorMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(parametersGroupLayout.createSequentialGroup()
-                        .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dropInProbabilityLabel)
-                            .addComponent(alleleFrequenciesLabel))
-                        .addGap(18, 18, 18)
-                        .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(parametersGroupLayout.createSequentialGroup()
-                                .addComponent(alleleFrequenciesFileName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(browseAlleleFrequencies))
-                            .addGroup(parametersGroupLayout.createSequentialGroup()
-                                .addComponent(_dropInProbability, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(thetaCorrectionLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(_thetaCorrection, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(_maxThreadsLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(threadSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(_validationModeCheckBox))))))
-        );
-        parametersGroupLayout.setVerticalGroup(
-            parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, parametersGroupLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(alleleFrequenciesLabel)
-                    .addComponent(alleleFrequenciesFileName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(browseAlleleFrequencies))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(_rareAlleleFrequencyErrorMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(_rareAlleleFrequencyLabel)
-                        .addComponent(_rareAlleleFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(thetaCorrectionLabel)
-                        .addComponent(_thetaCorrection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(_validationModeCheckBox)
-                        .addComponent(threadSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(_maxThreadsLabel))
-                    .addGroup(parametersGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(dropInProbabilityLabel)
-                        .addComponent(_dropInProbability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-
-        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(prosecutionGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(2, 2, 2)
-                .addComponent(defenseGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(parametersGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(resultsGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(prosecutionGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(defenseGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(parametersGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(resultsGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void browseAlleleFrequenciesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseAlleleFrequenciesActionPerformed
@@ -975,6 +877,8 @@ public class AnalysisPanel extends javax.swing.JPanel implements ProgressGui, Co
 
             _mathematicalModel = LRMathModelFactory.getMathematicalModel(_session.getMathematicalModelName());
             _mathematicalModel.addProgressListener(new AnalysisProgressListenerImpl(_session, this));
+            ApplicationSettings.setLatestDropIn(_session.getProsecution().getDropInProbability());
+            ApplicationSettings.setLatestTheta(_session.getProsecution().getThetaCorrection());
             _mathematicalModel.startAnalysis(_session);
         }
         catch (final Exception e) {

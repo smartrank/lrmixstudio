@@ -16,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import nl.minvenj.nfi.lrmixstudio.domain.Allele;
+import nl.minvenj.nfi.lrmixstudio.domain.DisabledLocus;
 import nl.minvenj.nfi.lrmixstudio.domain.Hypothesis;
 import nl.minvenj.nfi.lrmixstudio.domain.LikelihoodRatio;
 import nl.minvenj.nfi.lrmixstudio.domain.PopulationStatistics;
@@ -321,7 +322,7 @@ public class AnalysisReportTest {
         }
 
         @Override
-        public Collection<String> getDisabledLoci() {
+        public Collection<DisabledLocus> getDisabledLoci() {
             return Collections.emptyList();
         }
 

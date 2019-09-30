@@ -256,7 +256,7 @@ public class ProfileSummaryTable extends JTable {
                         final Sample s = (Sample) getValueAt(e.getFirstRow(), 1);
                         s.setEnabled(isSelected);
                         _session.fireUpdated(ConfigurationDataElement.ACTIVEREPLICATES);
-                        if (_session.getActiveReplicates().isEmpty()) {
+                        if (_session.getActiveReplicates().isEmpty() || _session.getEnabledLoci().isEmpty()) {
                             _session.setApplicationState(ApplicationStateChangeListener.APP_STATE.READY_FOR_OVERVIEW);
                         }
                         else {

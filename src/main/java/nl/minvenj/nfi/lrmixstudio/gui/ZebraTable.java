@@ -35,12 +35,12 @@ public class ZebraTable extends JTable {
 
         private final TableColumn proxy;
 
-        protected ZebraTableColumnProxy(TableColumn proxy) {
+        protected ZebraTableColumnProxy(final TableColumn proxy) {
             this.proxy = proxy;
         }
 
         @Override
-        public void setCellEditor(TableCellEditor editor) {
+        public void setCellEditor(final TableCellEditor editor) {
             TableCellEditor newEditor = editor;
             if (!(editor instanceof ZebraTableCellEditor)) {
                 newEditor = new ZebraTableCellEditor(editor, getName());
@@ -49,7 +49,7 @@ public class ZebraTable extends JTable {
         }
 
         @Override
-        public void setCellRenderer(TableCellRenderer renderer) {
+        public void setCellRenderer(final TableCellRenderer renderer) {
             TableCellRenderer newRenderer = renderer;
             if (!(renderer instanceof ZebraTableCellRenderer)) {
                 newRenderer = new ZebraTableCellRenderer(renderer, getName());
@@ -63,10 +63,11 @@ public class ZebraTable extends JTable {
         setShowGrid(false);
         setRowSelectionAllowed(false);
         getModel().addTableModelListener(this);
+        LRmixStudio.addFontChangeListener(this);
     }
 
     @Override
-    public void setDefaultRenderer(Class<?> columnClass, TableCellRenderer renderer) {
+    public void setDefaultRenderer(final Class<?> columnClass, final TableCellRenderer renderer) {
         TableCellRenderer newRenderer = renderer;
         if (!(renderer instanceof ZebraTableCellRenderer)) {
             newRenderer = new ZebraTableCellRenderer(renderer, getName());
@@ -76,7 +77,7 @@ public class ZebraTable extends JTable {
     }
 
     @Override
-    public void setDefaultEditor(Class<?> columnClass, TableCellEditor editor) {
+    public void setDefaultEditor(final Class<?> columnClass, final TableCellEditor editor) {
         TableCellEditor newEditor = editor;
         if (!(editor instanceof ZebraTableCellEditor)) {
             newEditor = new ZebraTableCellEditor(editor, getName());
@@ -85,16 +86,16 @@ public class ZebraTable extends JTable {
     }
 
     @Override
-    public TableColumn getColumn(Object identifier) {
+    public TableColumn getColumn(final Object identifier) {
         return new ZebraTableColumnProxy(super.getColumn(identifier));
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         super.setName(name);
         createDefaultEditors();
         createDefaultRenderers();
-        TableCellRenderer headerCellRenderer = getTableHeader().getDefaultRenderer();
+        final TableCellRenderer headerCellRenderer = getTableHeader().getDefaultRenderer();
         if (!(headerCellRenderer instanceof ZebraTableCellRenderer)) {
             getTableHeader().setDefaultRenderer(new ZebraTableCellRenderer(headerCellRenderer, null));
         }
@@ -103,8 +104,8 @@ public class ZebraTable extends JTable {
     @Override
     protected void createDefaultEditors() {
         super.createDefaultEditors();
-        HashMap wrappedEditors = new HashMap();
-        for (Object key : defaultEditorsByColumnClass.keySet()) {
+        final HashMap wrappedEditors = new HashMap();
+        for (final Object key : defaultEditorsByColumnClass.keySet()) {
             wrappedEditors.put(key, new ZebraTableCellEditor((TableCellEditor) defaultEditorsByColumnClass.get(key), getName()));
         }
         defaultEditorsByColumnClass.clear();
@@ -114,8 +115,8 @@ public class ZebraTable extends JTable {
     @Override
     protected void createDefaultRenderers() {
         super.createDefaultRenderers();
-        HashMap wrappedRenderers = new HashMap();
-        for (Object key : defaultRenderersByColumnClass.keySet()) {
+        final HashMap wrappedRenderers = new HashMap();
+        for (final Object key : defaultRenderersByColumnClass.keySet()) {
             wrappedRenderers.put(key, new ZebraTableCellRenderer((TableCellRenderer) defaultRenderersByColumnClass.get(key), getName()));
         }
         defaultRenderersByColumnClass.clear();
